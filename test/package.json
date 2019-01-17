@@ -11,8 +11,8 @@
     "@holochain/holochain-nodejs": "^0.1.22",
     "faucet": "0.0.1",
     "json3": "*",
-    "sleep": "^5.2.3",
-    "tape": "^4.9.1"
+    "tape": "^4.9.1",
+    "sleep": "^5.2.3"
   },
   "scripts": {
     "build": "webpack",

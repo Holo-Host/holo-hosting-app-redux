@@ -27,10 +27,11 @@ container.start()
 const liza = container.makeCaller('liza', dnaPath)
 const jack = container.makeCaller('jack', dnaPath)
 
-// test('agentId', (t) => {
-//   t.plan(2)
-//   t.ok(liza.agentId)
-//   t.notEqual(liza.agentId, jack.agentId)
-// })
+test('agentId', (t) => {
+  t.plan(2)
+  t.ok(liza.agentId)
+  t.notEqual(liza.agentId, jack.agentId)
+})
 
-require('./unit_test/provider_test')(liza,jack);
+require('./unit_test/whoami_test')(liza);
+require('./unit_test/provider_test')(liza);

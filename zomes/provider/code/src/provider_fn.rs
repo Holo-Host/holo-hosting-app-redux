@@ -15,9 +15,9 @@ pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeA
     let post_entry = Entry::App("app_config".into(), AppConfig{
         ui_hash,
         dna_list,
-    }.into());
+        }.into());
 
-   let address = hdk::commit_entry(&post_entry)?;
-
-   Ok(address)
+    let address = hdk::commit_entry(&post_entry)?;
+    
+    Ok(address)
 }
