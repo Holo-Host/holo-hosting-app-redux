@@ -1,4 +1,12 @@
-use crate::entry::app_config::AppConfig;
+use crate::app_config::AppConfig;
+use hdk::{
+    holochain_core_types::{
+        entry::Entry,
+        hash::HashString,
+        cas::content::Address,
+    },
+    error::ZomeApiResult,
+};
 
 pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeApiResult<Address>{
     // Validation before commiting to the DHT

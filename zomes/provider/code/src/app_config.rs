@@ -1,6 +1,7 @@
 
 use hdk::holochain_core_types::{
-    dna::zome::entry_types::Sharing,
+    dna::entry_types::Sharing,
+    error::HolochainError,
     json::JsonString,
     hash::HashString,
 };
@@ -8,7 +9,6 @@ use hdk::{
     self,
     entry_definition::ValidatingEntryType,
 };
-use serde_json;
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
 pub struct AppConfig {

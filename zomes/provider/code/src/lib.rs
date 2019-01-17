@@ -1,21 +1,28 @@
+#![feature(try_from)]
 #[macro_use]
 extern crate hdk;
 extern crate serde;
+#[macro_use]
 extern crate serde_derive;
+//#[macro_use]
 extern crate serde_json;
+#[macro_use]
+extern crate holochain_core_types_derive;
 
 use hdk::{
-    self,
     error::ZomeApiResult,
-    holochain_core_types::json::JsonString,
+    holochain_core_types::{
+        hash::HashString,
+        cas::content::Address,
+    },
 };
 
-pub mod entry::app_config;
+pub mod app_config;
 pub mod provider_fn;
 
 define_zome! {
     entries: [
-        entry::app_config::definitions(),
+        app_config::definitions()
     ]
 
     genesis: || { Ok(()) }
@@ -23,8 +30,8 @@ define_zome! {
     functions: {
         main (Public) {
             register_app: {
-                inputs: |config:JsonString|,
-                outputs: |sum: ZomeApiResult<JsonString>|,
+                inputs: |ui_hash:HashString, dna_list:Vec<HashString> |,
+                outputs: |sum: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_register_app
             }
         }
