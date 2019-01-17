@@ -1,9 +1,9 @@
 {
-  "name": "Holochain App Name",
-  "description": "A Holochain app",
+  "name": "Holo Hosting App",
+  "description": "A Holo app that is for holo app providers and the holo hosts",
   "authors": [
     {
-      "identifier": "Author Name <author@name.com>",
+      "identifier": "zo-el <zo@el.org>",
       "public_key_source": "",
       "signature": ""
     }

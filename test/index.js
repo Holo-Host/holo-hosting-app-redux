@@ -1,22 +1,36 @@
-// This test file uses the tape testing framework.
-// To learn more, go here: https://github.com/substack/tape
 const test = require('tape');
-const Container = require('@holochain/holochain-nodejs');
+const path = require('path');
+const sleep = require('sleep');
 
-// instantiate an app from the DNA JSON bundle
-const app = Container.instanceFromNameAndDna("app", "dist/bundle.json")
+// const { Config, Container } = require('@holochain/holochain-nodejs');
+const { Config, Container } = require('../../holochain-rust/nodejs_container');
 
-// activate the new instance
-app.start()
+const dnaPath = "dist/bundle.json"
 
-test('description of example test', (t) => {
-  // Make a call to a Zome function
-  // indicating the capability and function, and passing it an input
-  // const result = app.call("zome-name", "capability-name", "function-name", {})
+// IIFE to keep config-only stuff out of test scope
+const container = (() => {
+  const agentLiza = Config.agent("liza")
+  const agentJack = Config.agent("jack")
 
-  // check for equality of the actual and expected results
-  // t.equal(result, "expected result!")
+  const dna = Config.dna(dnaPath)
 
-  // ends this test
-  t.end()
-})
+  const instanceLiza = Config.instance(agentLiza, dna)
+  const instanceJack = Config.instance(agentJack, dna)
+
+  const containerConfig = Config.container([instanceLiza, instanceJack])
+  return new Container(containerConfig)
+})()
+
+// Initialize the Container
+container.start()
+
+const liza = container.makeCaller('liza', dnaPath)
+const jack = container.makeCaller('jack', dnaPath)
+
+// test('agentId', (t) => {
+//   t.plan(2)
+//   t.ok(liza.agentId)
+//   t.notEqual(liza.agentId, jack.agentId)
+// })
+
+require('./unit_test/provider_test')(liza,jack);
