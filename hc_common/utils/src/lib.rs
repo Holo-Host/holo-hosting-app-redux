@@ -29,7 +29,7 @@ pub fn get_links_and_load_type<
     tag: S
 ) -> ZomeApiResult<GetLinksLoadResult<R>> {
 	let link_load_results = hdk::get_links_and_load(base, tag)?;
-
+    // hdk::debug(format!("GET LINK LOAD:: {:?}",link_load_results));
 	Ok(link_load_results
 	.iter()
 	.map(|maybe_entry| {
@@ -44,13 +44,13 @@ pub fn get_links_and_load_type<
 						)?;
 
 			            Ok(GetLinksLoadElement::<R>{
-			                entry: typed_entry, 
+			                entry: typed_entry,
 			                address: entry.to_owned().address()
 			            })
 					},
 					_ => Err(ZomeApiError::Internal(
 						"get_links did not return an app entry".to_string())
-					)				
+					)
 				}
 			},
 			_ => Err(ZomeApiError::Internal(
