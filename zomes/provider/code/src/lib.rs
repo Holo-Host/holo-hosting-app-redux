@@ -12,30 +12,24 @@ extern crate holochain_core_types_derive;
 use hdk::{
     error::ZomeApiResult,
     holochain_core_types::{
-        error::HolochainError,
-        json::JsonString,
+        // error::HolochainError,
+        // json::JsonString,
         hash::HashString,
         cas::content::Address,
     },
 };
 
-pub mod app_config;
+pub mod entry;
 pub mod provider_fn;
-#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
-pub struct App {
-    pub uuid:String,
-    pub title:String,
-    pub author:String,
-    pub description:String,
-    pub thumbnail:String,
-}
+
 define_zome! {
     entries: [
-        app_config::definitions()
+        entry::app_config::definitions(),
+        entry::app_details::definitions()
     ]
 
-    genesis: || { 
-            Ok(()) 
+    genesis: || {
+            Ok(())
         }
 
     functions: {
@@ -44,6 +38,11 @@ define_zome! {
                 inputs: |ui_hash:HashString, dna_list:Vec<HashString> |,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_register_app
+            }
+            add_app_details: {
+                inputs: |app_details:entry::app_details::AppDetails, app_hash:Address |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_add_app_details
             }
         }
     }
