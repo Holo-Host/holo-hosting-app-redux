@@ -34,7 +34,9 @@ define_zome! {
         app_config::definitions()
     ]
 
-    genesis: || { Ok(()) }
+    genesis: || { 
+            Ok(()) 
+        }
 
     functions: {
         main (Public) {

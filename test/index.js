@@ -36,3 +36,4 @@ const liza = container.makeCaller('liza', dnaPath)
 
 require('./unit_test/whoami_test')(liza);
 require('./unit_test/provider_test')(liza);
+require('./unit_test/categories_test')(liza);

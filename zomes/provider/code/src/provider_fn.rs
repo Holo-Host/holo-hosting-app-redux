@@ -10,6 +10,7 @@ use hdk::{
 };
 
 pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeApiResult<Address>{
+    // TODO
     // Validation before commiting to the DHT
     // Check if user is verified
     // Check if all the hashes exist in the HCHC
