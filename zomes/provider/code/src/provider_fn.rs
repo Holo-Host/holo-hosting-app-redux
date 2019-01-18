@@ -1,5 +1,6 @@
 use crate::app_config::AppConfig;
 use hdk::{
+    self,
     holochain_core_types::{
         entry::Entry,
         hash::HashString,
@@ -12,12 +13,11 @@ pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeA
     // Validation before commiting to the DHT
     // Check if user is verified
     // Check if all the hashes exist in the HCHC
-    let post_entry = Entry::App("app_config".into(), AppConfig{
+
+    let app_entry = Entry::App("app_config".into(), AppConfig{
         ui_hash,
-        dna_list,
+        dna_list
         }.into());
 
-    let address = hdk::commit_entry(&post_entry)?;
-    
-    Ok(address)
+    utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "registered_tag")
 }

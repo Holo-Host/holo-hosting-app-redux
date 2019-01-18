@@ -10,14 +10,15 @@ const dnaPath = "dist/bundle.json"
 // IIFE to keep config-only stuff out of test scope
 const container = (() => {
   const agentLiza = Config.agent("liza")
-  const agentJack = Config.agent("jack")
+  // // const agentJack = Config.agent("jack")
 
   const dna = Config.dna(dnaPath)
 
   const instanceLiza = Config.instance(agentLiza, dna)
-  const instanceJack = Config.instance(agentJack, dna)
+  // const instanceJack = Config.instance(agentJack, dna)
 
-  const containerConfig = Config.container([instanceLiza, instanceJack])
+  // const containerConfig = Config.container([instanceLiza, instanceJack])
+  const containerConfig = Config.container([instanceLiza])
   return new Container(containerConfig)
 })()
 
@@ -25,13 +26,13 @@ const container = (() => {
 container.start()
 
 const liza = container.makeCaller('liza', dnaPath)
-const jack = container.makeCaller('jack', dnaPath)
+// const jack = container.makeCaller('jack', dnaPath)
 
-test('agentId', (t) => {
-  t.plan(2)
-  t.ok(liza.agentId)
-  t.notEqual(liza.agentId, jack.agentId)
-})
+// test('agentId', (t) => {
+//   t.plan(2)
+//   t.ok(liza.agentId)
+//   t.notEqual(liza.agentId, jack.agentId)
+// })
 
 require('./unit_test/whoami_test')(liza);
 require('./unit_test/provider_test')(liza);
