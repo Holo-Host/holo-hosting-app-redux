@@ -1,8 +1,7 @@
-
 const test = require('tape');
 
 module.exports = (liza) => {
-  test('Register App', (t) => {
+  test('App Flow', (t) => {
     const App_Config = {
       ui_hash: "QuarnnnnvltuenblergjasnvAfs",
       dna_list: ["QweAFioina","QtavsFdvva"]
@@ -12,16 +11,12 @@ module.exports = (liza) => {
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 
-    App_Details = {
-      app_details:{
-        details:"Details for this app",
-        domain_name:"app.holo.host"
-      },
+    const App_Hash ={
       app_hash:app_address.Ok
     }
-    const app_details_address = liza.call("provider","main","add_app_details",App_Details);
-    console.log("APP Details ADDRESS:: ",app_details_address);
-    t.equal(app_details_address.Ok, 'QmaVKt7iMmFgoYgm5fLdZNFbV5RZ12AhSBX8qhZo7hjj4S')
+    const app_enable = liza.call("host","main","enable_app",App_Hash);
+    console.log("APP Details ADDRESS:: ",app_enable);
+    t.equal(app_enable.Ok, null)
 
   })
 }

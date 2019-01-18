@@ -15,6 +15,7 @@ use hdk::{
 #[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
 pub struct AppDetails {
     pub details:String,
+    pub domain_name:String
 }
 
 pub fn definitions()-> ValidatingEntryType{

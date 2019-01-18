@@ -5,7 +5,7 @@ use hdk::holochain_core_types::{
     json::JsonString,
     hash::HashString,
     cas::content::Address
-    
+
 };
 use hdk::{
     self,
@@ -44,8 +44,31 @@ pub fn definitions()-> ValidatingEntryType{
                 validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
                     Ok(())
                 }
+            ),
+            to!(
+                "%agent_id",
+                tag: "host_enabled",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
+            from!(
+                "%agent_id",
+                tag: "apps_enabled",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
             )
         ]
     )
 }
-
