@@ -28,3 +28,8 @@ pub fn handle_get_enabled_app() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<
 pub fn handle_get_host_for_app(app_hash:Address)->ZomeApiResult<Vec<ZomeApiResult<Entry>>>{
     hdk::get_links_and_load(&app_hash, "host_enabled")
 }
+
+// TODO : Remove the link
+// pub fn handle_disable_app(app_hash: HashString) -> ZomeApiResult<()> {
+//
+// }

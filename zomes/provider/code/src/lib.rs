@@ -23,7 +23,8 @@ pub mod provider_fn;
 define_zome! {
     entries: [
         entry::app_config::definitions(),
-        entry::app_details::definitions()
+        entry::app_details::definitions(),
+        entry::provider_doc::definitions()
     ]
 
     genesis: || {
@@ -41,6 +42,11 @@ define_zome! {
                 inputs: |app_details:entry::app_details::AppDetails, app_hash:Address |,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_add_app_details
+            }
+            register_as_provider: {
+                inputs: |provider_doc:entry::provider_doc::ProviderDoc |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_register_as_provider
             }
         }
     }

@@ -24,4 +24,16 @@ module.exports = (liza) => {
     t.equal(app_details_address.Ok, 'QmaVKt7iMmFgoYgm5fLdZNFbV5RZ12AhSBX8qhZo7hjj4S')
 
   })
+
+  test('Verify Provider', (t) => {
+    const Provider_Doc = {
+      provider_doc:{
+      kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
+    }}
+    t.plan(1)
+    const verified = liza.call("provider", "main", "register_as_provider", Provider_Doc);
+    console.log("is verified?:: ",verified);
+    t.equal(verified.Ok.length, 46)
+
+  })
 }
