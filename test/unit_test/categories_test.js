@@ -12,7 +12,7 @@ const App_Config_2 = {
 
 module.exports = (app) => {
 
-  test('add Category ', (t) => {
+  test('Category test', (t) => {
 
     const app_address = app.call("provider", "main", "register_app", App_Config_1);
     t.equal(app_address.Ok.length, 46)

@@ -2,7 +2,7 @@ const sleep = require('sleep');
 const test = require('tape');
 
 module.exports = (liza) => {
-  test('Register App', (t) => {
+  test('Provider Tests', (t) => {
     const App_Config = {
       ui_hash: "QuarnnnnvltuenblergjasnvAfs",
       dna_list: ["QweAFioina","QtavsFdvva"]
