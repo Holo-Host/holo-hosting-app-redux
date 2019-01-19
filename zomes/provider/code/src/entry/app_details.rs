@@ -33,7 +33,7 @@ pub fn definitions()-> ValidatingEntryType{
         }
         ,
         links: [
-            to!(
+            from!(
                 "app_config",
                 tag: "details_tag",
 

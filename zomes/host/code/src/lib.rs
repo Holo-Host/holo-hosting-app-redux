@@ -14,7 +14,6 @@ use hdk::{
 use hdk::holochain_core_types::{
     hash::HashString,
     cas::content::Address,
-    agent::AgentId,
     entry::Entry,
 };
 

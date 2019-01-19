@@ -32,7 +32,7 @@ pub fn definitions()-> ValidatingEntryType{
         }
         ,
         links: [
-            to!(
+            from!(
                 "%agent_id",
                 tag: "verified_provider_tag",
 

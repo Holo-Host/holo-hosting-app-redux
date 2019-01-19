@@ -9,6 +9,7 @@ use hdk::{
         hash::HashString,
         cas::content::Address,
     },
+    holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
     error::ZomeApiResult,
 };
 
@@ -35,8 +36,14 @@ pub fn handle_add_app_details(app_details:AppDetails,app_hash:Address) -> ZomeAp
 
 pub fn handle_register_as_provider(provider_doc:ProviderDoc) -> ZomeApiResult<Address> {
     // TODO : Validation
-
     let verified_entry = Entry::App("provider_doc".into(), provider_doc.into());
-
     utils::commit_and_link(&verified_entry, &hdk::AGENT_ADDRESS, "verified_provider_tag")
+}
+
+pub fn handle_get_my_registered_app() -> ZomeApiResult<GetLinksResult> {
+    hdk::get_links(&hdk::AGENT_ADDRESS, "registered_tag")
+}
+
+pub fn handle_is_registered_as_provider() -> ZomeApiResult<GetLinksResult> {
+    hdk::get_links(&hdk::AGENT_ADDRESS, "verified_provider_tag")
 }

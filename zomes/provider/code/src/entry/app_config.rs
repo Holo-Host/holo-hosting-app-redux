@@ -33,7 +33,7 @@ pub fn definitions()-> ValidatingEntryType{
         }
         ,
         links: [
-            to!(
+            from!(
                 "%agent_id",
                 tag: "registered_tag",
 

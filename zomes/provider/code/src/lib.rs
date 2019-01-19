@@ -15,6 +15,7 @@ use hdk::{
         hash::HashString,
         cas::content::Address,
     },
+    holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
 };
 
 pub mod entry;
@@ -38,6 +39,11 @@ define_zome! {
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_register_app
             }
+            get_my_registered_app: {
+                inputs: | |,
+                outputs: |result: ZomeApiResult<GetLinksResult>|,
+                handler: provider_fn::handle_get_my_registered_app
+            }
             add_app_details: {
                 inputs: |app_details:entry::app_details::AppDetails, app_hash:Address |,
                 outputs: |result: ZomeApiResult<Address>|,
@@ -47,6 +53,11 @@ define_zome! {
                 inputs: |provider_doc:entry::provider_doc::ProviderDoc |,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_register_as_provider
+            }
+            is_registered_as_provider: {
+                inputs: | |,
+                outputs: |result:  ZomeApiResult<GetLinksResult>|,
+                handler: provider_fn::handle_is_registered_as_provider
             }
         }
     }
