@@ -10,6 +10,7 @@ extern crate holochain_core_types_derive;
 
 use hdk::{
     error::ZomeApiResult,
+    holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
 };
 use hdk::holochain_core_types::{
     hash::HashString,
@@ -18,9 +19,12 @@ use hdk::holochain_core_types::{
 };
 
 pub mod host_fn;
+pub mod entry;
 
 define_zome! {
-    entries: []
+    entries: [
+    entry::host_doc::definitions()
+    ]
 
     genesis: || { Ok(()) }
 
@@ -40,6 +44,16 @@ define_zome! {
                 inputs: | app_hash:Address |,
                 outputs: |result: ZomeApiResult<Vec<ZomeApiResult<Entry>>>|,
                 handler: host_fn::handle_get_host_for_app
+            }
+            register_as_host: {
+                inputs: |host_doc:entry::host_doc::HostDoc |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: host_fn::handle_register_as_host
+            }
+            is_registered_as_host: {
+                inputs: | |,
+                outputs: |result:  ZomeApiResult<GetLinksResult>|,
+                handler: host_fn::handle_is_registered_as_host
             }
         }
     }
