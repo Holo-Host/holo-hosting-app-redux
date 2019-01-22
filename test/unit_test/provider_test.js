@@ -7,7 +7,7 @@ module.exports = (liza) => {
       ui_hash: "QuarnnnnvltuenblergjasnvAfs",
       dna_list: ["QweAFioina","QtavsFdvva"]
     }
-    t.plan(3)
+    t.plan(4)
     const app_address = liza.call("provider", "main", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
@@ -22,6 +22,13 @@ module.exports = (liza) => {
     const app_details_address = liza.call("provider","main","add_app_details",App_Details);
     console.log("APP Details ADDRESS:: ",app_details_address);
     t.equal(app_details_address.Ok, 'QmXAYU3wHtnuuotABDY1WoqburChSseayBA2mkxWiw536P')
+
+    sleep.sleep(5);
+
+    const app_details_rec = liza.call("provider","main","get_app_details",{app_hash:app_address.Ok});
+    console.log("Get Details:: ",app_details_rec);
+    t.equal(app_details_rec.Ok[0].entry.details, "Details for this app")
+
 
     const my_apps = liza.call("provider","main","get_my_registered_app",{});
     console.log("my_apps:: ",my_apps);

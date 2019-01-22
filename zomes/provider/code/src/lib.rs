@@ -51,6 +51,11 @@ define_zome! {
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_add_app_details
             }
+            get_app_details: {
+                inputs: |app_hash:Address |,
+                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::app_details::AppDetails>>> |,
+                handler: provider_fn::handle_get_app_details
+            }
             register_as_provider: {
                 inputs: |provider_doc:entry::provider_doc::ProviderDoc |,
                 outputs: |result: ZomeApiResult<Address>|,
