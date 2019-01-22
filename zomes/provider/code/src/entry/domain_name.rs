@@ -16,7 +16,7 @@ pub fn definitions()-> ValidatingEntryType{
         name: "domain_name",
         description: "domain_name for an app",
         sharing: Sharing::Public,
-        native_type: RawString,
+        native_type: String,
         validation_package: || {
             hdk::ValidationPackageDefinition::Entry
         },

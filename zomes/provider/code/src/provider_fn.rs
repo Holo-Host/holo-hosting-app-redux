@@ -44,6 +44,10 @@ pub fn handle_add_app_domain_name(domain_name:RawString,app_hash:Address) -> Zom
     utils::commit_and_link(&app_domain_name_entry, &app_hash, "domain_name_tag")
 }
 
+pub fn handle_get_app_domain_name(app_hash:Address) -> ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> {
+    utils::get_links_and_load_type(&app_hash, "domain_name_tag")
+}
+
 pub fn handle_register_as_provider(provider_doc:ProviderDoc) -> ZomeApiResult<Address> {
     // TODO : Validation
     let verified_entry = Entry::App("provider_doc".into(), provider_doc.into());

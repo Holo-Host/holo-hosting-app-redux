@@ -66,6 +66,11 @@ define_zome! {
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_add_app_domain_name
             }
+            get_app_domain_name: {
+                inputs: |app_hash:Address |,
+                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> |,
+                handler: provider_fn::handle_get_app_domain_name
+            }
         }
     }
 }
