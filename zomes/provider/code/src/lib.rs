@@ -14,6 +14,7 @@ use hdk::{
     holochain_core_types::{
         hash::HashString,
         cas::content::Address,
+        json::RawString,
     },
     holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
 };
@@ -25,7 +26,8 @@ define_zome! {
     entries: [
         entry::app_config::definitions(),
         entry::app_details::definitions(),
-        entry::provider_doc::definitions()
+        entry::provider_doc::definitions(),
+        entry::domain_name::definitions()
     ]
 
     genesis: || {
@@ -58,6 +60,11 @@ define_zome! {
                 inputs: | |,
                 outputs: |result:  ZomeApiResult<GetLinksResult>|,
                 handler: provider_fn::handle_is_registered_as_provider
+            }
+            add_app_domain_name: {
+                inputs: |domain_name:RawString, app_hash:Address |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_add_app_domain_name
             }
         }
     }

@@ -6,3 +6,5 @@ pub use self::app_details::AppDetails;
 
 pub mod provider_doc;
 pub use self::provider_doc::ProviderDoc;
+
+pub mod domain_name;
