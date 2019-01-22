@@ -15,13 +15,13 @@ module.exports = (liza) => {
     App_Details = {
       app_details:{
         details:"Details for this app",
-        domain_name:"app.holo.host"
+        // domain_name:"app.holo.host"
       },
       app_hash:app_address.Ok
     }
     const app_details_address = liza.call("provider","main","add_app_details",App_Details);
     console.log("APP Details ADDRESS:: ",app_details_address);
-    t.equal(app_details_address.Ok, 'QmaVKt7iMmFgoYgm5fLdZNFbV5RZ12AhSBX8qhZo7hjj4S')
+    t.equal(app_details_address.Ok, 'QmXAYU3wHtnuuotABDY1WoqburChSseayBA2mkxWiw536P')
 
     const my_apps = liza.call("provider","main","get_my_registered_app",{});
     console.log("my_apps:: ",my_apps);
