@@ -27,7 +27,8 @@ define_zome! {
         entry::app_config::definitions(),
         entry::app_details::definitions(),
         entry::provider_doc::definitions(),
-        entry::domain_name::definitions()
+        entry::domain_name::definitions(),
+        entry::holofuel_account::definitions()
     ]
 
     genesis: || {
@@ -35,6 +36,16 @@ define_zome! {
         }
 
     functions: [
+            register_as_provider: {
+                inputs: |provider_doc:entry::provider_doc::ProviderDoc |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_register_as_provider
+            }
+            is_registered_as_provider: {
+                inputs: | |,
+                outputs: |result:  ZomeApiResult<GetLinksResult>|,
+                handler: provider_fn::handle_is_registered_as_provider
+            }
             register_app: {
                 inputs: |ui_hash:HashString, dna_list:Vec<HashString> |,
                 outputs: |result: ZomeApiResult<Address>|,
@@ -46,7 +57,7 @@ define_zome! {
                 handler: provider_fn::handle_get_my_registered_app
             }
             add_app_details: {
-                inputs: |app_details:entry::app_details::AppDetails, app_hash:Address |,
+                inputs: |app_details: entry::app_details::AppDetails, app_hash:Address |,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_add_app_details
             }
@@ -54,16 +65,6 @@ define_zome! {
                 inputs: |app_hash:Address |,
                 outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::app_details::AppDetails>>> |,
                 handler: provider_fn::handle_get_app_details
-            }
-            register_as_provider: {
-                inputs: |provider_doc:entry::provider_doc::ProviderDoc |,
-                outputs: |result: ZomeApiResult<Address>|,
-                handler: provider_fn::handle_register_as_provider
-            }
-            is_registered_as_provider: {
-                inputs: | |,
-                outputs: |result:  ZomeApiResult<GetLinksResult>|,
-                handler: provider_fn::handle_is_registered_as_provider
             }
             add_app_domain_name: {
                 inputs: |domain_name:String, app_hash:Address |,
@@ -75,17 +76,29 @@ define_zome! {
                 outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> |,
                 handler: provider_fn::handle_get_app_domain_name
             }
+            add_holofuel_account: {
+                inputs: |holofuel_account_details: entry::holofuel_account::HoloFuelAc|,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_add_holofuel_account
+            }
+            get_holofuel_account: {
+                inputs: | |,
+                outputs: |result: ZomeApiResult<GetLinksResult>|,
+                handler: provider_fn::handle_get_holofuel_account
+            }
         ]
         capabilities: {
             public (Public) [
+                register_as_provider,
+                is_registered_as_provider,
                 register_app,
                 get_my_registered_app,
                 add_app_details,
                 get_app_details,
-                register_as_provider,
-                is_registered_as_provider,
                 add_app_domain_name,
-                get_app_domain_name
+                get_app_domain_name,
+                add_holofuel_account,
+                get_holofuel_account
             ]
         }
 }

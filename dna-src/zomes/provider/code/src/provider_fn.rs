@@ -1,6 +1,7 @@
 use crate::entry::app_config::AppConfig;
 use crate::entry::app_details::AppDetails;
 use crate::entry::provider_doc::ProviderDoc;
+use crate::entry::holofuel_account::HoloFuelAc;
 
 use hdk::{
     self,
@@ -60,4 +61,13 @@ pub fn handle_register_as_provider(provider_doc:ProviderDoc) -> ZomeApiResult<Ad
 
 pub fn handle_is_registered_as_provider() -> ZomeApiResult<GetLinksResult> {
     hdk::get_links(&hdk::AGENT_ADDRESS, "verified_provider_tag")
+}
+
+pub fn handle_add_holofuel_account(holofuel_account_details:HoloFuelAc) -> ZomeApiResult<Address> {
+    let ac_entry = Entry::App("holofuel_account".into(), holofuel_account_details.into());
+    utils::commit_and_link(&ac_entry, &hdk::AGENT_ADDRESS, "holofuel_account_details_tag")
+}
+
+pub fn handle_get_holofuel_account() -> ZomeApiResult<GetLinksResult> {
+    hdk::get_links(&hdk::AGENT_ADDRESS, "holofuel_account_details_tag")
 }
