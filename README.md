@@ -14,7 +14,7 @@ The hosting app is a space for Hosts and App Providers to interact
 ## How to test?
 
 ```
-hc test | test/node_modules/faucet/bin/cmd.js
+cd dna-src && hc test 
 ```
 
 
