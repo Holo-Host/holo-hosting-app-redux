@@ -90,6 +90,6 @@ pub fn link_entries_bidir<S: Into<String>>(a: &HashString, b: &HashString, tag_a
 
 pub fn commit_and_link<S: Into<String>>(entry: &Entry, base: &Address, tag: S) -> ZomeApiResult<Address> {
 	let entry_addr = hdk::commit_entry(entry)?;
-	hdk::link_entries(&entry_addr, base, tag)?;
+	hdk::link_entries(base,&entry_addr, tag)?;
 	Ok(entry_addr)
 }
