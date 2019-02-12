@@ -29,7 +29,7 @@ pub fn get_links_and_load_type<
     tag: S
 ) -> ZomeApiResult<GetLinksLoadResult<R>> {
 	let link_load_results = hdk::get_links_and_load(base, tag)?;
-    hdk::debug(format!("GET LINK LOAD:: {:?}",link_load_results));
+
 	Ok(link_load_results
 	.iter()
 	.map(|maybe_entry| {
@@ -65,8 +65,8 @@ pub fn get_links_and_load_type<
 
 pub fn get_as_type<
 	R: TryFrom<AppEntryValue>
-> (address: &HashString) -> ZomeApiResult<R> {
-	let get_result = hdk::get_entry(address)?;
+> (address: HashString) -> ZomeApiResult<R> {
+	let get_result = hdk::get_entry(&address)?;
     let entry = get_result.ok_or(ZomeApiError::Internal("No entry at this address".into()))?;
     match entry {
         Entry::App(_, entry_value) => {
@@ -90,6 +90,6 @@ pub fn link_entries_bidir<S: Into<String>>(a: &HashString, b: &HashString, tag_a
 
 pub fn commit_and_link<S: Into<String>>(entry: &Entry, base: &Address, tag: S) -> ZomeApiResult<Address> {
 	let entry_addr = hdk::commit_entry(entry)?;
-	hdk::link_entries(base,&entry_addr, tag)?;
+	hdk::link_entries(&entry_addr, base, tag)?;
 	Ok(entry_addr)
 }

@@ -9,13 +9,13 @@ use hdk::{
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
-pub struct UserData {
+pub struct UserDetails {
     hash: String,
     name: String,
 }
 
-pub fn handle_get_agent() -> ZomeApiResult<UserData> {
-    Ok(UserData {
+pub fn handle_get_agent() -> ZomeApiResult<UserDetails> {
+    Ok(UserDetails {
         hash: AGENT_ADDRESS.to_string(),
         name: AGENT_ID_STR.to_string()
     })
