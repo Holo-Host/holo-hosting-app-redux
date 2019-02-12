@@ -6,7 +6,6 @@ const agentLiza = Config.agent("liza")
 const instanceLiza = Config.instance(agentLiza, dna)
 const scenario = new Scenario([instanceLiza])
 
-require('./unit_test/whoami_test')(scenario);
-require('./unit_test/host_test')(scenario);
-// require('./single_agent_tests/ratings_test')(scenario);
-// require('./single_agent_tests/whoami_test')(scenario);
+// require('./unit_test/whoami_test')(scenario);
+// require('./unit_test/host_test')(scenario);
+require('./unit_test/provider_test')(scenario);
