@@ -93,30 +93,3 @@ install_rust_tools: tools_toolchain
 		echo -e "\033[0;93m## Installing clippy (rust linting) tools ##\033[0m"; \
 		rustup component add clippy-preview; \
 	fi
-
-fmt_check: install_rust_tools
-	$(CARGO_TOOLS) fmt -- --check
-
-fmt: install_rust_tools
-	$(CARGO_TOOLS) fmt
-
-# execute all the found "C" binding tests
-${C_BINDING_TESTS}:
-	$@
-
-# clean up the target directory and all extraneous "C" binding test files
-clean: ${C_BINDING_CLEAN}
-	@for target in $$( find . -type d -a -name 'target' ); do \
-	    echo -e "\033[0;93m## Removing $${target} ##\033[0m"; \
-	    $(RM) -rf $${target}; \
-        done
-	@$(RM) -rf nodejs_conductor/dist
-	@$(RM) -rf app_spec/dist
-	@for cargo in $$( find . -name 'Cargo.toml' ); do \
-	    echo -e "\033[0;93m## 'cargo update' in $${cargo%/*} ##\033[0m"; \
-	    ( cd $${cargo%/*} && cargo update ); \
-	done
-
-# clean up the extraneous "C" binding test files
-${C_BINDING_CLEAN}:
-	-@$(RM) $@

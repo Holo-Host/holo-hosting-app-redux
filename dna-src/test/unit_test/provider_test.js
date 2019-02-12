@@ -1,5 +1,4 @@
 const sleep = require('sleep');
-const test = require('tape');
 
 module.exports = (scenario) => {
   scenario.runTape('Provider Tests', (t, {liza}) => {
