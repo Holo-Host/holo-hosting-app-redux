@@ -46,3 +46,22 @@ pub fn handle_register_as_host(host_doc:HostDoc) -> ZomeApiResult<Address> {
 pub fn handle_is_registered_as_host() -> ZomeApiResult<GetLinksResult> {
     hdk::get_links(&hdk::AGENT_ADDRESS, "verified_host_tag")
 }
+
+/*************************/
+/* Service Log Functions */
+/*************************/
+// TODO : This functions need to bridge to the service logs
+
+// Suggested struct for the service log config
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
+pub struct ServiceLogConfig {
+    pub app_hash:String, // Bundle hash in the Holo Hosting for which the Config is going to be set
+    pub payment_per_invoice:String, //
+    pub unpaied_limit:String // This is the limit after which the app would be stoped hosted on the HoloPort
+}
+
+// This need to bridge to the Service log app and the details need to be commited in the Service Log DHT
+pub fn handle_bridging_to_add_app_service_log_config(service_log_config:ServiceLogConfig,app_hash:Address) //-> ZomeApiResult<Address>
+{
+    // TODO
+}
