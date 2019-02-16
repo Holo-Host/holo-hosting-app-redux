@@ -88,6 +88,12 @@ pub fn link_entries_bidir<S: Into<String>>(a: &HashString, b: &HashString, tag_a
     Ok(())
 }
 
+pub fn remove_link_entries_bidir<S: Into<String>>(a: &HashString, b: &HashString, tag_a_b: S, tag_b_a: S) -> ZomeApiResult<()> {
+    hdk::remove_link(a, b, tag_a_b)?;
+    hdk::remove_link(b, a, tag_b_a)?;
+    Ok(())
+}
+
 pub fn commit_and_link<S: Into<String>>(entry: &Entry, base: &Address, tag: S) -> ZomeApiResult<Address> {
 	let entry_addr = hdk::commit_entry(entry)?;
 	hdk::link_entries(base,&entry_addr, tag)?;

@@ -87,18 +87,18 @@ define_zome! {
                 handler: provider_fn::handle_get_holofuel_account
             }
         ]
-        capabilities: {
-            public (Public) [
-                register_as_provider,
-                is_registered_as_provider,
-                register_app,
-                get_my_registered_app,
-                add_app_details,
-                get_app_details,
-                add_app_domain_name,
-                get_app_domain_name,
-                add_holofuel_account,
-                get_holofuel_account
-            ]
-        }
+        traits: {
+               hc_public [
+                   register_as_provider,
+                   is_registered_as_provider,
+                   register_app,
+                   get_my_registered_app,
+                   add_app_details,
+                   get_app_details,
+                   add_app_domain_name,
+                   get_app_domain_name,
+                   add_holofuel_account,
+                   get_holofuel_account
+                  ]
+           }
 }

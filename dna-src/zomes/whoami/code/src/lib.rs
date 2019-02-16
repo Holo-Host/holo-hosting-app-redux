@@ -29,7 +29,7 @@ define_zome! {
         }
     ]
 
-    capabilities: {
-        public (Public) [get_user]
-    }
+    traits: {
+           hc_public [get_user]
+       }
 }

@@ -35,6 +35,11 @@ define_zome! {
                 outputs: |result: ZomeApiResult<()>|,
                 handler: host_fn::handle_enable_app
             }
+            disable_app: {
+                inputs: |app_hash: HashString|,
+                outputs: |result: ZomeApiResult<()>|,
+                handler: host_fn::handle_disable_app
+            }
             get_enabled_app: {
                 inputs: | |,
                 outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<host_fn::AppConfig>>>|,
@@ -57,14 +62,14 @@ define_zome! {
             }
         ]
 
-
-    capabilities: {
-        public (Public) [
-            enable_app,
-            get_enabled_app,
-            get_host_for_app,
-            register_as_host,
-            is_registered_as_host
-            ]
-    }
+        traits: {
+               hc_public [
+                   enable_app,
+                   disable_app,
+                   get_enabled_app,
+                   get_host_for_app,
+                   register_as_host,
+                   is_registered_as_host
+                  ]
+           }
 }
