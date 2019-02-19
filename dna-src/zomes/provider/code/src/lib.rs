@@ -28,12 +28,13 @@ define_zome! {
         entry::app_details::definitions(),
         entry::provider_doc::definitions(),
         entry::domain_name::definitions(),
-        entry::holofuel_account::definitions()
+        entry::holofuel_account::definitions(),
+        entry::anchor::definitions()
     ]
 
     genesis: || {
-            Ok(())
-        }
+        Ok(())
+    }
 
     functions: [
             register_as_provider: {
@@ -66,16 +67,6 @@ define_zome! {
                 outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::app_details::AppDetails>>> |,
                 handler: provider_fn::handle_get_app_details
             }
-            add_app_domain_name: {
-                inputs: |domain_name:String, app_hash:Address |,
-                outputs: |result: ZomeApiResult<Address>|,
-                handler: provider_fn::handle_add_app_domain_name
-            }
-            get_app_domain_name: {
-                inputs: |app_hash:Address |,
-                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> |,
-                handler: provider_fn::handle_get_app_domain_name
-            }
             add_holofuel_account: {
                 inputs: |holofuel_account_details: entry::holofuel_account::HoloFuelAc|,
                 outputs: |result: ZomeApiResult<Address>|,
@@ -86,6 +77,26 @@ define_zome! {
                 outputs: |result: ZomeApiResult<GetLinksResult>|,
                 handler: provider_fn::handle_get_holofuel_account
             }
+            add_app_domain_name: {
+                inputs: |domain_name:String, app_hash:Address |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_add_app_domain_name
+            }
+            get_app_domain_name: {
+                inputs: |app_hash:Address |,
+                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> |,
+                handler: provider_fn::handle_get_app_domain_name
+            }
+            get_kv_updates_domain_name: {
+                inputs: | |,
+                outputs: |result: ZomeApiResult<Vec<provider_fn::DnsDnaKV>> |,
+                handler: provider_fn::handle_get_kv_updates_domain_name
+            }
+            kv_updates_domain_name_completed: {
+                inputs: |dns_address:Address |,
+                outputs: |result: ZomeApiResult<()> |,
+                handler: provider_fn::handle_kv_updates_domain_name_completed
+            }
         ]
         traits: {
                hc_public [
@@ -95,10 +106,12 @@ define_zome! {
                    get_my_registered_app,
                    add_app_details,
                    get_app_details,
+                   add_holofuel_account,
+                   get_holofuel_account,
                    add_app_domain_name,
                    get_app_domain_name,
-                   add_holofuel_account,
-                   get_holofuel_account
+                   get_kv_updates_domain_name,
+                   kv_updates_domain_name_completed
                   ]
            }
 }

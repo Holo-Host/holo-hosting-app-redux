@@ -8,12 +8,20 @@ use hdk::{
     holochain_core_types::{
         entry::Entry,
         hash::HashString,
+        json::JsonString,
         json::RawString,
         cas::content::Address,
+        error::HolochainError,
     },
     holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
     error::ZomeApiResult,
 };
+
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct DnsDnaKV {
+    dna:Vec<HashString>,
+    dns:utils::GetLinksLoadElement<String>
+}
 
 pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeApiResult<Address> {
     // TODO
@@ -46,7 +54,43 @@ pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<Vec<utils::GetL
 
 pub fn handle_add_app_domain_name(domain_name:String,app_hash:Address) -> ZomeApiResult<Address>{
     let app_domain_name_entry = Entry::App("domain_name".into(), RawString::from(domain_name).into());
-    utils::commit_and_link(&app_domain_name_entry, &app_hash, "domain_name_tag")
+    // Add tag to notify new domain name added
+    let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
+    let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
+
+    let domain_address = hdk::commit_entry(&app_domain_name_entry)?;
+
+    utils::link_entries_bidir(&domain_address, &app_hash,"app_hash_tag" ,"domain_name_tag")?;
+    hdk::link_entries(&anchor_address,&domain_address,"new_domain_name_tag");
+    Ok(domain_address)
+}
+
+pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
+    let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
+    let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
+
+    let mut dns_dna_kv:Vec<DnsDnaKV>=Vec::new();
+    match utils::get_links_and_load_type(&anchor_address, "new_domain_name_tag"){
+        Ok(domain_name)=>{
+            for dns in domain_name{
+                let app_address = hdk::get_links(&dns.address,"app_hash_tag")?;
+                dns_dna_kv.push(DnsDnaKV{
+                    dna:app_address.addresses().clone(),
+                    dns
+                });
+            }
+        }
+        Err(_)=>{}
+    }
+    Ok(dns_dna_kv)
+}
+
+pub fn handle_kv_updates_domain_name_completed(dns_address:Address)-> ZomeApiResult<()>{
+    let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
+    let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
+
+    hdk::remove_link(&anchor_address,&dns_address,"new_domain_name_tag",)?;
+    Ok(())
 }
 
 pub fn handle_get_app_domain_name(app_hash:Address) -> ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> {

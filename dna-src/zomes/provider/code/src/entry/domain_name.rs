@@ -2,7 +2,7 @@
 use hdk::holochain_core_types::{
     dna::entry_types::Sharing,
     cas::content::Address,
-    json::RawString,    
+    json::RawString,
 };
 use hdk::{
     self,
@@ -28,6 +28,30 @@ pub fn definitions()-> ValidatingEntryType{
             from!(
                 "app_config",
                 tag: "domain_name_tag",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
+            to!(
+                "app_config",
+                tag: "app_hash_tag",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
+            from!(
+                "anchor",
+                tag: "new_domain_name_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
