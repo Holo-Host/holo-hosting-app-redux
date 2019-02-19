@@ -93,7 +93,7 @@ define_zome! {
                 handler: provider_fn::handle_get_kv_updates_domain_name
             }
             kv_updates_domain_name_completed: {
-                inputs: |dns_address:Address |,
+                inputs: |dns_address:Vec<Address> |,
                 outputs: |result: ZomeApiResult<()> |,
                 handler: provider_fn::handle_kv_updates_domain_name_completed
             }

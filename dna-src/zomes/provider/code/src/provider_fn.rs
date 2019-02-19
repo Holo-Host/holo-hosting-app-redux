@@ -85,11 +85,12 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
     Ok(dns_dna_kv)
 }
 
-pub fn handle_kv_updates_domain_name_completed(dns_address:Address)-> ZomeApiResult<()>{
+pub fn handle_kv_updates_domain_name_completed(dns_address:Vec<Address>)-> ZomeApiResult<()>{
     let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
     let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
-
-    hdk::remove_link(&anchor_address,&dns_address,"new_domain_name_tag",)?;
+    for dns in dns_address{
+        hdk::remove_link(&anchor_address,&dns,"new_domain_name_tag",)?;
+    }
     Ok(())
 }
 

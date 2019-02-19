@@ -41,7 +41,7 @@ scenario.runTape('DNS TO DNA Tests', (t, {liza}) => {
     t.equal(new_domain_name.Ok[0].dns.entry, '"app2.holo.host"')
 
     // delete the updated DNS details are recieved
-    const updated = liza.call("provider","kv_updates_domain_name_completed",{dns_address:new_domain_name.Ok[0].dns.address});
+    const updated = liza.call("provider","kv_updates_domain_name_completed",{dns_address:[new_domain_name.Ok[0].dns.address]});
     console.log("Is Updated?:: ",updated);
     t.equal(updated.Ok, null)
 
