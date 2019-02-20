@@ -44,8 +44,8 @@ module.exports = (scenario) => {
 
     /*
     Ok{
-    recently_enabled_apps:[{dna:"",host:[""]}],
-    recently_disabled_apps:[{dna:"",host:[""]}]
+    recently_enabled_apps:[{app:"",host:[""]}],
+    recently_disabled_apps:[{app:"",host:[""]}]
     }
     */
     const kv_updates = liza.call("host","get_kv_updates_dna_to_host",{});
@@ -54,8 +54,24 @@ module.exports = (scenario) => {
     // console.log("KV Updates Enabled App2:: ",kv_updates.Ok.recently_enabled_apps[1].host);
     // console.log("KV Updates Disabled App1:: ",kv_updates.Ok.recently_disabled_apps[0].host);
     // console.log("KV Updates Disabled App2:: ",kv_updates.Ok.recently_disabled_apps[1].host);
-    t.equal(kv_updates.Ok.recently_enabled_apps.length, 2)
+    t.equal(kv_updates.Ok.recently_enabled_apps[0].host.length, 1)
     t.equal(kv_updates.Ok.recently_disabled_apps.length, 2)
+
+    sleep.sleep(5);
+    /// Calling this fn again should return no new kvs
+    const kv_updates_2 = liza.call("host","get_kv_updates_dna_to_host",{});
+    // console.log("KV Updates :: ",kv_updates_2.Ok.recently_enabled_apps[0]);
+    // console.log("KV Updates Enabled App1:: ",kv_updates_2.Ok.recently_enabled_apps[0].host);
+    // console.log("KV Updates Enabled App2:: ",kv_updates_2.Ok.recently_enabled_apps[1].host);
+    // console.log("KV Updates Disabled App1:: ",kv_updates_2.Ok.recently_disabled_apps[0].host);
+    // console.log("KV Updates Disabled App2:: ",kv_updates_2.Ok.recently_disabled_apps[1].host);
+    t.equal(kv_updates_2.Ok.recently_enabled_apps[0].host.length, 0)
+    t.equal(kv_updates_2.Ok.recently_disabled_apps.length, 2)
+
+    /// NOW the Updater responds that the KV has been updated
+
+    liza.call("host","kv_updates_host_completed",{kv_bundle:kv_updates_2.Ok.recently_enabled_apps});
+
 
   })
 }

@@ -70,6 +70,11 @@ define_zome! {
                 outputs: |result: ZomeApiResult<host_fn::DnaToHost>|,
                 handler: host_fn::handle_get_kv_updates_dna_to_host
             }
+            kv_updates_host_completed: {
+                inputs: |kv_bundle:Vec<host_fn::App2Host> |,
+                outputs: |result: ZomeApiResult<()>|,
+                handler: host_fn::handle_kv_updates_host_completed
+            }
         ]
 
         traits: {
@@ -81,7 +86,8 @@ define_zome! {
                    get_host_for_app,
                    register_as_host,
                    is_registered_as_host,
-                   get_kv_updates_dna_to_host
+                   get_kv_updates_dna_to_host,
+                   kv_updates_host_completed
                   ]
            }
 }

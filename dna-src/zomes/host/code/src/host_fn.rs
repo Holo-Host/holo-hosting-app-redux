@@ -19,6 +19,16 @@ pub struct AppConfig {
     pub dna_list:Vec<HashString>,
 }
 
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct DnaToHost{
+    recently_enabled_apps:Vec<App2Host>,
+    recently_disabled_apps:Vec<App2Host>
+}
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct App2Host{
+    app:HashString,
+    host:Vec<String>
+}
 
 pub fn handle_get_all_apps() -> ZomeApiResult<GetLinksResult> {
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
@@ -49,22 +59,12 @@ pub fn handle_disable_app(app_hash: HashString) -> ZomeApiResult<()> {
     Ok(())
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
-pub struct DnaToHost{
-    recently_enabled_apps:Vec<app2host>,
-    recently_disabled_apps:Vec<app2host>
-}
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
-struct app2host{
-    app:HashString,
-    host:Vec<String>
-}
 pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
     // Get all the apps
     let got_apps:GetLinksResult = handle_get_all_apps()?;
     let all_apps = got_apps.addresses().to_vec();
     // Check the enabled tag
-    let mut recently_enabled_apps:Vec<app2host>=Vec::new();
+    let mut recently_enabled_apps:Vec<App2Host>=Vec::new();
     for app in all_apps.clone(){
         let app_copy = app.clone();
         let enabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "recently_enabled_app_tag")?;
@@ -75,14 +75,21 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
                 _ =>{}
             }
         }
-        recently_enabled_apps.push(app2host{
+        recently_enabled_apps.push(App2Host{
             app,
-            host:agent_address_list
-        })
+            host:agent_address_list.clone()
+        });
+
+        // Remove the enable tag and add intransition apps
+        for agent in agent_address_list{
+            hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_enabled_app_tag")?;
+            hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_from_kv_store");
+        }
+
     }
 
     // Check the disabled tag
-    let mut recently_disabled_apps:Vec<app2host>=Vec::new();
+    let mut recently_disabled_apps:Vec<App2Host>=Vec::new();
     for app in all_apps.clone(){
         let app_copy = app.clone();
         let disabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "recently_disabled_app_tag")?;
@@ -94,10 +101,15 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
                 _ =>{}
             }
         }
-        recently_disabled_apps.push(app2host{
+        recently_disabled_apps.push(App2Host{
             app,
-            host:agent_address_list
-        })
+            host:agent_address_list.clone()
+        });
+        // Remove the disabled tag and add intransition apps
+        for agent in agent_address_list{
+            hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_disabled_app_tag")?;
+            hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_from_kv_store");
+        }
     }
     Ok(DnaToHost{
         recently_enabled_apps,
@@ -105,6 +117,14 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
     })
 }
 
+pub fn handle_kv_updates_host_completed(kv_bundle:Vec<App2Host>)-> ZomeApiResult<()>{
+    for kv in kv_bundle{
+        for host_address in kv.host {
+            hdk::remove_link(&kv.app,&HashString::from(host_address),"need_updates_from_kv_store",)?;
+        }
+    }
+    Ok(())
+}
 pub fn handle_get_enabled_app() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppConfig>>> {
     utils::get_links_and_load_type(&hdk::AGENT_ADDRESS, "apps_enabled")
 }
