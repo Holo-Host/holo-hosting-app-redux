@@ -16,6 +16,9 @@ The hosting app is a space for Hosts and App Providers to interact
 ```
 cd dna-src && hc test 
 ```
+## Documentaion:
+
+**[KV Store API](https://hackmd.io/_zUswSixRRK0NpnvoK1dLA?both):** Doc required by the KV Store to communicate with the HHA
 
 
 ## Built With
