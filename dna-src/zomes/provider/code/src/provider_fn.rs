@@ -34,11 +34,16 @@ pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeA
         dna_list
         }.into());
 
-    utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "registered_tag")
+    // CREATING AN ANCHOR
+    let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
+    let anchor_address = hdk::commit_entry(&all_apps)?;
+
+    utils::commit_and_link(&app_entry, &anchor_address, "all_apps_tag");
+    utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
 
 pub fn handle_get_my_registered_app() -> ZomeApiResult<GetLinksResult> {
-    hdk::get_links(&hdk::AGENT_ADDRESS, "registered_tag")
+    hdk::get_links(&hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
 
 // TODO Decide the actual details that are needed

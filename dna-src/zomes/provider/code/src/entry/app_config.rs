@@ -35,7 +35,7 @@ pub fn definitions()-> ValidatingEntryType{
         links: [
             from!(
                 "%agent_id",
-                tag: "registered_tag",
+                tag: "my_registered_apps_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
@@ -57,9 +57,45 @@ pub fn definitions()-> ValidatingEntryType{
                     Ok(())
                 }
             ),
+            to!(
+                "%agent_id",
+                tag: "recently_enabled_app_tag",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
+            to!(
+                "%agent_id",
+                tag: "recently_disabled_app_tag",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
             from!(
                 "%agent_id",
                 tag: "apps_enabled",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
+            from!(
+                "anchor",
+                tag: "all_apps_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry

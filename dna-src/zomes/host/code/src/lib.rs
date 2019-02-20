@@ -30,6 +30,11 @@ define_zome! {
     genesis: || { Ok(()) }
 
     functions: [
+            get_all_apps: {
+                inputs: | |,
+                outputs: |result: ZomeApiResult<GetLinksResult>|,
+                handler: host_fn::handle_get_all_apps
+            }
             enable_app: {
                 inputs: |app_hash: HashString|,
                 outputs: |result: ZomeApiResult<()>|,
@@ -60,16 +65,23 @@ define_zome! {
                 outputs: |result:  ZomeApiResult<GetLinksResult>|,
                 handler: host_fn::handle_is_registered_as_host
             }
+            get_kv_updates_dna_to_host: {
+                inputs: | |,
+                outputs: |result: ZomeApiResult<host_fn::DnaToHost>|,
+                handler: host_fn::handle_get_kv_updates_dna_to_host
+            }
         ]
 
         traits: {
                hc_public [
+                   get_all_apps,
                    enable_app,
                    disable_app,
                    get_enabled_app,
                    get_host_for_app,
                    register_as_host,
-                   is_registered_as_host
+                   is_registered_as_host,
+                   get_kv_updates_dna_to_host
                   ]
            }
 }

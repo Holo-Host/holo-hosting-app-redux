@@ -10,4 +10,5 @@ const scenario = new Scenario([instanceLiza])
 // require('./unit_test/whoami_test')(scenario);
 // require('./unit_test/host_test')(scenario);
 // require('./unit_test/provider_test')(scenario);
-require('./unit_test/dna_dns_test')(scenario);
+// require('./unit_test/dna_dns_test')(scenario);
+require('./unit_test/kv_enable_disable_test')(scenario);
