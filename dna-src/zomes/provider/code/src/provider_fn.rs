@@ -2,6 +2,7 @@ use crate::entry::app_config::AppConfig;
 use crate::entry::app_details::AppDetails;
 use crate::entry::provider_doc::ProviderDoc;
 use crate::entry::holofuel_account::HoloFuelAc;
+use crate::entry::domain_name::DNS;
 
 use hdk::{
     self,
@@ -52,7 +53,7 @@ pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<Vec<utils::GetL
 }
 
 pub fn handle_add_app_domain_name(domain_name:String,app_hash:Address) -> ZomeApiResult<Address>{
-    let app_domain_name_entry = Entry::App("domain_name".into(), RawString::from(domain_name).into());
+    let app_domain_name_entry = Entry::App("domain_name".into(), DNS{dns_name:domain_name}.into());
     // Add tag to notify new domain name added
     // let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
     // let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
@@ -70,11 +71,6 @@ pub fn handle_get_all_apps() -> ZomeApiResult<GetLinksResult> {
     hdk::get_links(&anchor_address, "all_apps_tag")
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
-pub struct DnsDnaKV {
-    dna:HashString,
-    dns:Vec<String>
-}
 
 // pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
 pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
@@ -85,34 +81,51 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
         let mut recently_updated_dns:Vec<DnsDnaKV>=Vec::new();
         for app in all_apps.clone(){
             let app_copy = app.clone();
-            let mut updated_dns:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "new_domain_name_tag")?;
+            let mut updated_dns:Vec<utils::GetLinksLoadElement<DNS>> = utils::get_links_and_load_type(&app_copy, "new_domain_name_tag")?;
             // Data refactor
-            let mut dns_list:Vec<String>=Vec::new();
-            for dns in updated_dns{
-                match dns?{
-                    Entry::App(t,v) => dns_list.push(v.to_string()),
-                    _ =>{}
-                }
+            let mut dns_list:Vec<DNSEntry>=Vec::new();
+            for dns in updated_dns.clone(){
+                dns_list.push(DNSEntry{
+                    address:dns.address,
+                    name:dns.entry.dns_name
+                })
             }
 
             recently_updated_dns.push(DnsDnaKV{
                 dna:app,
                 dns:dns_list
             });
+
+            // Remove the new_domain_name tag and add intransition apps
+            for dns in &updated_dns{
+                hdk::remove_link(&app_copy,&dns.address,"new_domain_name_tag")?;
+                hdk::link_entries(&app_copy,&dns.address ,"need_update_domain_name_tag");
+            }
         }
         Ok(recently_updated_dns)
 }
 
-pub fn handle_kv_updates_domain_name_completed(dns_address:Vec<Address>)-> ZomeApiResult<()>{
-    let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
-    let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
-    for dns in dns_address{
-        hdk::remove_link(&anchor_address,&dns,"new_domain_name_tag",)?;
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct DnsDnaKV {
+    dna:HashString,
+    dns:Vec<DNSEntry>
+}
+
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct DNSEntry {
+    address:HashString,
+    name:String
+}
+pub fn handle_kv_updates_domain_name_completed(kv_bundle:Vec<DnsDnaKV>)-> ZomeApiResult<()>{
+    for kv in kv_bundle{
+        for dns in kv.dns {
+            hdk::remove_link(&kv.dna,&dns.address.clone(),"need_update_domain_name_tag")?;
+        }
     }
     Ok(())
 }
 
-pub fn handle_get_app_domain_name(app_hash:Address) -> ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> {
+pub fn handle_get_app_domain_name(app_hash:Address) -> ZomeApiResult<Vec<utils::GetLinksLoadElement<DNS>>> {
     utils::get_links_and_load_type(&app_hash, "domain_name_tag")
 }
 

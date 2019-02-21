@@ -8,6 +8,7 @@ pub mod provider_doc;
 pub use self::provider_doc::ProviderDoc;
 
 pub mod domain_name;
+pub use self::domain_name::DNS;
 
 pub mod anchor;
 

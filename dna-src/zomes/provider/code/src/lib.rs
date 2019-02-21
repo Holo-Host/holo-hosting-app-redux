@@ -84,7 +84,7 @@ define_zome! {
             }
             get_app_domain_name: {
                 inputs: |app_hash:Address |,
-                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<String>>> |,
+                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::domain_name::DNS>>> |,
                 handler: provider_fn::handle_get_app_domain_name
             }
             get_kv_updates_domain_name: {
@@ -93,7 +93,7 @@ define_zome! {
                 handler: provider_fn::handle_get_kv_updates_domain_name
             }
             kv_updates_domain_name_completed: {
-                inputs: |dns_address:Vec<Address> |,
+                inputs: |kv_bundle:Vec<provider_fn::DnsDnaKV>|,
                 outputs: |result: ZomeApiResult<()> |,
                 handler: provider_fn::handle_kv_updates_domain_name_completed
             }
