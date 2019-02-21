@@ -37,6 +37,18 @@ pub fn definitions()-> ValidatingEntryType{
                     Ok(())
                 }
             ),
+            from!(
+                "app_config",
+                tag: "new_domain_name_tag",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
             to!(
                 "app_config",
                 tag: "app_hash_tag",

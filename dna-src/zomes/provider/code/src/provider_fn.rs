@@ -17,12 +17,6 @@ use hdk::{
     error::ZomeApiResult,
 };
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
-pub struct DnsDnaKV {
-    dna:Vec<HashString>,
-    dns:utils::GetLinksLoadElement<String>
-}
-
 pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeApiResult<Address> {
     // TODO
     // Validation before commiting to the DHT
@@ -60,34 +54,53 @@ pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<Vec<utils::GetL
 pub fn handle_add_app_domain_name(domain_name:String,app_hash:Address) -> ZomeApiResult<Address>{
     let app_domain_name_entry = Entry::App("domain_name".into(), RawString::from(domain_name).into());
     // Add tag to notify new domain name added
-    let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
-    let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
+    // let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
+    // let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
 
     let domain_address = hdk::commit_entry(&app_domain_name_entry)?;
 
     utils::link_entries_bidir(&domain_address, &app_hash,"app_hash_tag" ,"domain_name_tag")?;
-    hdk::link_entries(&anchor_address,&domain_address,"new_domain_name_tag");
+    hdk::link_entries(&app_hash,&domain_address,"new_domain_name_tag");
     Ok(domain_address)
 }
 
-pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
-    let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
-    let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
+pub fn handle_get_all_apps() -> ZomeApiResult<GetLinksResult> {
+    let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
+    let anchor_address = hdk::commit_entry(&all_apps)?;
+    hdk::get_links(&anchor_address, "all_apps_tag")
+}
 
-    let mut dns_dna_kv:Vec<DnsDnaKV>=Vec::new();
-    match utils::get_links_and_load_type(&anchor_address, "new_domain_name_tag"){
-        Ok(domain_name)=>{
-            for dns in domain_name{
-                let app_address = hdk::get_links(&dns.address,"app_hash_tag")?;
-                dns_dna_kv.push(DnsDnaKV{
-                    dna:app_address.addresses().clone(),
-                    dns
-                });
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct DnsDnaKV {
+    dna:HashString,
+    dns:Vec<String>
+}
+
+// pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
+pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
+        // Get all the apps
+        let got_apps:GetLinksResult = handle_get_all_apps()?;
+        let all_apps = got_apps.addresses().to_vec();
+        // Check the enabled tag
+        let mut recently_updated_dns:Vec<DnsDnaKV>=Vec::new();
+        for app in all_apps.clone(){
+            let app_copy = app.clone();
+            let mut updated_dns:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "new_domain_name_tag")?;
+            // Data refactor
+            let mut dns_list:Vec<String>=Vec::new();
+            for dns in updated_dns{
+                match dns?{
+                    Entry::App(t,v) => dns_list.push(v.to_string()),
+                    _ =>{}
+                }
             }
+
+            recently_updated_dns.push(DnsDnaKV{
+                dna:app,
+                dns:dns_list
+            });
         }
-        Err(_)=>{}
-    }
-    Ok(dns_dna_kv)
+        Ok(recently_updated_dns)
 }
 
 pub fn handle_kv_updates_domain_name_completed(dns_address:Vec<Address>)-> ZomeApiResult<()>{

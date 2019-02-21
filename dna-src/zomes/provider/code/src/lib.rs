@@ -89,7 +89,7 @@ define_zome! {
             }
             get_kv_updates_domain_name: {
                 inputs: | |,
-                outputs: |result: ZomeApiResult<Vec<provider_fn::DnsDnaKV>> |,
+                outputs: |result: ZomeApiResult<Vec<provider_fn::DnsDnaKV>>|,
                 handler: provider_fn::handle_get_kv_updates_domain_name
             }
             kv_updates_domain_name_completed: {
