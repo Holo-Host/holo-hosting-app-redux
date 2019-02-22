@@ -18,6 +18,17 @@ use hdk::{
     error::ZomeApiResult,
 };
 
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct DnsDnaKV {
+    dna:HashString,
+    dns:Vec<DNSEntry>
+}
+
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct DNSEntry {
+    address:HashString,
+    name:String
+}
 pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeApiResult<Address> {
     // TODO
     // Validation before commiting to the DHT
@@ -105,17 +116,6 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
         Ok(recently_updated_dns)
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
-pub struct DnsDnaKV {
-    dna:HashString,
-    dns:Vec<DNSEntry>
-}
-
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
-pub struct DNSEntry {
-    address:HashString,
-    name:String
-}
 pub fn handle_kv_updates_domain_name_completed(kv_bundle:Vec<DnsDnaKV>)-> ZomeApiResult<()>{
     for kv in kv_bundle{
         for dns in kv.dns {
