@@ -1,8 +1,5 @@
-const test = require('tape');
-const sleep = require('sleep');
-
 module.exports = (scenario) => {
-  scenario.runTape('App Flow Test', (t, {liza}) => {
+  scenario.runTape('App Flow Test', async(t, {liza}) => {
     const App_Config_1 = {
       ui_hash: "Quarnnnnvltuenb###CONFIG1",
       dna_list: ["QweAFioina","QtavsFdvva"]
@@ -21,8 +18,6 @@ module.exports = (scenario) => {
     liza.call("host","enable_app",{app_hash:app_address_2.Ok});
     t.equal(app_enable.Ok, null)
 
-    sleep.sleep(5);
-
     const app_list = liza.call("host","get_enabled_app",{});
     console.log("APP List:: ",app_list);
     t.equal(app_list.Ok.length, 2)
@@ -34,13 +29,9 @@ module.exports = (scenario) => {
     const disable_app_hash = liza.call("host","disable_app",{app_hash:app_address_2.Ok});
     t.equal(disable_app_hash.Ok, null)
 
-    sleep.sleep(5);
-
     const app_list_after_disable = liza.call("host","get_enabled_app",{});
     console.log("APP list again:: ",app_list_after_disable);
     t.equal(app_list_after_disable.Ok.length, 1)
-
-    sleep.sleep(5);
 
     /*
     Ok{
@@ -57,7 +48,6 @@ module.exports = (scenario) => {
     t.equal(kv_updates.Ok.recently_enabled_apps[0].host.length, 1)
     t.equal(kv_updates.Ok.recently_disabled_apps.length, 2)
 
-    sleep.sleep(5);
     /// Calling this fn again should return no new kvs
     const kv_updates_2 = liza.call("host","get_kv_updates_dna_to_host",{});
     // console.log("KV Updates :: ",kv_updates_2.Ok.recently_enabled_apps[0]);
@@ -71,7 +61,5 @@ module.exports = (scenario) => {
     /// NOW the Updater responds that the KV has been updated
 
     liza.call("host","kv_updates_host_completed",{kv_bundle:kv_updates_2.Ok.recently_enabled_apps});
-
-
   })
 }

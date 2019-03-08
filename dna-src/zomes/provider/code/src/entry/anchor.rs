@@ -1,7 +1,6 @@
 
 use hdk::holochain_core_types::{
     dna::entry_types::Sharing,
-    cas::content::Address,
     json::RawString,
 };
 use hdk::{

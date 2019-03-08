@@ -44,7 +44,7 @@ pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeA
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
 
-    utils::commit_and_link(&app_entry, &anchor_address, "all_apps_tag");
+    utils::commit_and_link(&app_entry, &anchor_address, "all_apps_tag")?;
     utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
 
@@ -72,7 +72,7 @@ pub fn handle_add_app_domain_name(domain_name:String,app_hash:Address) -> ZomeAp
     let domain_address = hdk::commit_entry(&app_domain_name_entry)?;
 
     utils::link_entries_bidir(&domain_address, &app_hash,"app_hash_tag" ,"domain_name_tag")?;
-    hdk::link_entries(&app_hash,&domain_address,"new_domain_name_tag");
+    hdk::link_entries(&app_hash,&domain_address,"new_domain_name_tag")?;
     Ok(domain_address)
 }
 
@@ -92,7 +92,7 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
         let mut recently_updated_dns:Vec<DnsDnaKV>=Vec::new();
         for app in all_apps.clone(){
             let app_copy = app.clone();
-            let mut updated_dns:Vec<utils::GetLinksLoadElement<DNS>> = utils::get_links_and_load_type(&app_copy, "new_domain_name_tag")?;
+            let updated_dns:Vec<utils::GetLinksLoadElement<DNS>> = utils::get_links_and_load_type(&app_copy, "new_domain_name_tag")?;
             // Data refactor
             let mut dns_list:Vec<DNSEntry>=Vec::new();
             for dns in updated_dns.clone(){
@@ -110,7 +110,7 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
             // Remove the new_domain_name tag and add intransition apps
             for dns in &updated_dns{
                 hdk::remove_link(&app_copy,&dns.address,"new_domain_name_tag")?;
-                hdk::link_entries(&app_copy,&dns.address ,"need_update_domain_name_tag");
+                hdk::link_entries(&app_copy,&dns.address ,"need_update_domain_name_tag")?;
             }
         }
         Ok(recently_updated_dns)
