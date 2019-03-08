@@ -86,8 +86,11 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
 
         // Remove the enable tag and add intransition apps
         for agent in agent_address_list{
-            hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_enabled_app_tag")?;
-            hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_enabled_from_kv_store")?;
+            hdk::debug("---------")?;
+            let v= hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_enabled_app_tag")?;
+            hdk::debug(v)?;
+            let c = hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_enabled_from_kv_store")?;
+            hdk::debug(c)?;
         }
 
     }
