@@ -81,6 +81,30 @@ pub fn definitions()-> ValidatingEntryType{
                     Ok(())
                 }
             ),
+            to!(
+                "%agent_id",
+                tag: "need_updates_enabled_from_kv_store",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
+            to!(
+                "%agent_id",
+                tag: "need_updates_disabled_from_kv_store",
+
+                validation_package: || {
+                    hdk::ValidationPackageDefinition::Entry
+                },
+
+                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                    Ok(())
+                }
+            ),
             from!(
                 "%agent_id",
                 tag: "apps_enabled",
