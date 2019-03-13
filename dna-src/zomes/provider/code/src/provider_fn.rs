@@ -3,6 +3,7 @@ use crate::entry::app_details::AppDetails;
 use crate::entry::provider_doc::ProviderDoc;
 use crate::entry::holofuel_account::HoloFuelAc;
 use crate::entry::domain_name::DNS;
+use crate::entry::payment_pref::PaymentPref;
 
 use hdk::{
     self,
@@ -54,13 +55,40 @@ pub fn handle_get_my_registered_app() -> ZomeApiResult<GetLinksResult> {
 
 // TODO Decide the actual details that are needed
 pub fn handle_add_app_details(app_details:AppDetails,app_hash:Address) -> ZomeApiResult<Address>{
-
     let app_details_entry = Entry::App("app_details".into(), app_details.into());
     utils::commit_and_link(&app_details_entry, &app_hash, "details_tag")
 }
 
-pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppDetails>>> {
-    utils::get_links_and_load_type(&app_hash, "details_tag")
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct AppBundle{
+    pub app_bundle:AppConfig,
+    pub app_details:Vec<utils::GetLinksLoadElement<AppDetails>>,
+    pub payment_pref:Vec<utils::GetLinksLoadElement<PaymentPref>>
+}
+
+pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<AppBundle> {
+    Ok(AppBundle{
+        // get app AppConfig
+        app_bundle:utils::get_as_type(&app_hash)?,
+        // get app details_tag
+        app_details: utils::get_links_and_load_type(&app_hash, "details_tag")?,
+        // get app servicelog details ir
+        payment_pref: utils::get_links_and_load_type(&app_hash, "payment_pref_tag")?
+    })
+}
+
+pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64) -> ZomeApiResult<Address>{
+    add_service_log_details(PaymentPref{
+        provider_address: Address::from(hdk::AGENT_ADDRESS.to_string()),
+        dna_bundle_hash:app_hash.clone(),
+        max_fuel_per_invoice,
+        max_unpaid_value
+    },app_hash)
+}
+
+fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiResult<Address>{
+    let payment_pref_entry = Entry::App("payment_pref".into(), payment_pref.into());
+    utils::commit_and_link(&payment_pref_entry, &app_hash, "payment_pref_tag")
 }
 
 pub fn handle_add_app_domain_name(domain_name:String,app_hash:Address) -> ZomeApiResult<Address>{

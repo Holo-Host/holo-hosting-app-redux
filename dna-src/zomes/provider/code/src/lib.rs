@@ -29,7 +29,8 @@ define_zome! {
         entry::provider_doc::definitions(),
         entry::domain_name::definitions(),
         entry::holofuel_account::definitions(),
-        entry::anchor::definitions()
+        entry::anchor::definitions(),
+        entry::payment_pref::definitions()
     ]
 
     genesis: || {
@@ -64,7 +65,7 @@ define_zome! {
             }
             get_app_details: {
                 inputs: |app_hash:Address |,
-                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::app_details::AppDetails>>> |,
+                outputs: |result: ZomeApiResult<provider_fn::AppBundle> |,
                 handler: provider_fn::handle_get_app_details
             }
             add_holofuel_account: {
@@ -97,6 +98,11 @@ define_zome! {
                 outputs: |result: ZomeApiResult<()> |,
                 handler: provider_fn::handle_kv_updates_domain_name_completed
             }
+            add_service_log_details: {
+                inputs: |app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64 |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_add_service_log_details
+            }
         ]
         traits: {
                hc_public [
@@ -111,7 +117,8 @@ define_zome! {
                    add_app_domain_name,
                    get_app_domain_name,
                    get_kv_updates_domain_name,
-                   kv_updates_domain_name_completed
+                   kv_updates_domain_name_completed,
+                   add_service_log_details
                   ]
            }
 }
