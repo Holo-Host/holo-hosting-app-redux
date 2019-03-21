@@ -11,9 +11,10 @@ use hdk::holochain_core_types::{
     entry::Entry,
 };
 use crate::entry::host_doc::HostDoc;
+// use std::convert::TryFrom;
+// use serde_json::{Result, Value};
 
-
-#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
 pub struct AppConfig {
     pub ui_hash:HashString,
     pub dna_list:Vec<HashString>,
@@ -24,17 +25,25 @@ pub struct DnaToHost{
     recently_enabled_apps:Vec<App2Host>,
     recently_disabled_apps:Vec<App2Host>
 }
+
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
 pub struct App2Host{
     app:HashString,
     host:Vec<String>
 }
 
-pub fn handle_get_all_apps() -> ZomeApiResult<GetLinksResult> {
+pub fn handle_get_all_apps() -> ZomeApiResult<Vec<String>> {
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
+    let all_apps_commit = hdk::get_links(&anchor_address, "all_apps_tag")?;
+    let app_address = all_apps_commit.addresses();
 
-    hdk::get_links(&anchor_address, "all_apps_tag")
+    let mut app_details_list: Vec<String> =Vec::new();
+    for x in app_address{
+        let details = hdk::call(hdk::THIS_INSTANCE,"provider",Address::from(hdk::PUBLIC_TOKEN.to_string()),"get_app_details",json!({"app_hash":x}).into())?;
+        app_details_list.push(String::from(details.to_owned()));
+    }
+    Ok(app_details_list)
 }
 
 pub fn handle_enable_app(app_hash: HashString) -> ZomeApiResult<()> {
@@ -59,9 +68,16 @@ pub fn handle_disable_app(app_hash: HashString) -> ZomeApiResult<()> {
     Ok(())
 }
 
+fn handle_get_all_apps_addresses() -> ZomeApiResult<GetLinksResult> {
+    let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
+    let anchor_address = hdk::commit_entry(&all_apps)?;
+
+    hdk::get_links(&anchor_address, "all_apps_tag")
+}
+
 pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
     // Get all the apps
-    let got_apps:GetLinksResult = handle_get_all_apps()?;
+    let got_apps:GetLinksResult = handle_get_all_apps_addresses()?;
     let all_apps = got_apps.addresses().to_vec();
     // Check the enabled tag
     let mut recently_enabled_apps:Vec<App2Host>=Vec::new();

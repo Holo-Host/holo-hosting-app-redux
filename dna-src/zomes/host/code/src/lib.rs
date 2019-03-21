@@ -1,9 +1,10 @@
 #![feature(try_from)]
 #[macro_use]
 extern crate hdk;
-extern crate serde;
 #[macro_use]
 extern crate serde_derive;
+extern crate boolinator;
+#[macro_use]
 extern crate serde_json;
 #[macro_use]
 extern crate holochain_core_types_derive;
@@ -32,7 +33,7 @@ define_zome! {
     functions: [
             get_all_apps: {
                 inputs: | |,
-                outputs: |result: ZomeApiResult<GetLinksResult>|,
+                outputs: |result: ZomeApiResult<Vec<String>>|,
                 handler: host_fn::handle_get_all_apps
             }
             enable_app: {
