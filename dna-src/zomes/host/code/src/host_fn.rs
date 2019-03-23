@@ -32,16 +32,26 @@ pub struct App2Host{
     host:Vec<String>
 }
 
-pub fn handle_get_all_apps() -> ZomeApiResult<Vec<String>> {
+#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+pub struct AllApps{
+    hash:HashString,
+    details:String
+}
+
+
+pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
     let all_apps_commit = hdk::get_links(&anchor_address, "all_apps_tag")?;
     let app_address = all_apps_commit.addresses();
 
-    let mut app_details_list: Vec<String> =Vec::new();
+    let mut app_details_list: Vec<AllApps> =Vec::new();
     for x in app_address{
         let details = hdk::call(hdk::THIS_INSTANCE,"provider",Address::from(hdk::PUBLIC_TOKEN.to_string()),"get_app_details",json!({"app_hash":x}).into())?;
-        app_details_list.push(String::from(details.to_owned()));
+        app_details_list.push(AllApps{
+            hash:x.to_owned(),
+            details:String::from(details.to_owned())
+        });
     }
     Ok(app_details_list)
 }

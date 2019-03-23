@@ -33,7 +33,7 @@ define_zome! {
     functions: [
             get_all_apps: {
                 inputs: | |,
-                outputs: |result: ZomeApiResult<Vec<String>>|,
+                outputs: |result: ZomeApiResult<Vec<host_fn::AllApps>>|,
                 handler: host_fn::handle_get_all_apps
             }
             enable_app: {
