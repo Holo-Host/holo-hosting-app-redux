@@ -19,7 +19,21 @@ module.exports = (scenario) => {
 
     const all_apps = liza.call("host","get_all_apps",{});
     console.log("All Apps: ",all_apps);
-    t.equal(all_apps.Ok.length, 2)
+    t.equal(all_apps.Err.Internal, 'Agent Not a Host')
 
+    const Host_Doc = {
+      host_doc:{
+      kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
+    }}
+
+    const verified = liza.call("host", "register_as_host", Host_Doc);
+    console.log("verified:: ",verified);
+    t.equal(verified.Ok.length, 46)
+
+    sleep.sleep(5);
+
+    const all_apps_again = liza.call("host","get_all_apps",{});
+    console.log("All Apps: ",all_apps_again);
+    t.equal(all_apps_again.Ok.length, 2)
 })
 }

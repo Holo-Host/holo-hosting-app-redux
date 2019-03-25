@@ -1,5 +1,5 @@
 use hdk::{
-    error::ZomeApiResult,
+    error::{ZomeApiResult,ZomeApiError},
     holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
 };
 use hdk::holochain_core_types::{
@@ -38,8 +38,21 @@ pub struct AllApps{
     details:String
 }
 
+pub fn validate_host() -> ZomeApiResult<bool> {
+    let check = handle_is_registered_as_host()?;
+    if check.addresses().len() != 0 {
+        hdk::debug("PASSING TRUE")?;
+        Ok(true)
+    }
+    else {
+        hdk::debug("PASSING FALSE")?;
+        Err(ZomeApiError::Internal(
+            "Agent Not a Host".to_string()))
+    }
+}
 
 pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
+    validate_host()?;
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
     let all_apps_commit = hdk::get_links(&anchor_address, "all_apps_tag")?;
