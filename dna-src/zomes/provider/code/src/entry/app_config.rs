@@ -1,10 +1,11 @@
+use boolinator::Boolinator;
 
 use hdk::holochain_core_types::{
     dna::entry_types::Sharing,
     error::HolochainError,
     json::JsonString,
     hash::HashString,
-    cas::content::Address
+    validation::{EntryValidationData},
 
 };
 use hdk::{
@@ -23,15 +24,30 @@ pub fn definitions()-> ValidatingEntryType{
         name: "app_config",
         description: "config for an app",
         sharing: Sharing::Public,
-        native_type: AppConfig,
         validation_package: || {
             hdk::ValidationPackageDefinition::Entry
         },
+        validation: |validation_data: hdk::EntryValidationData<AppConfig>| {
+            match validation_data
+            {
+                EntryValidationData::Create{entry:_app_config,validation_data:_} =>
+                {
+                    Ok(())
+                },
+                EntryValidationData::Modify{new_entry,old_entry,old_entry_header:_,validation_data:_} =>
+                {
+                   (new_entry.ui_hash != old_entry.ui_hash)
+                   .ok_or_else(|| String::from("Trying to modify with same data"))
+                },
+                EntryValidationData::Delete{old_entry:_,old_entry_header:_,validation_data:_} =>
+                {
+                  Ok(())
+                }
 
-        validation: |_app: AppConfig, _ctx: hdk::ValidationData| {
-            Ok(())
-        }
-        ,
+            }
+
+        },
+
         links: [
             from!(
                 "%agent_id",
@@ -41,7 +57,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             ),
@@ -53,7 +69,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             ),
@@ -65,7 +81,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             ),
@@ -77,7 +93,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             ),
@@ -89,7 +105,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             ),
@@ -101,7 +117,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             ),
@@ -113,7 +129,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             ),
@@ -125,7 +141,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             )

@@ -1,4 +1,5 @@
 #![feature(try_from)]
+extern crate boolinator;
 #[macro_use]
 extern crate hdk;
 extern crate serde;

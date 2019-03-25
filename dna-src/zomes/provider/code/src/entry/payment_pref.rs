@@ -1,17 +1,18 @@
-
 use hdk::holochain_core_types::{
     dna::entry_types::Sharing,
     json::JsonString,
     cas::content::Address,
     error::HolochainError,
     hash::HashString,
+    validation::{EntryValidationData},
+
 };
 use hdk::{
     self,
     entry_definition::ValidatingEntryType,
 };
 
-#[derive(Serialize, Deserialize, DefaultJson, Debug)]
+#[derive(Serialize, Deserialize, DefaultJson, Debug, Clone)]
 pub struct PaymentPref {
     pub provider_address: Address,
     pub dna_bundle_hash: HashString,
@@ -25,13 +26,27 @@ pub fn definitions() -> ValidatingEntryType {
         name: "payment_pref",
         description: "the payment preferences defintion",
         sharing: Sharing::Public,
-        native_type: PaymentPref,
         validation_package: || {
             hdk::ValidationPackageDefinition::Entry
         },
+        validation: |validation_data: hdk::EntryValidationData<PaymentPref>| {
+            match validation_data
+            {
+                EntryValidationData::Create{entry:_payment_pref,validation_data:_} =>
+                {
+                    Ok(())
+                },
+                EntryValidationData::Modify{new_entry:_new_entry,old_entry:_old_entry,old_entry_header:_,validation_data:_} =>
+                {
+                   Ok(())
+                },
+                EntryValidationData::Delete{old_entry:_old_entry,old_entry_header:_,validation_data:_} =>
+                {
+                  Ok(())
+                }
 
-        validation: |_my_entry: PaymentPref, _validation_data: hdk::ValidationData| {
-            Ok(())
+            }
+
         },
         links: [
             from!(
@@ -42,7 +57,7 @@ pub fn definitions() -> ValidatingEntryType {
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             )

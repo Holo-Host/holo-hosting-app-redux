@@ -1,10 +1,11 @@
+use boolinator::Boolinator;
 
 use hdk::holochain_core_types::{
     dna::entry_types::Sharing,
     error::HolochainError,
     json::JsonString,
     // hash::HashString,
-    cas::content::Address
+    validation::{EntryValidationData},
 
 };
 use hdk::{
@@ -24,15 +25,30 @@ pub fn definitions()-> ValidatingEntryType{
         name: "app_details",
         description: "Details for an app",
         sharing: Sharing::Public,
-        native_type: AppDetails,
         validation_package: || {
             hdk::ValidationPackageDefinition::Entry
         },
+        validation: |validation_data: hdk::EntryValidationData<AppDetails>| {
+            match validation_data
+            {
+                EntryValidationData::Create{entry:_app_details,validation_data:_} =>
+                {
+                    Ok(())
+                },
+                EntryValidationData::Modify{new_entry,old_entry,old_entry_header:_,validation_data:_} =>
+                {
+                   (new_entry.name != old_entry.name)
+                   .ok_or_else(|| String::from("Trying to modify with same data"))
+                },
+                EntryValidationData::Delete{old_entry,old_entry_header:_,validation_data:_} =>
+                {
+                   (old_entry.name!="SYS")
+                   .ok_or_else(|| String::from("Trying to delete native type with content SYS"))
+                }
 
-        validation: |_app: AppDetails, _ctx: hdk::ValidationData| {
-            Ok(())
-        }
-        ,
+            }
+
+        },
         links: [
             from!(
                 "app_config",
@@ -42,7 +58,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             )

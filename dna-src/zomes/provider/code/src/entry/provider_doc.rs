@@ -1,10 +1,8 @@
-
 use hdk::holochain_core_types::{
     dna::entry_types::Sharing,
     error::HolochainError,
     json::JsonString,
-    // hash::HashString,
-    cas::content::Address
+    validation::{EntryValidationData},
 
 };
 use hdk::{
@@ -22,15 +20,29 @@ pub fn definitions()-> ValidatingEntryType{
         name: "provider_doc",
         description: "Details for an provider that is verified",
         sharing: Sharing::Public,
-        native_type: ProviderDoc,
         validation_package: || {
             hdk::ValidationPackageDefinition::Entry
         },
 
-        validation: |_doc: ProviderDoc, _ctx: hdk::ValidationData| {
-            Ok(())
-        }
-        ,
+        validation: |validation_data: hdk::EntryValidationData<ProviderDoc>| {
+            match validation_data
+            {
+                EntryValidationData::Create{entry:_provider_doc,validation_data:_} =>
+                {
+                    Ok(())
+                },
+                EntryValidationData::Modify{new_entry:_new_entry,old_entry:_old_entry,old_entry_header:_,validation_data:_} =>
+                {
+                   Ok(())
+                },
+                EntryValidationData::Delete{old_entry:_old_entry,old_entry_header:_,validation_data:_} =>
+                {
+                   Ok(())
+                }
+
+            }
+
+        },
         links: [
             from!(
                 "%agent_id",
@@ -40,7 +52,7 @@ pub fn definitions()-> ValidatingEntryType{
                     hdk::ValidationPackageDefinition::Entry
                 },
 
-                validation: |_base: Address, _target: Address, _ctx: hdk::ValidationData| {
+                validation: | _validation_data: hdk::LinkValidationData | {
                     Ok(())
                 }
             )
