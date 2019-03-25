@@ -70,6 +70,7 @@ pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
 }
 
 pub fn handle_enable_app(app_hash: HashString) -> ZomeApiResult<()> {
+    validate_host()?;
     utils::link_entries_bidir(&app_hash, &hdk::AGENT_ADDRESS, "host_enabled", "apps_enabled")?;
 
     // check if its a recently_disabled_app_tag
@@ -81,6 +82,7 @@ pub fn handle_enable_app(app_hash: HashString) -> ZomeApiResult<()> {
 }
 
 pub fn handle_disable_app(app_hash: HashString) -> ZomeApiResult<()> {
+    validate_host()?;
     utils::remove_link_entries_bidir(&app_hash, &hdk::AGENT_ADDRESS, "host_enabled", "apps_enabled")?;
 
     // check if its a recently_disabled_app_tag
@@ -92,6 +94,7 @@ pub fn handle_disable_app(app_hash: HashString) -> ZomeApiResult<()> {
 }
 
 fn handle_get_all_apps_addresses() -> ZomeApiResult<GetLinksResult> {
+    validate_host()?;
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
 
@@ -174,6 +177,7 @@ pub fn handle_kv_updates_host_completed(kv_bundle:Vec<App2Host>)-> ZomeApiResult
     Ok(())
 }
 pub fn handle_get_enabled_app() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppConfig>>> {
+    validate_host()?;
     utils::get_links_and_load_type(&hdk::AGENT_ADDRESS, "apps_enabled")
 }
 

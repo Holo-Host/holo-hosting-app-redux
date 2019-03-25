@@ -16,8 +16,19 @@ module.exports = (scenario) => {
     console.log("APP ADDRESS:: ",app_address_1);
     t.equal(app_address_1.Ok.length, 46)
 
+    const Host_Doc = {
+      host_doc:{
+      kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
+    }}
+    const verified = liza.call("host", "register_as_host", Host_Doc);
+    console.log("verified:: ",verified);
+    t.equal(verified.Ok.length, 46)
+
+    sleep.sleep(5);
+
     const app_enable = liza.call("host","enable_app",{app_hash:app_address_1.Ok});
     liza.call("host","enable_app",{app_hash:app_address_2.Ok});
+    console.log("App_enbled: ", app_enable);
     t.equal(app_enable.Ok, null)
 
     sleep.sleep(5);
@@ -31,6 +42,7 @@ module.exports = (scenario) => {
     t.equal(agent_list.Ok.length, 1)
 
     const disable_app_hash = liza.call("host","disable_app",{app_hash:app_address_2.Ok});
+    console.log("App_Disabled: ", app_enable);
     t.equal(disable_app_hash.Ok, null)
 
     sleep.sleep(5);

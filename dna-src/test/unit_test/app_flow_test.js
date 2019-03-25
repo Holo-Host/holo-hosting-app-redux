@@ -8,6 +8,13 @@ module.exports = (scenario) => {
       ui_hash: "Quarnnnnvltuenb###CONFIG2",
       dna_list: ["QweAFioina","QtavsFdvva"]
     }
+    const Host_Doc = {
+      host_doc:{
+      kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
+    }}
+    const verified = liza.call("host", "register_as_host", Host_Doc);
+    console.log("verified:: ",verified);
+    t.equal(verified.Ok.length, 46)
 
     const app_address_1 = liza.call("provider",  "register_app", App_Config_1);
     const app_address_2 = liza.call("provider",  "register_app", App_Config_2);
