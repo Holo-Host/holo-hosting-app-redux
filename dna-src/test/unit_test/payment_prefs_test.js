@@ -12,6 +12,7 @@ module.exports = (scenario) => {
 
     App_Details = {
       app_details:{
+        name:"App Name",
         details:"Details for this app"
         // domain_name:"app.holo.host"
       },
@@ -19,7 +20,7 @@ module.exports = (scenario) => {
     }
     const app_details_address = liza.call("provider","add_app_details",App_Details);
     console.log("APP Details ADDRESS:: ",app_details_address);
-    t.equal(app_details_address.Ok, 'QmXAYU3wHtnuuotABDY1WoqburChSseayBA2mkxWiw536P')
+    t.equal(app_details_address.Ok, 'Qma8ZDMrav4zMsBLS25abKsxhGaPTiY8Efr8Tq7z6YxVad')
 
     sleep.sleep(5);
 

@@ -14,6 +14,7 @@ use hdk::{
 
 #[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
 pub struct AppDetails {
+    pub name:String,
     pub details:String,
     // pub domain_name:String
 }

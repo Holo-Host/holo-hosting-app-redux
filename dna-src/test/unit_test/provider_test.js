@@ -12,6 +12,7 @@ module.exports = (scenario) => {
 
     App_Details = {
       app_details:{
+        name:"App Name",
         details:"Details for this app",
         // domain_name:"app.holo.host"
       },
@@ -19,13 +20,13 @@ module.exports = (scenario) => {
     }
     const app_details_address = liza.call("provider","add_app_details",App_Details);
     console.log("APP Details ADDRESS:: ",app_details_address);
-    t.equal(app_details_address.Ok, 'QmXAYU3wHtnuuotABDY1WoqburChSseayBA2mkxWiw536P')
+    t.equal(app_details_address.Ok, 'Qma8ZDMrav4zMsBLS25abKsxhGaPTiY8Efr8Tq7z6YxVad')
 
     sleep.sleep(5);
 
     const app_details_rec = liza.call("provider","get_app_details",{app_hash:app_address.Ok});
     console.log("Get Details:: ",app_details_rec);
-    t.equal(app_details_rec.Ok[0].entry.details, "Details for this app")
+    t.equal(app_details_rec.Ok.app_bundle.ui_hash, "QuarnnnnvltuenblergjasnvAfs")
 
     const my_apps = liza.call("provider","get_my_registered_app",{});
     console.log("my_apps:: ",my_apps);
