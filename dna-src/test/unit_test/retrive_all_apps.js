@@ -1,6 +1,16 @@
 const sleep = require('sleep');
 module.exports = (scenario) => {
   scenario.runTape('App Flow Test',async (t, {liza}) => {
+    const Provider_Doc = {
+      provider_doc:{
+      kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
+    }}
+    const verified_provider = liza.call("provider", "register_as_provider", Provider_Doc);
+    console.log("verified_provider:: ",verified_provider);
+    t.equal(verified_provider.Ok.length, 46)
+
+    sleep.sleep(5);
+
     const App_Config_1 = {
       ui_hash: "Quarnnnnvltuenb###CONFIG1",
       dna_list: ["QweAFioina","QtavsFdvva"]

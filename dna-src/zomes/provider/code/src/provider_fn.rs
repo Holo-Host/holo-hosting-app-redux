@@ -16,7 +16,7 @@ use hdk::{
         error::HolochainError,
     },
     holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
-    error::ZomeApiResult,
+    error::{ZomeApiResult,ZomeApiError},
 };
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
@@ -30,12 +30,22 @@ pub struct DNSEntry {
     address:HashString,
     name:String
 }
+
+pub fn validate_provider() -> ZomeApiResult<bool> {
+    let check = handle_is_registered_as_provider()?;
+    if check.addresses().len() != 0 {
+        Ok(true)
+    }
+    else {
+        Err(ZomeApiError::Internal("Agent Not a Provider".to_string()))
+    }
+}
 pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeApiResult<Address> {
     // TODO
     // Validation before commiting to the DHT
     // Check if user is verified
     // Check if all the hashes exist in the HCHC
-
+    validate_provider()?;
     let app_entry = Entry::App("app_config".into(), AppConfig{
         ui_hash,
         dna_list
@@ -50,11 +60,13 @@ pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeA
 }
 
 pub fn handle_get_my_registered_app() -> ZomeApiResult<GetLinksResult> {
+    validate_provider()?;
     hdk::get_links(&hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
 
 // TODO Decide the actual details that are needed
 pub fn handle_add_app_details(app_details:AppDetails,app_hash:Address) -> ZomeApiResult<Address>{
+    validate_provider()?;
     let app_details_entry = Entry::App("app_details".into(), app_details.into());
     utils::commit_and_link(&app_details_entry, &app_hash, "details_tag")
 }
@@ -92,6 +104,7 @@ fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiR
 }
 
 pub fn handle_add_app_domain_name(domain_name:String,app_hash:Address) -> ZomeApiResult<Address>{
+    validate_provider()?;
     let app_domain_name_entry = Entry::App("domain_name".into(), DNS{dns_name:domain_name}.into());
     // Add tag to notify new domain name added
     // let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());

@@ -1,6 +1,16 @@
-module.exports = (scenario) => {
+const sleep = require('sleep');
 
+module.exports = (scenario) => {
 scenario.runTape('DNS TO DNA Tests', async(t, {liza}) => {
+    const Provider_Doc = {
+      provider_doc:{
+      kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
+    }}
+    const verified_provider = liza.call("provider", "register_as_provider", Provider_Doc);
+    console.log("verified_provider:: ",verified_provider);
+    t.equal(verified_provider.Ok.length, 46)
+
+    sleep.sleep(5);
     const App_Config = {
       ui_hash: "Quarnnnnvltuenbsfasf",
       dna_list: ["QweAFFRna","Qtavsvfava"]
@@ -20,7 +30,7 @@ scenario.runTape('DNS TO DNA Tests', async(t, {liza}) => {
       domain_name:"app2.org",
       app_hash:app_address.Ok
     }
-  liza.call("provider","add_app_domain_name",App_Domain_Name2);
+    liza.call("provider","add_app_domain_name",App_Domain_Name2);
     // console.log("APP Domain Details ADDRESS:: ",app_domain_name_address);
     // t.equal(app_domain_name_address.Ok, 'QmQ5QB4ZShmVgo8jkDs5XsJDGHrTZcnm7ULT9J2oH91qxT')
 
