@@ -15,7 +15,7 @@ scenario.runTape('DNS TO DNA Tests', async(t, {liza}) => {
       ui_hash: "Quarnnnnvltuenbsfasf",
       dna_list: ["QweAFFRna","Qtavsvfava"]
     }
-    const app_address = liza.call("provider", "register_app", App_Config);
+    const app_address = liza.call("provider", "register_app_bundle", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 

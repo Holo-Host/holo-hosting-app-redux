@@ -16,7 +16,7 @@ module.exports = (scenario) => {
       ui_hash: "QuarnnnnvltuenblergjasnvAfs",
       dna_list: ["QweAFioina","QtavsFdvva"]
     }
-    const app_address = liza.call("provider", "register_app", App_Config);
+    const app_address = liza.call("provider", "register_app_bundle", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 
@@ -97,7 +97,7 @@ scenario.runTape('Provider Tests Domain Name', async(t, {liza}) => {
       ui_hash: "Quarnnnnvltuenbsfasf",
       dna_list: ["QweAFFRna","Qtavsvfava"]
     }
-    const app_address = liza.call("provider", "register_app", App_Config);
+    const app_address = liza.call("provider", "register_app_bundle", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 

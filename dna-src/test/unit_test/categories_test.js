@@ -14,11 +14,11 @@ module.exports = (app) => {
 
   test('Category test', (t) => {
 
-    const app_address = app.call("provider", "main", "register_app", App_Config_1);
+    const app_address = app.call("provider", "main", "register_app_bundle", App_Config_1);
     t.equal(app_address.Ok.length, 46)
     console.log("APP ADDRESS:: ",app_address.Ok);
 
-    const app_address2 = app.call("provider", "main", "register_app", App_Config_2);
+    const app_address2 = app.call("provider", "main", "register_app_bundle", App_Config_2);
     t.equal(app_address2.Ok.length, 46)
     console.log("APP ADDRESS:: ",app_address2.Ok);
 
