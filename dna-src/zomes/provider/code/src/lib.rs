@@ -12,7 +12,6 @@ extern crate holochain_core_types_derive;
 use hdk::{
     error::ZomeApiResult,
     holochain_core_types::{
-        // hash::HashString,
         cas::content::Address,
         error::HolochainError,
         json::JsonString,

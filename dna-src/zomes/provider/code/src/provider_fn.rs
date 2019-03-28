@@ -43,7 +43,6 @@ pub fn validate_provider() -> ZomeApiResult<bool> {
 
 pub fn handle_register_app(app_bundle:AppConfig, app_details:AppDetails, domain_name:DNS) -> ZomeApiResult<Address> {
     let app_hash = handle_register_app_bundle(app_bundle)?;
-
     handle_add_app_details(app_details, &app_hash)?;
     handle_add_app_domain_name(domain_name, &app_hash)?;
     Ok(app_hash)
