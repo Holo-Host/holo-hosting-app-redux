@@ -12,31 +12,25 @@ scenario.runTape('DNS TO DNA Tests', async(t, {liza}) => {
 
     sleep.sleep(5);
     const App_Config = {
-      ui_hash: "Quarnnnnvltuenbsfasf",
-      dna_list: ["QweAFFRna","Qtavsvfava"]
+      app_bundle: {
+        ui_hash: "Quarnnnnvltuenbsfasf",
+        dna_list: ["QweAFioina","QtavsFdvva"]
+      },
+      app_details: {
+        name: "App DNS Test",
+        details: "Details for the world to know about the App DNS Test."
+      },
+      domain_name: {
+        dns_name: "appDNS1.holo.host"
+      }
     }
     const app_address = liza.call("provider", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 
-    App_Domain_Name1 = {
-      domain_name:"app2.holo.host",
-      app_hash:app_address.Ok
-    }
-    const app_domain_name_address = liza.call("provider","add_app_domain_name",App_Domain_Name1);
-    console.log("APP Domain Details ADDRESS:: ",app_domain_name_address);
-    t.equal(app_domain_name_address.Ok, 'QmPkuw9HB55FTnuWtjpsQDmxYjn1zxLyyegE4AJWdxoq4c')
-    App_Domain_Name2 = {
-      domain_name:"app2.org",
-      app_hash:app_address.Ok
-    }
-    liza.call("provider","add_app_domain_name",App_Domain_Name2);
-    // console.log("APP Domain Details ADDRESS:: ",app_domain_name_address);
-    // t.equal(app_domain_name_address.Ok, 'QmQ5QB4ZShmVgo8jkDs5XsJDGHrTZcnm7ULT9J2oH91qxT')
-
     const app_domain_name = liza.call("provider","get_app_domain_name",{app_hash:app_address.Ok});
     console.log("Get Domain Names:: ",app_domain_name);
-    t.equal(app_domain_name.Ok[0].entry.dns_name, 'app2.holo.host')
+    t.equal(app_domain_name.Ok[0].entry.dns_name, 'appDNS1.holo.host')
 
     // Get the new DNS<=>DNAs
     // Return VAlues to the KV store
@@ -50,7 +44,7 @@ scenario.runTape('DNS TO DNA Tests', async(t, {liza}) => {
     const new_domain_name = liza.call("provider","get_kv_updates_domain_name",{});
     console.log("New Domain Names KVs:: ",new_domain_name);
     console.log("New Domain Names KVs:: ",new_domain_name.Ok[0].dns);
-    t.equal(new_domain_name.Ok[0].dns[0].name, 'app2.holo.host')
+    t.equal(new_domain_name.Ok[0].dns[0].name, 'appDNS1.holo.host')
 
     // const new_domain_name_again = liza.call("provider","get_kv_updates_domain_name",{});
     // console.log("New Domain Names KVs:: ",new_domain_name_again);
@@ -67,8 +61,5 @@ scenario.runTape('DNS TO DNA Tests', async(t, {liza}) => {
     const again_new_domain_name = liza.call("provider","get_kv_updates_domain_name",{});
     console.log("Checking New Domain Names After Deleting:: ",again_new_domain_name);
     t.equal(again_new_domain_name.Ok.length, 1)
-
-
-
   })
 }

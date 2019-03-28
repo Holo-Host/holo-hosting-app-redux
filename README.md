@@ -15,7 +15,7 @@ The hosting app is a space for Hosts and App Providers to interact
 ```
 cd dna-src && hc test 
 ```
-# How to quickly spin up an agent?
+# How to quickly spin up an agent
 > This could be used to test the [UI](https://github.com/Holo-Host/holo-hosting-app_GUI)
 ### Steps to run two DNAs:
   1. Open two terminals at @Holo-Hosting-App

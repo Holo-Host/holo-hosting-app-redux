@@ -40,16 +40,21 @@ pub fn validate_provider() -> ZomeApiResult<bool> {
         Err(ZomeApiError::Internal("Agent Not a Provider".to_string()))
     }
 }
-pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeApiResult<Address> {
+
+pub fn handle_register_app(app_bundle:AppConfig, app_details:AppDetails, domain_name:DNS) -> ZomeApiResult<Address> {
+    let app_hash = handle_register_app_bundle(app_bundle)?;
+    handle_add_app_details(app_details, &app_hash)?;
+    handle_add_app_domain_name(domain_name, &app_hash)?;
+    Ok(app_hash)
+}
+
+pub fn handle_register_app_bundle(app_bundle:AppConfig) -> ZomeApiResult<Address> {
     // TODO
     // Validation before commiting to the DHT
     // Check if user is verified
     // Check if all the hashes exist in the HCHC
     validate_provider()?;
-    let app_entry = Entry::App("app_config".into(), AppConfig{
-        ui_hash,
-        dna_list
-        }.into());
+    let app_entry = Entry::App("app_config".into(), app_bundle.into());
 
     // CREATING AN ANCHOR
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
@@ -59,16 +64,16 @@ pub fn handle_register_app(ui_hash:HashString,dna_list:Vec<HashString>) -> ZomeA
     utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
 
-pub fn handle_get_my_registered_app() -> ZomeApiResult<GetLinksResult> {
+pub fn handle_get_my_registered_app_list() -> ZomeApiResult<GetLinksResult> {
     validate_provider()?;
     hdk::get_links(&hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
 
 // TODO Decide the actual details that are needed
-pub fn handle_add_app_details(app_details:AppDetails,app_hash:Address) -> ZomeApiResult<Address>{
+pub fn handle_add_app_details(app_details:AppDetails, app_hash:&Address) -> ZomeApiResult<Address>{
     validate_provider()?;
     let app_details_entry = Entry::App("app_details".into(), app_details.into());
-    utils::commit_and_link(&app_details_entry, &app_hash, "details_tag")
+    utils::commit_and_link(&app_details_entry, app_hash, "details_tag")
 }
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
@@ -103,17 +108,17 @@ fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiR
     utils::commit_and_link(&payment_pref_entry, &app_hash, "payment_pref_tag")
 }
 
-pub fn handle_add_app_domain_name(domain_name:String,app_hash:Address) -> ZomeApiResult<Address>{
+pub fn handle_add_app_domain_name(domain_name:DNS, app_hash:&Address) -> ZomeApiResult<Address>{
     validate_provider()?;
-    let app_domain_name_entry = Entry::App("domain_name".into(), DNS{dns_name:domain_name}.into());
+    let app_domain_name_entry = Entry::App("domain_name".into(), domain_name.into());
     // Add tag to notify new domain name added
     // let new_domain_names_anchor_entry = Entry::App("anchor".into(), RawString::from("New_Domain_Names").into());
     // let anchor_address = hdk::commit_entry(&new_domain_names_anchor_entry)?;
 
     let domain_address = hdk::commit_entry(&app_domain_name_entry)?;
 
-    utils::link_entries_bidir(&domain_address, &app_hash,"app_hash_tag" ,"domain_name_tag")?;
-    hdk::link_entries(&app_hash,&domain_address,"new_domain_name_tag")?;
+    utils::link_entries_bidir(&domain_address, app_hash,"app_hash_tag" ,"domain_name_tag")?;
+    hdk::link_entries(app_hash,&domain_address,"new_domain_name_tag")?;
     Ok(domain_address)
 }
 

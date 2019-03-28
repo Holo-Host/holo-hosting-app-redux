@@ -12,7 +12,6 @@ extern crate holochain_core_types_derive;
 use hdk::{
     error::ZomeApiResult,
     holochain_core_types::{
-        hash::HashString,
         cas::content::Address,
         error::HolochainError,
         json::JsonString,
@@ -50,19 +49,14 @@ define_zome! {
                 handler: provider_fn::handle_is_registered_as_provider
             }
             register_app: {
-                inputs: |ui_hash:HashString, dna_list:Vec<HashString> |,
+                inputs: | app_bundle: entry::app_config::AppConfig, app_details: entry::app_details::AppDetails, domain_name: entry::domain_name::DNS |,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_register_app
             }
-            get_my_registered_app: {
+            get_my_registered_app_list: {
                 inputs: | |,
                 outputs: |result: ZomeApiResult<GetLinksResult>|,
-                handler: provider_fn::handle_get_my_registered_app
-            }
-            add_app_details: {
-                inputs: |app_details: entry::app_details::AppDetails, app_hash:Address |,
-                outputs: |result: ZomeApiResult<Address>|,
-                handler: provider_fn::handle_add_app_details
+                handler: provider_fn::handle_get_my_registered_app_list
             }
             get_app_details: {
                 inputs: |app_hash:Address |,
@@ -78,11 +72,6 @@ define_zome! {
                 inputs: | |,
                 outputs: |result: ZomeApiResult<GetLinksResult>|,
                 handler: provider_fn::handle_get_holofuel_account
-            }
-            add_app_domain_name: {
-                inputs: |domain_name:String, app_hash:Address |,
-                outputs: |result: ZomeApiResult<Address>|,
-                handler: provider_fn::handle_add_app_domain_name
             }
             get_app_domain_name: {
                 inputs: |app_hash:Address |,
@@ -110,12 +99,10 @@ define_zome! {
                    register_as_provider,
                    is_registered_as_provider,
                    register_app,
-                   get_my_registered_app,
-                   add_app_details,
+                   get_my_registered_app_list,
                    get_app_details,
                    add_holofuel_account,
                    get_holofuel_account,
-                   add_app_domain_name,
                    get_app_domain_name,
                    get_kv_updates_domain_name,
                    kv_updates_domain_name_completed,

@@ -13,24 +13,21 @@ module.exports = (scenario) => {
     sleep.sleep(5);
 
     const App_Config = {
-      ui_hash: "QuarnnnnvltuenblergjasnvAfs",
-      dna_list: ["QweAFioina","QtavsFdvva"]
+      app_bundle: {
+        ui_hash: "QuarnnnnvltuenblergjasnvAfs",
+        dna_list: ["QweAFioina","QtavsFdvva"]
+      },
+      app_details: {
+        name:"App Name",
+        details:"Details for this app",
+      },
+      domain_name: {
+        dns_name: "app2.holo.host"
+      }
     }
     const app_address = liza.call("provider", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
-
-    App_Details = {
-      app_details:{
-        name:"App Name",
-        details:"Details for this app",
-        // domain_name:"app.holo.host"
-      },
-      app_hash:app_address.Ok
-    }
-    const app_details_address = liza.call("provider","add_app_details",App_Details);
-    console.log("APP Details ADDRESS:: ",app_details_address);
-    t.equal(app_details_address.Ok, 'Qma8ZDMrav4zMsBLS25abKsxhGaPTiY8Efr8Tq7z6YxVad')
 
     sleep.sleep(5);
 
@@ -38,7 +35,7 @@ module.exports = (scenario) => {
     console.log("Get Details:: ",app_details_rec);
     t.equal(app_details_rec.Ok.app_bundle.ui_hash, "QuarnnnnvltuenblergjasnvAfs")
 
-    const my_apps = liza.call("provider","get_my_registered_app",{});
+    const my_apps = liza.call("provider","get_my_registered_app_list",{});
     console.log("my_apps:: ",my_apps);
     t.equal(my_apps.Ok.addresses.length, 1)
 
@@ -94,20 +91,21 @@ scenario.runTape('Provider Tests Domain Name', async(t, {liza}) => {
     sleep.sleep(5);
 
     const App_Config = {
-      ui_hash: "Quarnnnnvltuenbsfasf",
-      dna_list: ["QweAFFRna","Qtavsvfava"]
+      app_bundle: {
+        ui_hash: "Quarnnnnvltuenbsfasf",
+        dna_list: ["QweAFFRna","Qtavsvfava"]
+      },
+      app_details: {
+        name: "Provider Domain Name App Test",
+        details: "Details for the world to know about the App Test."
+      },
+      domain_name: {
+        dns_name: "app2.holo.host"
+      }
     }
     const app_address = liza.call("provider", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
-
-    App_Domain_Name = {
-      domain_name:"app2.holo.host",
-      app_hash:app_address.Ok
-    }
-    const app_domain_name_address = liza.call("provider","add_app_domain_name",App_Domain_Name);
-    console.log("APP Details ADDRESS:: ",app_domain_name_address);
-    t.equal(app_domain_name_address.Ok, 'QmPkuw9HB55FTnuWtjpsQDmxYjn1zxLyyegE4AJWdxoq4c')
 
     sleep.sleep(5);
 

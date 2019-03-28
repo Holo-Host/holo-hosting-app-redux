@@ -13,12 +13,30 @@ module.exports = (scenario) => {
     sleep.sleep(5);
 
     const App_Config_1 = {
-      ui_hash: "Quarnnnnvltuenb###CONFIG1",
-      dna_list: ["QweAFioina","QtavsFdvva"]
+      app_bundle: {
+        ui_hash: "Quarnnnnvltuenb###CONFIG1",
+        dna_list: ["QweAFioina","QtavsFdvva"]
+      },
+      app_details: {
+        name: "App Test 1",
+        details: "Details for the world to know about the App Test 1."
+      },
+      domain_name: {
+        dns_name: "apptest1.com"
+      }
     }
     const App_Config_2 = {
-      ui_hash: "Quarnnnnvltuenb###CONFIG2",
-      dna_list: ["QweAFioina","QtavsFdvva"]
+      app_bundle: {
+        ui_hash: "Quarnnnnvltuenb###CONFIG2",
+        dna_list: ["QweAFioina","QtavsFdvva"]
+      },
+      app_details: {
+        name: "App Test 2",
+        details: "Details for the world to know about the App Test 2."
+      },
+      domain_name: {
+        dns_name: "apptest2.com"
+      }
     }
 
     const app_address_1 = liza.call("provider",  "register_app", App_Config_1);
@@ -28,8 +46,9 @@ module.exports = (scenario) => {
 
     const Host_Doc = {
       host_doc:{
-      kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
-    }}
+        kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
+      }
+    }
     const verified = liza.call("host", "register_as_host", Host_Doc);
     console.log("verified:: ",verified);
     t.equal(verified.Ok.length, 46)
@@ -43,7 +62,7 @@ module.exports = (scenario) => {
 
     sleep.sleep(5);
 
-    const app_list = liza.call("host","get_enabled_app",{});
+    const app_list = liza.call("host","get_enabled_app_list",{});
     console.log("APP List:: ",app_list);
     t.equal(app_list.Ok.length, 2)
 
@@ -57,7 +76,7 @@ module.exports = (scenario) => {
 
     sleep.sleep(5);
 
-    const app_list_after_disable = liza.call("host","get_enabled_app",{});
+    const app_list_after_disable = liza.call("host","get_enabled_app_list",{});
     console.log("APP list again:: ",app_list_after_disable);
     t.equal(app_list_after_disable.Ok.length, 1)
 

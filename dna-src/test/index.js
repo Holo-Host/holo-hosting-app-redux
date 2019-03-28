@@ -14,3 +14,4 @@ require('./unit_test/provider_test')(scenario);
 require('./unit_test/kv_enable_disable_test')(scenario);
 require('./unit_test/payment_prefs_test')(scenario);
 require('./unit_test/retrive_all_apps')(scenario);
+require('./unit_test/register_app_test')(scenario);
