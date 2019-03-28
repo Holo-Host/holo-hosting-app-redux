@@ -12,7 +12,6 @@ extern crate holochain_core_types_derive;
 use hdk::{
     error::ZomeApiResult,
     holochain_core_types::{
-        // hash::HashString,
         cas::content::Address,
         error::HolochainError,
         json::JsonString,
@@ -105,7 +104,8 @@ define_zome! {
                    register_as_provider,
                    is_registered_as_provider,
                    register_app,
-                   // register_app_bundle,
+                   // TODO: REMOVE register_app_bundle from public api list
+                   register_app_bundle,
                    get_my_registered_app,
                    get_app_details,
                    add_holofuel_account,

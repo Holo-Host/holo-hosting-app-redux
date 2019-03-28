@@ -13,24 +13,22 @@ module.exports = (scenario) => {
     sleep.sleep(5);
 
     const App_Config = {
-      ui_hash: "QuarnnnnvltuenblergjasnvAfs",
-      dna_list: ["QweAFioina","QtavsFdvva"]
+      app_bundle: {
+        ui_hash: "QuarnnnnvltuenblergjasnvAfs",
+        dna_list: ["QweAFioina","QtavsFdvva"]
+      },
+      app_details: {
+        name:"App Name",
+        details:"Details for this app",
+      },
+      domain_name: {
+        dns_name: "app2.holo.host"
+      }
     }
-    const app_address = liza.call("provider", "register_app_bundle", App_Config);
+
+    const app_address = liza.call("provider", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
-
-    App_Details = {
-      app_details:{
-        name:"App Name",
-        details:"Details for this app"
-        // domain_name:"app.holo.host"
-      },
-      app_hash:app_address.Ok
-    }
-    const app_details_address = liza.call("provider","add_app_details",App_Details);
-    console.log("APP Details ADDRESS:: ",app_details_address);
-    t.equal(app_details_address.Ok, 'Qma8ZDMrav4zMsBLS25abKsxhGaPTiY8Efr8Tq7z6YxVad')
 
     sleep.sleep(5);
 
@@ -50,8 +48,8 @@ module.exports = (scenario) => {
     console.log("App_bundle:: ",app_bundle.Ok.app_bundle);
     console.log("App_details:: ",app_bundle.Ok.app_details);
     console.log("Payment_pref:: ",app_bundle.Ok.payment_pref);
-    t.equal(app_bundle.Ok.app_bundle.ui_hash, App_Config.ui_hash)
-    t.equal(app_bundle.Ok.app_details[0].entry.details, App_Details.app_details.details)
+    t.equal(app_bundle.Ok.app_bundle.ui_hash, App_Config.app_bundle.ui_hash)
+    t.equal(app_bundle.Ok.app_details[0].entry.details, App_Config.app_details.details)
     t.equal(app_bundle.Ok.payment_pref[0].entry.max_fuel_per_invoice, PaymentPref.max_fuel_per_invoice)
 
   })

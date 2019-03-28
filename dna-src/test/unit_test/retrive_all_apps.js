@@ -12,16 +12,34 @@ module.exports = (scenario) => {
     sleep.sleep(5);
 
     const App_Config_1 = {
-      ui_hash: "Quarnnnnvltuenb###CONFIG1",
-      dna_list: ["QweAFioina","QtavsFdvva"]
+      app_bundle: {
+        ui_hash: "Quarnnnnvltuenb###CONFIG1",
+        dna_list: ["QweAFioina","QtavsFdvva"]
+      },
+      app_details: {
+        name: "App Test 1",
+        details: "Details for the world to know about the App Test 1."
+      },
+      domain_name: {
+        dns_name: "apptest1.com"
+      }
     }
     const App_Config_2 = {
-      ui_hash: "Quarnnnnvltuenb###CONFIG2",
-      dna_list: ["QweAFioina","QtavsFdvva"]
+      app_bundle: {
+        ui_hash: "Quarnnnnvltuenb###CONFIG2",
+        dna_list: ["QweAFioina","QtavsFdvva"]
+      },
+      app_details: {
+        name: "App Test 2",
+        details: "Details for the world to know about the App Test 2."
+      },
+      domain_name: {
+        dns_name: "apptest2.com"
+      }
     }
 
-    const app_address_1 = liza.call("provider",  "register_app_bundle", App_Config_1);
-    const app_address_2 = liza.call("provider",  "register_app_bundle", App_Config_2);
+    const app_address_1 = liza.call("provider",  "register_app", App_Config_1);
+    const app_address_2 = liza.call("provider",  "register_app", App_Config_2);
     console.log("APP ADDRESS:: ",app_address_1);
     t.equal(app_address_1.Ok, "QmU2ZBDdD5DSJYJ6wcWwDwVGYtLg4Bc7GhUQoHnp8AC3zu");
 

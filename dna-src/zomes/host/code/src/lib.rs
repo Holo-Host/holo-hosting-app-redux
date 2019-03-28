@@ -46,6 +46,7 @@ define_zome! {
                 outputs: |result: ZomeApiResult<()>|,
                 handler: host_fn::handle_disable_app
             }
+            // TODO: CHANGE TO : "get_enabled_app_list"
             get_enabled_app: {
                 inputs: | |,
                 outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<host_fn::AppConfig>>>|,
