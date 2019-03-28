@@ -62,7 +62,7 @@ module.exports = (scenario) => {
 
     sleep.sleep(5);
 
-    const app_list = liza.call("host","get_enabled_app",{});
+    const app_list = liza.call("host","get_enabled_app_list",{});
     console.log("APP List:: ",app_list);
     t.equal(app_list.Ok.length, 2)
 
@@ -76,7 +76,7 @@ module.exports = (scenario) => {
 
     sleep.sleep(5);
 
-    const app_list_after_disable = liza.call("host","get_enabled_app",{});
+    const app_list_after_disable = liza.call("host","get_enabled_app_list",{});
     console.log("APP list again:: ",app_list_after_disable);
     t.equal(app_list_after_disable.Ok.length, 1)
 

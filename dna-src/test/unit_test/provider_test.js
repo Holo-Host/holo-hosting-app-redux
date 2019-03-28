@@ -35,7 +35,7 @@ module.exports = (scenario) => {
     console.log("Get Details:: ",app_details_rec);
     t.equal(app_details_rec.Ok.app_bundle.ui_hash, "QuarnnnnvltuenblergjasnvAfs")
 
-    const my_apps = liza.call("provider","get_my_registered_app",{});
+    const my_apps = liza.call("provider","get_my_registered_app_list",{});
     console.log("my_apps:: ",my_apps);
     t.equal(my_apps.Ok.addresses.length, 1)
 

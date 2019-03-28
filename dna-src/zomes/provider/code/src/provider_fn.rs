@@ -64,7 +64,7 @@ pub fn handle_register_app_bundle(app_bundle:AppConfig) -> ZomeApiResult<Address
     utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
 
-pub fn handle_get_my_registered_app() -> ZomeApiResult<GetLinksResult> {
+pub fn handle_get_my_registered_app_list() -> ZomeApiResult<GetLinksResult> {
     validate_provider()?;
     hdk::get_links(&hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }

@@ -48,20 +48,15 @@ define_zome! {
                 outputs: |result:  ZomeApiResult<GetLinksResult>|,
                 handler: provider_fn::handle_is_registered_as_provider
             }
-            register_app_bundle: {
-                inputs: | app_bundle: entry::app_config::AppConfig|,
-                outputs: |result: ZomeApiResult<Address>|,
-                handler: provider_fn::handle_register_app_bundle
-            }
             register_app: {
                 inputs: | app_bundle: entry::app_config::AppConfig, app_details: entry::app_details::AppDetails, domain_name: entry::domain_name::DNS |,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_register_app
             }
-            get_my_registered_app: {
+            get_my_registered_app_list: {
                 inputs: | |,
                 outputs: |result: ZomeApiResult<GetLinksResult>|,
-                handler: provider_fn::handle_get_my_registered_app
+                handler: provider_fn::handle_get_my_registered_app_list
             }
             get_app_details: {
                 inputs: |app_hash:Address |,
@@ -104,9 +99,7 @@ define_zome! {
                    register_as_provider,
                    is_registered_as_provider,
                    register_app,
-                   // TODO: REMOVE register_app_bundle from public api list
-                   register_app_bundle,
-                   get_my_registered_app,
+                   get_my_registered_app_list,
                    get_app_details,
                    add_holofuel_account,
                    get_holofuel_account,
