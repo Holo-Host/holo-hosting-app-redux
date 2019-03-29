@@ -14,6 +14,3 @@ pub mod anchor;
 
 pub mod holofuel_account;
 pub use self::holofuel_account::HoloFuelAc;
-
-pub mod payment_pref;
-pub use self::payment_pref::PaymentPref;
