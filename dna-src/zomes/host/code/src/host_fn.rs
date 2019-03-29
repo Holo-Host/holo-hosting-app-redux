@@ -199,7 +199,6 @@ pub fn handle_is_registered_as_host() -> ZomeApiResult<GetLinksResult> {
 /* Service Log Functions */
 /*************************/
 
-
 pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64) -> ZomeApiResult<Address>{
     add_service_log_details(PaymentPref{
         provider_address: Address::from(hdk::AGENT_ADDRESS.to_string()),
@@ -217,20 +216,3 @@ fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiR
 pub fn handle_get_service_log_details(app_hash:Address)-> ZomeApiResult<Vec<utils::GetLinksLoadElement<PaymentPref>>>{
     utils::get_links_and_load_type(&app_hash, "payment_pref_tag")
 }
-
-
-// TODO : This functions need to bridge to the service logs
-
-// // Suggested struct for the service log config
-// #[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
-// pub struct ServiceLogConfig {
-//     pub app_hash:String, // Bundle hash in the Holo Hosting for which the Config is going to be set
-//     pub payment_per_invoice:String, //
-//     pub unpaied_limit:String // This is the limit after which the app would be stoped hosted on the HoloPort
-// }
-//
-// // This need to bridge to the Service log app and the details need to be commited in the Service Log DHT
-// pub fn handle_bridging_to_add_app_service_log_config(service_log_config:ServiceLogConfig,app_hash:Address) //-> ZomeApiResult<Address>
-// {
-//     // TODO
-// }

@@ -55,7 +55,7 @@ module.exports = (scenario) => {
 
     const service_log_details = liza.call("host","get_service_log_details",{app_hash:app_address.Ok});
     console.log("SERVICe LOG Details: ",service_log_details);
-    t.equal(service_log_details.Ok.address, "QmZZL2W8R1WghusNw9ZEUsWJfvj69KmnTrqCW2HoUu8i6p")
+    t.equal(service_log_details.Ok[0].address, "QmZZL2W8R1WghusNw9ZEUsWJfvj69KmnTrqCW2HoUu8i6p")
 
 
   })
