@@ -38,7 +38,7 @@ module.exports = (scenario) => {
       max_unpaid_value: 10,
     }
 
-    const pref_commited = liza.call("provider","add_service_log_details",PaymentPref);
+    const pref_commited = liza.call("host","add_service_log_details",PaymentPref);
     console.log("pref_commited:: ",pref_commited);
     t.equal(pref_commited.Ok, "QmZZL2W8R1WghusNw9ZEUsWJfvj69KmnTrqCW2HoUu8i6p")
 
@@ -51,6 +51,12 @@ module.exports = (scenario) => {
     t.equal(app_bundle.Ok.app_bundle.ui_hash, App_Config.app_bundle.ui_hash)
     t.equal(app_bundle.Ok.app_details[0].entry.details, App_Config.app_details.details)
     t.equal(app_bundle.Ok.payment_pref[0].entry.max_fuel_per_invoice, PaymentPref.max_fuel_per_invoice)
+
+
+    const service_log_details = liza.call("host","get_service_log_details",{app_hash:app_address.Ok});
+    console.log("SERVICe LOG Details: ",service_log_details);
+    t.equal(service_log_details.Ok.address, "QmZZL2W8R1WghusNw9ZEUsWJfvj69KmnTrqCW2HoUu8i6p")
+
 
   })
 }

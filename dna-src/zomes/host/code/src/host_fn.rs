@@ -11,8 +11,7 @@ use hdk::holochain_core_types::{
     entry::Entry,
 };
 use crate::entry::host_doc::HostDoc;
-// use std::convert::TryFrom;
-// use serde_json::{Result, Value};
+use crate::entry::payment_pref::PaymentPref;
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
 pub struct AppConfig {
@@ -199,6 +198,27 @@ pub fn handle_is_registered_as_host() -> ZomeApiResult<GetLinksResult> {
 /*************************/
 /* Service Log Functions */
 /*************************/
+
+
+pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64) -> ZomeApiResult<Address>{
+    add_service_log_details(PaymentPref{
+        provider_address: Address::from(hdk::AGENT_ADDRESS.to_string()),
+        dna_bundle_hash:app_hash.clone(),
+        max_fuel_per_invoice,
+        max_unpaid_value
+    },app_hash)
+}
+
+fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiResult<Address>{
+    let payment_pref_entry = Entry::App("payment_pref".into(), payment_pref.into());
+    utils::commit_and_link(&payment_pref_entry, &app_hash, "payment_pref_tag")
+}
+
+pub fn handle_get_service_log_details(app_hash:Address)-> ZomeApiResult<Vec<utils::GetLinksLoadElement<PaymentPref>>>{
+    utils::get_links_and_load_type(&app_hash, "payment_pref_tag")
+}
+
+
 // TODO : This functions need to bridge to the service logs
 
 // // Suggested struct for the service log config

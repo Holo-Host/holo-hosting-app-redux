@@ -25,7 +25,8 @@ pub mod entry;
 
 define_zome! {
     entries: [
-    entry::host_doc::definitions()
+    entry::host_doc::definitions(),
+    entry::payment_pref::definitions()
     ]
 
     genesis: || { Ok(()) }
@@ -76,6 +77,16 @@ define_zome! {
                 outputs: |result: ZomeApiResult<()>|,
                 handler: host_fn::handle_kv_updates_host_completed
             }
+            add_service_log_details: {
+                inputs: |app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64 |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: host_fn::handle_add_service_log_details
+            }
+            get_service_log_details: {
+                inputs: |app_hash: Address |,
+                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::payment_pref::PaymentPref>>>|,
+                handler: host_fn::handle_get_service_log_details
+            }
         ]
 
         traits: {
@@ -88,7 +99,9 @@ define_zome! {
                    register_as_host,
                    is_registered_as_host,
                    get_kv_updates_dna_to_host,
-                   kv_updates_host_completed
+                   kv_updates_host_completed,
+                   add_service_log_details,
+                   get_service_log_details
                   ]
            }
 }
