@@ -1,0 +1,12 @@
+{
+  "name": "Holo-Hosting-App",
+  "description": "Use: to spin up 2 agents wit the HHA DNA",
+  "scripts": {
+    "start-dna-agent1":"cd ./dna-src && HC_N3H_PATH=/home/zo-el/n3h HC_AGENT=testAgent1 hc run --port 3000",
+    "start-dna-agent2":"cd ./dna-src && HC_N3H_BOOTSTRAP_NODE=<__> HC_N3H_IPC_URI=<__> HC_N3H_PATH=/home/zo-el/n3h HC_AGENT=testAgent2 hc run --port 3100"
+  },
+  "authors": [
+    "zo-el"
+  ],
+  "license": "GNU"
+}

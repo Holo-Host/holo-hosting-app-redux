@@ -1,0 +1,18 @@
+[package]
+name = "provider"
+version = "0.1.0"
+authors = ["zo-el <zo@el.org>"]
+edition = "2018"
+
+[dependencies]
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "develop"}
+holochain_core_types_derive= { git = "https://github.com/holochain/holochain-rust" , branch = "develop"}
+utils = { path = "../../../hc_common/utils" }
+boolinator = "=2.4.0"
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["cdylib"]
