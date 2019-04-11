@@ -15,8 +15,7 @@ use hdk::{
 
 #[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
 pub struct AppConfig {
-    pub ui_hash:HashString,
-    pub dna_list:Vec<HashString>,
+    pub happ_hash:HashString,
 }
 
 pub fn definitions()-> ValidatingEntryType{
@@ -36,7 +35,7 @@ pub fn definitions()-> ValidatingEntryType{
                 },
                 EntryValidationData::Modify{new_entry,old_entry,old_entry_header:_,validation_data:_} =>
                 {
-                   (new_entry.ui_hash != old_entry.ui_hash)
+                   (new_entry.happ_hash != old_entry.happ_hash)
                    .ok_or_else(|| String::from("Trying to modify with same data"))
                 },
                 EntryValidationData::Delete{old_entry:_,old_entry_header:_,validation_data:_} =>

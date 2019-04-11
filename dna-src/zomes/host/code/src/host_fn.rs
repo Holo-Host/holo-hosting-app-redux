@@ -40,11 +40,9 @@ pub struct AllApps{
 pub fn validate_host() -> ZomeApiResult<bool> {
     let check = handle_is_registered_as_host()?;
     if check.addresses().len() != 0 {
-        hdk::debug("PASSING TRUE")?;
         Ok(true)
     }
     else {
-        hdk::debug("PASSING FALSE")?;
         Err(ZomeApiError::Internal(
             "Agent Not a Host".to_string()))
     }

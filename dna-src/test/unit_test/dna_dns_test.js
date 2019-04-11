@@ -13,12 +13,7 @@ scenario.runTape('DNS TO DNA Tests', async(t, {liza}) => {
     sleep.sleep(5);
     const App_Config = {
       app_bundle: {
-        ui_hash: "Quarnnnnvltuenbsfasf",
-        dna_list: ["QweAFioina","QtavsFdvva"]
-      },
-      app_details: {
-        name: "App DNS Test",
-        details: "Details for the world to know about the App DNS Test."
+        happ_hash: "Quarnnnnvltuenbsfasf",
       },
       domain_name: {
         dns_name: "appDNS1.holo.host"

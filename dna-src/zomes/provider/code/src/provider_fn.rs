@@ -1,5 +1,4 @@
 use crate::entry::app_config::AppConfig;
-use crate::entry::app_details::AppDetails;
 use crate::entry::provider_doc::ProviderDoc;
 use crate::entry::holofuel_account::HoloFuelAc;
 use crate::entry::domain_name::DNS;
@@ -40,9 +39,9 @@ pub fn validate_provider() -> ZomeApiResult<bool> {
     }
 }
 
-pub fn handle_register_app(app_bundle:AppConfig, app_details:AppDetails, domain_name:DNS) -> ZomeApiResult<Address> {
+pub fn handle_register_app(app_bundle:AppConfig, domain_name:DNS) -> ZomeApiResult<Address> {
     let app_hash = handle_register_app_bundle(app_bundle)?;
-    handle_add_app_details(app_details, &app_hash)?;
+    // handle_add_app_details(app_details, &app_hash)?;
     handle_add_app_domain_name(domain_name, &app_hash)?;
     Ok(app_hash)
 }
@@ -67,13 +66,13 @@ pub fn handle_get_my_registered_app_list() -> ZomeApiResult<GetLinksResult> {
     validate_provider()?;
     hdk::get_links(&hdk::AGENT_ADDRESS, "my_registered_apps_tag")
 }
-
-// TODO Decide the actual details that are needed
-pub fn handle_add_app_details(app_details:AppDetails, app_hash:&Address) -> ZomeApiResult<Address>{
-    validate_provider()?;
-    let app_details_entry = Entry::App("app_details".into(), app_details.into());
-    utils::commit_and_link(&app_details_entry, app_hash, "details_tag")
-}
+//
+// // TODO Decide the actual details that are needed
+// pub fn handle_add_app_details(app_details:AppDetails, app_hash:&Address) -> ZomeApiResult<Address>{
+//     validate_provider()?;
+//     let app_details_entry = Entry::App("app_details".into(), app_details.into());
+//     utils::commit_and_link(&app_details_entry, app_hash, "details_tag")
+// }
 
 // Copy of the PaymentPref in the host zome
 #[derive(Serialize, Deserialize, DefaultJson, Debug, Clone)]
@@ -87,7 +86,7 @@ pub struct PaymentPref {
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
 pub struct AppBundle{
     pub app_bundle:AppConfig,
-    pub app_details:Vec<utils::GetLinksLoadElement<AppDetails>>,
+    // pub app_details:Vec<utils::GetLinksLoadElement<AppDetails>>,
     pub payment_pref:Vec<utils::GetLinksLoadElement<PaymentPref>>
 }
 
@@ -96,7 +95,7 @@ pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<AppBundle> {
         // get app AppConfig
         app_bundle:utils::get_as_type(&app_hash)?,
         // get app details_tag
-        app_details: utils::get_links_and_load_type(&app_hash, "details_tag")?,
+        // app_details: utils::get_links_and_load_type(&app_hash, "details_tag")?,
         // get app servicelog details ir
         payment_pref: utils::get_links_and_load_type(&app_hash, "payment_pref_tag")?
     })
