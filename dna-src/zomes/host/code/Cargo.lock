@@ -298,7 +298,7 @@ dependencies = [
 
 [[package]]
 name = "host"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "boolinator 2.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hdk 0.0.10-alpha1 (git+https://github.com/holochain/holochain-rust?branch=release-0.0.10-alpha1)",
