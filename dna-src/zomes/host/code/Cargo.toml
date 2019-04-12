@@ -8,8 +8,8 @@ edition = "2018"
 serde = "=1.0.89"
 serde_json = { version = "=1.0.39", features = ["preserve_order"] }
 serde_derive = "=1.0.89"
-hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.10-alpha1"}
-holochain_core_types_derive= { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.10-alpha1"}
+hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.10-alpha2"}
+holochain_core_types_derive= { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.10-alpha2"}
 utils = { path = "../../../hc_common/utils" }
 boolinator = "=2.4.0"
 
