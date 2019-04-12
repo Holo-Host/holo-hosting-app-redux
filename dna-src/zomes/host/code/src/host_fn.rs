@@ -15,8 +15,7 @@ use crate::entry::payment_pref::PaymentPref;
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
 pub struct AppConfig {
-    pub ui_hash:HashString,
-    pub dna_list:Vec<HashString>,
+    pub happ_hash:HashString,
 }
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
@@ -173,7 +172,7 @@ pub fn handle_kv_updates_host_completed(kv_bundle:Vec<App2Host>)-> ZomeApiResult
     }
     Ok(())
 }
-pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppConfig>>> {
+pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppConfig>>>{
     validate_host()?;
     utils::get_links_and_load_type(&hdk::AGENT_ADDRESS, "apps_enabled")
 }
