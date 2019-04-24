@@ -32,7 +32,7 @@ module.exports = (scenario) => {
 
     const my_apps = liza.call("provider","get_my_registered_app_list",{});
     console.log("my_apps:: ",my_apps);
-    t.equal(my_apps.Ok.addresses.length, 1)
+    t.equal(my_apps.Ok.links.length, 1)
 
 
   })
@@ -50,7 +50,7 @@ scenario.runTape('Verify Provider', async(t, {liza}) => {
 
     const is_verified = liza.call("provider", "is_registered_as_provider", {});
     console.log("is verified?:: ",is_verified);
-    t.equal(is_verified.Ok.addresses.length, 1)
+    t.equal(is_verified.Ok.links.length, 1)
 
     const HoloFuelAc={
       holofuel_account_details:{
@@ -60,7 +60,7 @@ scenario.runTape('Verify Provider', async(t, {liza}) => {
 
     let checking = liza.call("provider", "get_holofuel_account", {});
     console.log("CHECK if Exists:: ",checking);
-    t.equal(checking.Ok.addresses.length, 0)
+    t.equal(checking.Ok.links.length, 0)
 
 
     const HFC = liza.call("provider", "add_holofuel_account", HoloFuelAc);
@@ -71,7 +71,7 @@ scenario.runTape('Verify Provider', async(t, {liza}) => {
 
     checking = liza.call("provider", "get_holofuel_account", {});
     console.log("CHECK if Exists:: ",checking);
-    t.equal(checking.Ok.addresses.length, 1)
+    t.equal(checking.Ok.links.length, 1)
   })
 
 scenario.runTape('Provider Tests Domain Name', async(t, {liza}) => {

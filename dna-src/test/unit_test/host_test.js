@@ -14,6 +14,6 @@ module.exports = (scenario) => {
     sleep.sleep(5);
     const is_verified = liza.call("host", "is_registered_as_host", {});
     console.log("is verified?:: ",is_verified);
-    t.equal(is_verified.Ok.addresses.length, 1)
+    t.equal(is_verified.Ok.links.length, 1)
   })
 }
