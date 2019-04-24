@@ -84,7 +84,7 @@ define_zome! {
             }
             get_service_log_details: {
                 inputs: |app_hash: Address |,
-                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::payment_pref::PaymentPref>>>|,
+                outputs: |result:ZomeApiResult<entry::payment_pref::PaymentPref>|,
                 handler: host_fn::handle_get_service_log_details
             }
         ]
