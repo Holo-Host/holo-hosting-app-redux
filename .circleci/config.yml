@@ -2,13 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: holochain/holochain-rustbuild dna
+            - image: holochain/holochain-rust:latest
 
     steps:
       - checkout
 
       - run:
-          name: Greeting
+          name: build dna
           command: cd dna-src  && hc package
 
       - run:
