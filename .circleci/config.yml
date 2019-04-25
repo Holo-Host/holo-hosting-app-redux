@@ -2,14 +2,14 @@ version: 2
 jobs:
   build:
     docker:
-            - image: holochain/holochain-rust:latest
+      - image: holochain/holochain-rust:latest
 
     steps:
       - checkout
 
       - run:
           name: build hc cli
-          command: hc-cli-install
+          command: nix-shell --run hc-cli-install
 
       - run:
           name: build dna
