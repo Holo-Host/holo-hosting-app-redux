@@ -13,8 +13,9 @@ jobs:
           name: install cli     
           command: cd holochain-rust && nix-shell --run hc-cli-install
 
-      - checkout
+      - checkout:
+          path: ~/Holo-Hosting-App
 
       - run:
           name: build dna
-          command: cd dna-src && hc package
+          command: cd ~/Holo-Hosting-App/dna-src && hc package
