@@ -8,9 +8,9 @@ jobs:
       - checkout
 
       - run:
-          name: build dna
-          command: cd dna-src  && hc package
+          name: build hc cli
+          command: hc-cli-install
 
       - run:
-          name: Print the Current Time
-          command: date
+          name: build dna
+          command: cd dna-src && hc package
