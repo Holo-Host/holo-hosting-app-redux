@@ -5,11 +5,15 @@ jobs:
       - image: holochain/holochain-rust:latest
 
     steps:
-      - checkout
 
       - run:
-          name: build hc cli
-          command: nix-shell --run hc-cli-install
+          name: clone hc rust
+          command: git clone https://github.com/holochain/holochain-rust
+      - run:
+          name: install cli     
+          command: cd holochain-rust && nix-shell --run hc-cli-install
+
+      - checkout
 
       - run:
           name: build dna
