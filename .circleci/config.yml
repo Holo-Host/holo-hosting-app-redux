@@ -18,4 +18,4 @@ jobs:
 
       - run:
           name: build dna
-          command: cd ~/Holo-Hosting-App/dna-src && hc package
+          command: cd ~/Holo-Hosting-App/dna-src && /root/.cargo/bin/hc package
