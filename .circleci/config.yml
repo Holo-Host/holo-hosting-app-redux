@@ -5,6 +5,9 @@ jobs:
       - image: holochain/holochain-rust:latest
 
     steps:
+      - run:
+          name: rustup
+          command: rustup toolchain install nightly-2019-01-24 && rustup default nightly-2019-01-24 && rustup target add wasm32-unknown-unknown --toolchain nightly-2019-01-24
 
       - run:
           name: clone hc rust
