@@ -2,20 +2,14 @@ version: 2
 jobs:
   build:
     docker:
-      - image: holochain/holochain-rust:latest
+            - image: samrose/holohc:cli-v0.0.12-alpha1
 
     steps:
 
-      - run:
-          name: clone hc rust
-          command: git clone https://github.com/holochain/holochain-rust
-      - run:
-          name: install cli     
-          command: cd holochain-rust && nix-shell --run hc-cli-install
 
       - checkout:
           path: ~/Holo-Hosting-App
 
       - run:
           name: build dna
-          command: cd ~/Holo-Hosting-App/dna-src && nix-shell --run  /root/.cargo/bin/hc package
+          command: cd ~/Holo-Hosting-App/dna-src && /hc/cli-v0.0.12-alpha1-x86_64-unknown-linux-gnu/hc package
