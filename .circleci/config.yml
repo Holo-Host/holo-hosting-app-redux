@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-            - image: samrose/holohc:cli-v0.0.12-alpha1
+            - image: samrose/holo-hc:cli-v0.0.12-alpha1
 
     steps:
 
