@@ -22,8 +22,8 @@ jobs:
       # taken to be the root directory of the workspace.
         root: /root
             # Must be relative path from root
-          paths:
-            - echo-output
+        paths:
+          - echo-output
         
   build2:
     docker:
