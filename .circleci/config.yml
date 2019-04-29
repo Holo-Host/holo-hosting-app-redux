@@ -14,12 +14,21 @@ jobs:
           name: build dna
           command: cd ~/Holo-Hosting-App/dna-src && /hc/cli-v0.0.12-alpha1-x86_64-unknown-linux-gnu/hc package
   
-  build2:
+      - persist_to_workspace: # Persist the specified paths (workspace/echo-output)
+      # into the workspace  for use in downstream job. Must be an absolute path,
+      # or relative path from working_directory. This is a directory on the container which is
+      # taken to be the root directory of the workspace.
+          root: hc
+            # Must be relative path from root
+          paths:
+            - echo-output
+        
+          build2:
     docker:
       - image: circleci/golang:1.12
     steps:
       - attach_workspace:
-          at: /hc
+          at: hc
 
       - run:
           name: check if attach_workspace is working
