@@ -15,7 +15,7 @@ jobs:
       
       - run:
           name: "Publish release"
-          command: ghr -t ${GITHUB_TOKEN} -u samrose -r Holo-Hosting-App -c ${CIRCLE_SHA1}  ${TAG} ${PATH}      
+          command: ghr -t ${GITHUB_TOKEN} -u samrose -r Holo-Hosting-App   ${TAG} ${PATH}      
 
 workflows:
   version: 2
