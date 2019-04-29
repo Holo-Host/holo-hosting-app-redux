@@ -24,3 +24,10 @@ jobs:
       - run:
           name: check if attach_workspace is working
           command: ls -la
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - build1
+    - build2
