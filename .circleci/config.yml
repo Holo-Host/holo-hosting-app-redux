@@ -1,8 +1,8 @@
 version: 2
 jobs:
-  build:
+  build1:
     docker:
-            - image: samrose/holo-hc:cli-v0.0.12-alpha1
+      - image: samrose/holo-hc:cli-v0.0.12-alpha1
 
     steps:
 
@@ -13,3 +13,12 @@ jobs:
       - run:
           name: build dna
           command: cd ~/Holo-Hosting-App/dna-src && /hc/cli-v0.0.12-alpha1-x86_64-unknown-linux-gnu/hc package
+  
+  build2:
+    steps:
+      - attach_workspace:
+        at: /hc
+
+      - run:
+          name: check if attach_workspace is working
+          command: ls -la
