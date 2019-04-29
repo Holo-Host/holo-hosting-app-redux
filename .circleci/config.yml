@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build1:
+  build:
     docker:
       - image: samrose/holo-hc:cli-v0.0.12-alpha1
       - image: circleci/golang:1.12
