@@ -23,7 +23,7 @@ jobs:
           paths:
             - echo-output
         
-          build2:
+  build2:
     docker:
       - image: circleci/golang:1.12
     steps:
