@@ -17,7 +17,7 @@ jobs:
           name: "Publish release"
           command: ghr -t ${GITHUB_TOKEN} \
           test1 \
-          /home/circleci/Holo-Hosting-App/dna-src/dist/      
+          Holo-Hosting-App/dna-src/dist/      
 
 workflows:
   version: 2
