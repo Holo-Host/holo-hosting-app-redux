@@ -20,10 +20,10 @@ jobs:
       # into the workspace  for use in downstream job. Must be an absolute path,
       # or relative path from working_directory. This is a directory on the container which is
       # taken to be the root directory of the workspace.
-        root: /root
+          root: /root
             # Must be relative path from root
-        paths:
-          - echo-output
+          paths:
+            - echo-output
         
   build2:
     docker:
