@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
       - image: samrose/holo-hc:cli-v0.0.12-alpha1
-      - image: circleci/golang:1.12
     steps:
 
 
@@ -12,7 +11,7 @@ jobs:
 
       - run:
           name: build dna
-          command: cd ~/Holo-Hosting-App/dna-src && /hc/cli-v0.0.12-alpha1-x86_64-unknown-linux-gnu/hc package
+          command: cd ~/Holo-Hosting-App/dna-src && /home/circleci/cli-v0.0.12-alpha1-x86_64-unknown-linux-gnu/hc package
       
           #- store_artifacts:
           #path: /root/Holo-Hosting-App/dna-src/dist/dna-src.dna.json
