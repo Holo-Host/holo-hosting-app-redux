@@ -19,7 +19,7 @@ jobs:
       - image: circleci/golang:1.12
     steps:
       - attach_workspace:
-        at: /hc
+          at: /hc
 
       - run:
           name: check if attach_workspace is working
