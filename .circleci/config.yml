@@ -16,7 +16,8 @@ jobs:
       - run:
           name: "Publish release"
           command: 
-            ghr 
+            ghr
+            -t ${GITHUB_TOKEN} 
             -u samrose
             -r Holo-Hosting-App 
             test1 
