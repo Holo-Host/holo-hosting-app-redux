@@ -15,9 +15,7 @@ jobs:
       
       - run:
           name: "Publish release"
-          command: ghr -t ${GITHUB_TOKEN} \
-          test1 \
-          Holo-Hosting-App/dna-src/dist/      
+          command: ghr -t ${GITHUB_TOKEN} test1 Holo-Hosting-App/dna-src/dist/      
 
 workflows:
   version: 2
