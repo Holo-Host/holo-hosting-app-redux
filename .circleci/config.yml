@@ -16,7 +16,9 @@ jobs:
       - run:
           name: "Publish release"
           command: 
-            ghr  
+            ghr 
+            -u samrose
+            -r Holo-Hosting-App 
             test1 
             /home/circleci/Holo-Hosting-App/dna-src/dist/      
 
