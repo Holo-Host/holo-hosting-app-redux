@@ -15,7 +15,9 @@ jobs:
       
       - run:
           name: "Publish release"
-          command: 
+          command: |
+            echo 'export GITHUB_TOKEN="$GITHUB_TOKEN"' >> $BASH_ENV
+            source $BASH_ENV      
             ghr
             -t ${GITHUB_TOKEN} 
             -u samrose
