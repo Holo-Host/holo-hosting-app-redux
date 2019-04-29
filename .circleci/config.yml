@@ -15,7 +15,7 @@ jobs:
       
       - run:
           name: "Publish release"
-          command: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete v0.0.1 /home/circleci/Holo-Hosting-App/dna-src/dist/      
+          command: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1}  0.0.1 /home/circleci/Holo-Hosting-App/dna-src/dist/      
 
 workflows:
   version: 2
