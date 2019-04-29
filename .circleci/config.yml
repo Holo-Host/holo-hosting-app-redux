@@ -16,21 +16,21 @@ jobs:
       
       - store_artifacts:
           path: /root/Holo-Hosting-App/dna-src/dist/dna-src.dna.json
-      #- persist_to_workspace: # Persist the specified paths (workspace/echo-output)
+      - persist_to_workspace: # Persist the specified paths (workspace/echo-output)
       # into the workspace  for use in downstream job. Must be an absolute path,
       # or relative path from working_directory. This is a directory on the container which is
       # taken to be the root directory of the workspace.
-      #    root: hc
+        root: /root
             # Must be relative path from root
-      #    paths:
-      #      - echo-output
+          paths:
+            - echo-output
         
   build2:
     docker:
       - image: circleci/golang:1.12
     steps:
       - attach_workspace:
-          at: hc
+          at: /root
 
       - run:
           name: check if attach_workspace is working
