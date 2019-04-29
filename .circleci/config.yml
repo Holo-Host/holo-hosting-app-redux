@@ -15,7 +15,7 @@ jobs:
           command: cd ~/Holo-Hosting-App/dna-src && /hc/cli-v0.0.12-alpha1-x86_64-unknown-linux-gnu/hc package
       
       - store_artifacts:
-          path: /hc
+          path: /root/Holo-Hosting-App/dna-src/dist/dna-src.dna.json
       #- persist_to_workspace: # Persist the specified paths (workspace/echo-output)
       # into the workspace  for use in downstream job. Must be an absolute path,
       # or relative path from working_directory. This is a directory on the container which is
