@@ -5,7 +5,9 @@ jobs:
       - image: holochain/holochain-rust:latest
 
     steps:
-
+      - run:
+          name: install git
+          command: apt-get -qq update; apt-get -y install git
       - run:
           name: clone hc rust
           command: git clone https://github.com/holochain/holochain-rust
