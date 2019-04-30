@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: holochain/holochain-rust:latest
+
+    steps:
+
+      - run:
+          name: clone hc rust
+          command: git clone https://github.com/holochain/holochain-rust
+      - run:
+          name: install cli
+          command: cd holochain-rust && nix-shell --run hc-cli-install
+
+      - checkout:
+          path: ~/Holo-Hosting-App
+
+      - run:
+          name: test dna
+          command: cd ~/Holo-Hosting-App/dna-src && /root/.cargo/bin/hc test
