@@ -15,8 +15,7 @@ use crate::entry::payment_pref::PaymentPref;
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
 pub struct AppConfig {
-    pub ui_hash:HashString,
-    pub dna_list:Vec<HashString>,
+    pub happ_hash:HashString,
 }
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]
@@ -40,11 +39,9 @@ pub struct AllApps{
 pub fn validate_host() -> ZomeApiResult<bool> {
     let check = handle_is_registered_as_host()?;
     if check.addresses().len() != 0 {
-        hdk::debug("PASSING TRUE")?;
         Ok(true)
     }
     else {
-        hdk::debug("PASSING FALSE")?;
         Err(ZomeApiError::Internal(
             "Agent Not a Host".to_string()))
     }
@@ -175,7 +172,7 @@ pub fn handle_kv_updates_host_completed(kv_bundle:Vec<App2Host>)-> ZomeApiResult
     }
     Ok(())
 }
-pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppConfig>>> {
+pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppConfig>>>{
     validate_host()?;
     utils::get_links_and_load_type(&hdk::AGENT_ADDRESS, "apps_enabled")
 }
@@ -213,6 +210,8 @@ fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiR
     utils::commit_and_link(&payment_pref_entry, &app_hash, "payment_pref_tag")
 }
 
-pub fn handle_get_service_log_details(app_hash:Address)-> ZomeApiResult<Vec<utils::GetLinksLoadElement<PaymentPref>>>{
-    utils::get_links_and_load_type(&app_hash, "payment_pref_tag")
+pub fn handle_get_service_log_details(app_hash:Address)-> ZomeApiResult<PaymentPref>{
+    let payment_details : Vec<utils::GetLinksLoadElement<PaymentPref>> = utils::get_links_and_load_type(&app_hash, "payment_pref_tag")?;
+    // let payment_pref:PaymentPref = PaymentPref::try_from(payment_details[0].entry.to_owned());
+    Ok(payment_details[0].entry.to_owned())
 }

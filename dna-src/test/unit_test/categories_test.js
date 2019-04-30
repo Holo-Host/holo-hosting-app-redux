@@ -2,12 +2,7 @@ const test = require('tape');
 
 const App_Config_1 = {
   app_bundle: {
-    ui_hash: "QuarnnnnvltuenblergjasnvAfs",
-    dna_list: ["QweAFioina","QtavsFdvva"]
-  },
-  app_details: {
-    name: "App Test 1",
-    details: "Details for the world to know about the App Test 1."
+    happ_hash: "QuarnnnnvltuenblergjasnvAfs",
   },
   domain_name: {
     dns_name: "apptest1.com"
@@ -15,12 +10,7 @@ const App_Config_1 = {
 }
 const App_Config_2 = {
   app_bundle: {
-    ui_hash: "QrafVSdvzv98vlsurhvsdfvser",
-    dna_list: ["Q4farvrvsdf","Q4fdfvrbas"]
-  },
-  app_details: {
-    name: "App Test 2",
-    details: "Details for the world to know about the App Test 2."
+    happ_hash: "QrafVSdvzv98vlsurhvsdfvser",
   },
   domain_name: {
     dns_name: "apptest2.com"

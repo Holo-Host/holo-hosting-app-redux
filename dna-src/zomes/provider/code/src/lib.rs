@@ -37,18 +37,8 @@ define_zome! {
     }
 
     functions: [
-            register_as_provider: {
-                inputs: |provider_doc:entry::provider_doc::ProviderDoc |,
-                outputs: |result: ZomeApiResult<Address>|,
-                handler: provider_fn::handle_register_as_provider
-            }
-            is_registered_as_provider: {
-                inputs: | |,
-                outputs: |result:  ZomeApiResult<GetLinksResult>|,
-                handler: provider_fn::handle_is_registered_as_provider
-            }
             register_app: {
-                inputs: | app_bundle: entry::app_config::AppConfig, app_details: entry::app_details::AppDetails, domain_name: entry::domain_name::DNS |,
+                inputs: | app_bundle: entry::app_config::AppConfig, domain_name: entry::domain_name::DNS |,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: provider_fn::handle_register_app
             }
@@ -61,6 +51,17 @@ define_zome! {
                 inputs: |app_hash:Address |,
                 outputs: |result: ZomeApiResult<provider_fn::AppBundle> |,
                 handler: provider_fn::handle_get_app_details
+            }
+    // REQUIRED
+            register_as_provider: {
+                inputs: |provider_doc:entry::provider_doc::ProviderDoc |,
+                outputs: |result: ZomeApiResult<Address>|,
+                handler: provider_fn::handle_register_as_provider
+            }
+            is_registered_as_provider: {
+                inputs: | |,
+                outputs: |result:  ZomeApiResult<GetLinksResult>|,
+                handler: provider_fn::handle_is_registered_as_provider
             }
             add_holofuel_account: {
                 inputs: |holofuel_account_details: entry::holofuel_account::HoloFuelAc|,

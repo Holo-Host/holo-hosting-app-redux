@@ -1,11 +1,6 @@
 const App_Config = {
   app_bundle: {
-    ui_hash: "QuarnnnnvltuenblergjasnvAfs",
-    dna_list: ["QweAFioina","QtavsFdvva"]
-  },
-  app_details: {
-    name: "Zoooeeeel app",
-    details: "Details for the world to know about the zoel app."
+    happ_hash: "QuarnnnnvltuenblergjasnvAfs",
   },
   domain_name: {
     dns_name: "zs.com"

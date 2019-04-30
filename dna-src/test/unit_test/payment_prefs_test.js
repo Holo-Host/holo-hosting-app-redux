@@ -14,7 +14,7 @@ module.exports = (scenario) => {
 
     const App_Config = {
       app_bundle: {
-        ui_hash: "QuarnnnnvltuenblergjasnvAfs",
+        happ_hash: "QuarnnnnvltuenblergjasnvAfs",
         dna_list: ["QweAFioina","QtavsFdvva"]
       },
       app_details: {
@@ -40,22 +40,20 @@ module.exports = (scenario) => {
 
     const pref_commited = liza.call("host","add_service_log_details",PaymentPref);
     console.log("pref_commited:: ",pref_commited);
-    t.equal(pref_commited.Ok, "QmZZL2W8R1WghusNw9ZEUsWJfvj69KmnTrqCW2HoUu8i6p")
+    t.equal(pref_commited.Ok, "QmdGAGUVSsFkYzNjvzxvC3F2kG5bgpmb1EzttWRfVXd3Vb")
 
     sleep.sleep(5);
 
     const app_bundle = liza.call("provider","get_app_details",{app_hash:app_address.Ok});
-    console.log("App_bundle:: ",app_bundle.Ok.app_bundle);
-    console.log("App_details:: ",app_bundle.Ok.app_details);
-    console.log("Payment_pref:: ",app_bundle.Ok.payment_pref);
-    t.equal(app_bundle.Ok.app_bundle.ui_hash, App_Config.app_bundle.ui_hash)
-    t.equal(app_bundle.Ok.app_details[0].entry.details, App_Config.app_details.details)
+    // console.log("App_bundle:: ",app_bundle.Ok.app_bundle);
+    // console.log("Payment_pref:: ",app_bundle.Ok.payment_pref);
+    t.equal(app_bundle.Ok.app_bundle.happ_hash, App_Config.app_bundle.happ_hash)
     t.equal(app_bundle.Ok.payment_pref[0].entry.max_fuel_per_invoice, PaymentPref.max_fuel_per_invoice)
 
 
     const service_log_details = liza.call("host","get_service_log_details",{app_hash:app_address.Ok});
     console.log("SERVICe LOG Details: ",service_log_details);
-    t.equal(service_log_details.Ok[0].address, "QmZZL2W8R1WghusNw9ZEUsWJfvj69KmnTrqCW2HoUu8i6p")
+    t.equal(service_log_details.Ok.max_unpaid_value, 10)
 
 
   })

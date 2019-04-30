@@ -14,12 +14,7 @@ module.exports = (scenario) => {
 
     const App_Config = {
       app_bundle: {
-        ui_hash: "QuarnnnnvltuenblergjasnvAfs",
-        dna_list: ["QweAFioina","QtavsFdvva"]
-      },
-      app_details: {
-        name:"App Name",
-        details:"Details for this app",
+        happ_hash: "QuarnnnnvltuenblergjasnvAfs"
       },
       domain_name: {
         dns_name: "app2.holo.host"
@@ -33,11 +28,11 @@ module.exports = (scenario) => {
 
     const app_details_rec = liza.call("provider","get_app_details",{app_hash:app_address.Ok});
     console.log("Get Details:: ",app_details_rec);
-    t.equal(app_details_rec.Ok.app_bundle.ui_hash, "QuarnnnnvltuenblergjasnvAfs")
+    t.equal(app_details_rec.Ok.app_bundle.happ_hash, "QuarnnnnvltuenblergjasnvAfs")
 
     const my_apps = liza.call("provider","get_my_registered_app_list",{});
     console.log("my_apps:: ",my_apps);
-    t.equal(my_apps.Ok.addresses.length, 1)
+    t.equal(my_apps.Ok.links.length, 1)
 
 
   })
@@ -55,7 +50,7 @@ scenario.runTape('Verify Provider', async(t, {liza}) => {
 
     const is_verified = liza.call("provider", "is_registered_as_provider", {});
     console.log("is verified?:: ",is_verified);
-    t.equal(is_verified.Ok.addresses.length, 1)
+    t.equal(is_verified.Ok.links.length, 1)
 
     const HoloFuelAc={
       holofuel_account_details:{
@@ -65,7 +60,7 @@ scenario.runTape('Verify Provider', async(t, {liza}) => {
 
     let checking = liza.call("provider", "get_holofuel_account", {});
     console.log("CHECK if Exists:: ",checking);
-    t.equal(checking.Ok.addresses.length, 0)
+    t.equal(checking.Ok.links.length, 0)
 
 
     const HFC = liza.call("provider", "add_holofuel_account", HoloFuelAc);
@@ -76,7 +71,7 @@ scenario.runTape('Verify Provider', async(t, {liza}) => {
 
     checking = liza.call("provider", "get_holofuel_account", {});
     console.log("CHECK if Exists:: ",checking);
-    t.equal(checking.Ok.addresses.length, 1)
+    t.equal(checking.Ok.links.length, 1)
   })
 
 scenario.runTape('Provider Tests Domain Name', async(t, {liza}) => {
@@ -92,12 +87,7 @@ scenario.runTape('Provider Tests Domain Name', async(t, {liza}) => {
 
     const App_Config = {
       app_bundle: {
-        ui_hash: "Quarnnnnvltuenbsfasf",
-        dna_list: ["QweAFFRna","Qtavsvfava"]
-      },
-      app_details: {
-        name: "Provider Domain Name App Test",
-        details: "Details for the world to know about the App Test."
+        happ_hash: "QuarnnnnvltuenblergjasnvAfs"
       },
       domain_name: {
         dns_name: "app2.holo.host"
