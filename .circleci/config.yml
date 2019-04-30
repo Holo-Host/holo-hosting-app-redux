@@ -12,11 +12,13 @@ jobs:
       - run:
           name: build dna
           command: cd ~/Holo-Hosting-App/dna-src && /home/circleci/cli-v0.0.12-alpha1-x86_64-unknown-linux-gnu/hc package
-      
       - run:
-          name: "publish release"
-          command: |
-            ghr -t $GITHUB_TOKEN -u samrose -r Holo-Hosting-App test1 /home/circleci/Holo-Hosting-App/dna-src/dist/      
+          name: test env vars
+          command: echo $CIRCLE_PROJECT_USERNAME      
+          #- run:
+          #name: "publish release"
+          #command: |
+          #  ghr -t $GITHUB_TOKEN -u samrose -r Holo-Hosting-App test1 /home/circleci/Holo-Hosting-App/dna-src/dist/      
 
 workflows:
   version: 2
