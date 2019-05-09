@@ -81,6 +81,7 @@ pub struct PaymentPref {
     pub dna_bundle_hash: HashString,
     pub max_fuel_per_invoice: f64,
     pub max_unpaid_value: f64,
+    pub price_per_unit: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, DefaultJson)]

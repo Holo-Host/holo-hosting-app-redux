@@ -196,12 +196,13 @@ pub fn handle_is_registered_as_host() -> ZomeApiResult<GetLinksResult> {
 /* Service Log Functions */
 /*************************/
 
-pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64) -> ZomeApiResult<Address>{
+pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64, price_per_unit:f64) -> ZomeApiResult<Address>{
     add_service_log_details(PaymentPref{
         provider_address: Address::from(hdk::AGENT_ADDRESS.to_string()),
         dna_bundle_hash:app_hash.clone(),
         max_fuel_per_invoice,
-        max_unpaid_value
+        max_unpaid_value,
+        price_per_unit
     },app_hash)
 }
 
