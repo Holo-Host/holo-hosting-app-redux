@@ -78,7 +78,7 @@ define_zome! {
                 handler: host_fn::handle_kv_updates_host_completed
             }
             add_service_log_details: {
-                inputs: |app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64 |,
+                inputs: |app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64 , price_per_unit:f64|,
                 outputs: |result: ZomeApiResult<Address>|,
                 handler: host_fn::handle_add_service_log_details
             }
