@@ -32,6 +32,18 @@ module.exports = (scenario) => {
 
     sleep.sleep(5);
 
+    const HoloFuelAc={
+      holofuel_account_details:{
+        account_number:"Qnul------HF----------vn89a"
+      }
+    }
+
+    const HFC = liza.call("provider", "add_holofuel_account", HoloFuelAc);
+    console.log("HF COMMIT:: ",HFC);
+    t.equal(HFC.Ok.length, 46)
+
+    sleep.sleep(5);
+
     PaymentPref = {
       app_hash: app_address.Ok,
       max_fuel_per_invoice: 2.0,
