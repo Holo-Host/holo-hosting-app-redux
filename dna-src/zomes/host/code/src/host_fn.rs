@@ -1,6 +1,12 @@
 use hdk::{
     error::{ZomeApiResult,ZomeApiError},
-    holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
+    holochain_wasm_utils::api_serialization::{
+        get_entry::{
+            GetEntryOptions,
+            GetEntryResultType,
+        },
+        get_links::GetLinksResult,
+    }
 };
 use hdk::holochain_core_types::{
     hash::HashString,
@@ -196,14 +202,35 @@ pub fn handle_is_registered_as_host() -> ZomeApiResult<GetLinksResult> {
 /* Service Log Functions */
 /*************************/
 
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
+pub struct HoloFuelAc {
+    pub account_number:String,
+}
 pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f64, max_unpaid_value:f64, price_per_unit:f64) -> ZomeApiResult<Address>{
-    add_service_log_details(PaymentPref{
-        provider_address: Address::from(hdk::AGENT_ADDRESS.to_string()),
-        dna_bundle_hash:app_hash.clone(),
-        max_fuel_per_invoice,
-        max_unpaid_value,
-        price_per_unit
-    },app_hash)
+
+    if let GetEntryResultType::Single(result) = hdk::get_entry_result(
+            &app_hash,
+            GetEntryOptions {
+                headers: true,
+                ..Default::default()
+            },)?
+            .result
+            {
+                let provider_address = result.headers[result.headers.len()-1].provenances()[0].source();
+
+                let provider_hf: utils::GetLinksLoadResult<HoloFuelAc> = utils::get_links_and_load_type(&provider_address, "holofuel_account_details_tag")?;
+
+                add_service_log_details(PaymentPref{
+                    provider_address: Address::from(provider_hf[0].entry.account_number.to_owned()),
+                    dna_bundle_hash:app_hash.clone(),
+                    max_fuel_per_invoice,
+                    max_unpaid_value,
+                    price_per_unit
+                },app_hash)
+            }
+        else{
+            Err(ZomeApiError::Internal("Providers HoloFuel Ac is not Registered".to_string()))
+        }
 }
 
 fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiResult<Address>{
