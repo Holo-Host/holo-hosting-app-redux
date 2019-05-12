@@ -1,5 +1,5 @@
-const { Config, Scenario } = require("../../../holochain-rust/nodejs_conductor")
-// const { Config, Scenario } = require("@holochain/holochain-nodejs")
+// const { Config, Scenario } = require("../../../holochain-rust/nodejs_conductor")
+const { Config, Scenario } = require("@holochain/holochain-nodejs")
 Scenario.setTape(require('tape'))
 const dnaPath = "dist/dna-src.dna.json"
 const dna = Config.dna(dnaPath, 'happs')
