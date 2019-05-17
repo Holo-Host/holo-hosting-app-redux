@@ -8,5 +8,5 @@ edition = "2018"
 serde = "1.0"
 serde_json = "1.0"
 serde_derive = "1.0"
-hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.12-alpha1" }
-holochain_core_types_derive= { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.12-alpha1" }
+hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.15-alpha1" }
+holochain_core_types_derive= { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.15-alpha1" }

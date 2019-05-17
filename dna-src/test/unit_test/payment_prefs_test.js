@@ -32,23 +32,37 @@ module.exports = (scenario) => {
 
     sleep.sleep(5);
 
+    const HoloFuelAc={
+      holofuel_account_details:{
+        account_number:"Qnul------HF----------vn89a"
+      }
+    }
+
+    const HFC = liza.call("provider", "add_holofuel_account", HoloFuelAc);
+    console.log("HF COMMIT:: ",HFC);
+    t.equal(HFC.Ok.length, 46)
+
+    sleep.sleep(5);
+
     PaymentPref = {
       app_hash: app_address.Ok,
       max_fuel_per_invoice: 2.0,
       max_unpaid_value: 10,
+      price_per_unit: 0.5
     }
 
     const pref_commited = liza.call("host","add_service_log_details",PaymentPref);
     console.log("pref_commited:: ",pref_commited);
-    t.equal(pref_commited.Ok, "QmdGAGUVSsFkYzNjvzxvC3F2kG5bgpmb1EzttWRfVXd3Vb")
+    t.ok(pref_commited.Ok)
 
     sleep.sleep(5);
 
     const app_bundle = liza.call("provider","get_app_details",{app_hash:app_address.Ok});
-    // console.log("App_bundle:: ",app_bundle.Ok.app_bundle);
-    // console.log("Payment_pref:: ",app_bundle.Ok.payment_pref);
+    // console.log("App_bundle:: ",app_bundle.Ok);
+    console.log("Payment_pref:: ",app_bundle.Ok.payment_pref[0].entry);
     t.equal(app_bundle.Ok.app_bundle.happ_hash, App_Config.app_bundle.happ_hash)
     t.equal(app_bundle.Ok.payment_pref[0].entry.max_fuel_per_invoice, PaymentPref.max_fuel_per_invoice)
+    t.equal(app_bundle.Ok.payment_pref[0].entry.price_per_unit, PaymentPref.price_per_unit)
 
 
     const service_log_details = liza.call("host","get_service_log_details",{app_hash:app_address.Ok});
