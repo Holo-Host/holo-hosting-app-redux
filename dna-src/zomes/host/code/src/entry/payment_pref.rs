@@ -52,7 +52,7 @@ pub fn definitions() -> ValidatingEntryType {
         links: [
             from!(
                 "app_config",
-                tag: "payment_pref_tag",
+                link_type: "payment_pref_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry

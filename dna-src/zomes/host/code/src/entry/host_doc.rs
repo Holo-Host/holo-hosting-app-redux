@@ -46,7 +46,7 @@ pub fn definitions()-> ValidatingEntryType{
         links: [
             from!(
                 "%agent_id",
-                tag: "verified_host_tag",
+                link_type: "verified_host_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry

@@ -50,7 +50,7 @@ pub fn definitions()-> ValidatingEntryType{
         links: [
             from!(
                 "%agent_id",
-                tag: "holofuel_account_details_tag",
+                link_type: "holofuel_account_details_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry

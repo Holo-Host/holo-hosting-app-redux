@@ -61,8 +61,8 @@ module.exports = (scenario) => {
     // console.log("App_bundle:: ",app_bundle.Ok);
     console.log("Payment_pref:: ",app_bundle.Ok.payment_pref[0].entry);
     t.equal(app_bundle.Ok.app_bundle.happ_hash, App_Config.app_bundle.happ_hash)
-    t.equal(app_bundle.Ok.payment_pref[0].entry.max_fuel_per_invoice, PaymentPref.max_fuel_per_invoice)
-    t.equal(app_bundle.Ok.payment_pref[0].entry.price_per_unit, PaymentPref.price_per_unit)
+    t.equal(app_bundle.Ok.payment_pref[0].max_fuel_per_invoice, PaymentPref.max_fuel_per_invoice)
+    t.equal(app_bundle.Ok.payment_pref[0].price_per_unit, PaymentPref.price_per_unit)
 
 
     const service_log_details = liza.call("host","get_service_log_details",{app_hash:app_address.Ok});
