@@ -495,7 +495,7 @@ dependencies = [
 
 [[package]]
 name = "provider"
-version = "0.2.0-alpha"
+version = "0.2.1-alpha"
 dependencies = [
  "boolinator 2.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hc_common 0.1.0",

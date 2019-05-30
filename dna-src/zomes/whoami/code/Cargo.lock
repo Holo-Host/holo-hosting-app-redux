@@ -680,7 +680,7 @@ dependencies = [
 
 [[package]]
 name = "whoami"
-version = "0.2.0-alpha"
+version = "0.2.1-alpha"
 dependencies = [
  "hdk 0.0.17-alpha2 (git+https://github.com/holochain/holochain-rust?branch=release-0.0.17-alpha2)",
  "holochain_core_types_derive 0.0.17-alpha2 (git+https://github.com/holochain/holochain-rust?branch=release-0.0.17-alpha2)",
