@@ -75,7 +75,7 @@ define_zome! {
             }
             get_app_domain_name: {
                 inputs: |app_hash:Address |,
-                outputs: |result: ZomeApiResult<Vec<utils::GetLinksLoadElement<entry::domain_name::DNS>>> |,
+                outputs: |result: ZomeApiResult<Vec<entry::domain_name::DNS>> |,
                 handler: provider_fn::handle_get_app_domain_name
             }
             get_kv_updates_domain_name: {

@@ -1,4 +1,5 @@
 use hdk::{
+    utils,
     error::{ZomeApiResult,ZomeApiError},
     holochain_wasm_utils::api_serialization::{
         get_entry::{
@@ -57,7 +58,7 @@ pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
     validate_host()?;
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
-    let all_apps_commit = hdk::get_links(&anchor_address, "all_apps_tag")?;
+    let all_apps_commit = hdk::get_links(&anchor_address, Some("all_apps_tag".to_string()), Some("".to_string()))?;
     let app_address = all_apps_commit.addresses();
 
     let mut app_details_list: Vec<AllApps> =Vec::new();
@@ -73,24 +74,26 @@ pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
 
 pub fn handle_enable_app(app_hash: HashString) -> ZomeApiResult<()> {
     validate_host()?;
-    utils::link_entries_bidir(&app_hash, &hdk::AGENT_ADDRESS, "host_enabled", "apps_enabled")?;
+    utils::link_entries_bidir(&app_hash, &hdk::AGENT_ADDRESS, "host_enabled", "apps_enabled","","")?;
 
     // check if its a recently_disabled_app_tag
-    hdk::remove_link(&app_hash,&hdk::AGENT_ADDRESS,"recently_disabled_app_tag")?;
+    hdk::remove_link(&app_hash,&hdk::AGENT_ADDRESS,"recently_disabled_app_tag","")?;
 
-    hdk::link_entries(&app_hash,&hdk::AGENT_ADDRESS,"recently_enabled_app_tag")?;
+    hdk::link_entries(&app_hash,&hdk::AGENT_ADDRESS,"recently_enabled_app_tag", "")?;
 
     Ok(())
 }
 
 pub fn handle_disable_app(app_hash: HashString) -> ZomeApiResult<()> {
     validate_host()?;
-    utils::remove_link_entries_bidir(&app_hash, &hdk::AGENT_ADDRESS, "host_enabled", "apps_enabled")?;
+
+    hdk::remove_link(&app_hash, &hdk::AGENT_ADDRESS, "host_enabled", &"".to_owned())?;
+    hdk::remove_link(&hdk::AGENT_ADDRESS, &app_hash, "apps_enabled", "")?;
 
     // check if its a recently_disabled_app_tag
-    hdk::remove_link(&app_hash,&hdk::AGENT_ADDRESS,"recently_enabled_app_tag")?;
+    hdk::remove_link(&app_hash,&hdk::AGENT_ADDRESS,"recently_enabled_app_tag", "")?;
 
-    hdk::link_entries(&app_hash,&hdk::AGENT_ADDRESS,"recently_disabled_app_tag")?;
+    hdk::link_entries(&app_hash,&hdk::AGENT_ADDRESS,"recently_disabled_app_tag","")?;
 
     Ok(())
 }
@@ -100,7 +103,7 @@ fn handle_get_all_apps_addresses() -> ZomeApiResult<GetLinksResult> {
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
 
-    hdk::get_links(&anchor_address, "all_apps_tag")
+    hdk::get_links(&anchor_address, Some("all_apps_tag".to_string()), Some("".to_string()))
 }
 
 pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
@@ -111,8 +114,8 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
     let mut recently_enabled_apps:Vec<App2Host>=Vec::new();
     for app in all_apps.clone(){
         let app_copy = app.clone();
-        let mut enabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "recently_enabled_app_tag")?;
-        let mut enabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "need_updates_enabled_from_kv_store")?;
+        let mut enabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("recently_enabled_app_tag".to_string()), Some("".to_string()))?;
+        let mut enabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("need_updates_enabled_from_kv_store".to_string()), Some("".to_string()))?;
 
         enabled_agents.append(&mut enabled_agents_old);
 
@@ -130,8 +133,8 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
 
         // Remove the enable tag and add intransition apps
         for agent in agent_address_list{
-            hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_enabled_app_tag")?;
-            hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_enabled_from_kv_store")?;
+            hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_enabled_app_tag", "")?;
+            hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_enabled_from_kv_store", "")?;
         }
 
     }
@@ -140,8 +143,8 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
     let mut recently_disabled_apps:Vec<App2Host>=Vec::new();
     for app in all_apps.clone(){
         let app_copy = app.clone();
-        let mut disabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "recently_disabled_app_tag")?;
-        let mut disabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, "need_updates_disabled_from_kv_store")?;
+        let mut disabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("recently_disabled_app_tag".to_string()), Some("".to_string()))?;
+        let mut disabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("need_updates_disabled_from_kv_store".to_string()), Some("".to_string()))?;
 
         disabled_agents.append(&mut disabled_agents_old);
 
@@ -159,8 +162,8 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
         });
         // Remove the disabled tag and add intransition apps
         for agent in agent_address_list{
-            hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_disabled_app_tag")?;
-            hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_disabled_from_kv_store")?;
+            hdk::remove_link(&app_copy,&HashString::from(agent.clone()),"recently_disabled_app_tag", "")?;
+            hdk::link_entries(&app_copy,&HashString::from(agent.clone()),"need_updates_disabled_from_kv_store", "")?;
         }
     }
     Ok(DnaToHost{
@@ -172,30 +175,30 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
 pub fn handle_kv_updates_host_completed(kv_bundle:Vec<App2Host>)-> ZomeApiResult<()>{
     for kv in kv_bundle{
         for host_address in kv.host {
-            hdk::remove_link(&kv.app,&HashString::from(host_address.clone()),"need_updates_enabled_from_kv_store",)?;
-            hdk::remove_link(&kv.app,&HashString::from(host_address.clone()),"need_updates_disabled_from_kv_store",)?;
+            hdk::remove_link(&kv.app,&HashString::from(host_address.clone()),"need_updates_enabled_from_kv_store","")?;
+            hdk::remove_link(&kv.app,&HashString::from(host_address.clone()),"need_updates_disabled_from_kv_store","")?;
         }
     }
     Ok(())
 }
-pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<utils::GetLinksLoadElement<AppConfig>>>{
+pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<AppConfig>>{
     validate_host()?;
-    utils::get_links_and_load_type(&hdk::AGENT_ADDRESS, "apps_enabled")
+    utils::get_links_and_load_type(&hdk::AGENT_ADDRESS, Some("apps_enabled".to_string()), Some("".to_string()))
 }
 
 pub fn handle_get_host_for_app(app_hash:Address)->ZomeApiResult<Vec<ZomeApiResult<Entry>>>{
-    hdk::get_links_and_load(&app_hash, "host_enabled")
+    hdk::get_links_and_load(&app_hash, Some("host_enabled".to_string()), Some("".to_string()))
 }
 
 pub fn handle_register_as_host(host_doc:HostDoc) -> ZomeApiResult<Address> {
     // TODO : Validation
     let verified_entry = Entry::App("host_doc".into(), host_doc.into());
-    utils::commit_and_link( &verified_entry,&hdk::AGENT_ADDRESS, "verified_host_tag")
+    utils::commit_and_link( &verified_entry,&hdk::AGENT_ADDRESS, "verified_host_tag","")
     // Ok(address)
 }
 
 pub fn handle_is_registered_as_host() -> ZomeApiResult<GetLinksResult> {
-    hdk::get_links(&hdk::AGENT_ADDRESS, "verified_host_tag")
+    hdk::get_links(&hdk::AGENT_ADDRESS, Some("verified_host_tag".to_string()), Some("".to_string()))
 }
 
 /*************************/
@@ -218,10 +221,10 @@ pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f6
             {
                 let provider_address = result.headers[result.headers.len()-1].provenances()[0].source();
 
-                let provider_hf: utils::GetLinksLoadResult<HoloFuelAc> = utils::get_links_and_load_type(&provider_address, "holofuel_account_details_tag")?;
+                let provider_hf: Vec<HoloFuelAc> = utils::get_links_and_load_type(&provider_address, Some("holofuel_account_details_tag".to_string()), Some("".to_string()))?;
 
                 add_service_log_details(PaymentPref{
-                    provider_address: Address::from(provider_hf[0].entry.account_number.to_owned()),
+                    provider_address: Address::from(provider_hf[0].account_number.to_owned()),
                     dna_bundle_hash:app_hash.clone(),
                     max_fuel_per_invoice,
                     max_unpaid_value,
@@ -235,11 +238,11 @@ pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f6
 
 fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiResult<Address>{
     let payment_pref_entry = Entry::App("payment_pref".into(), payment_pref.into());
-    utils::commit_and_link(&payment_pref_entry, &app_hash, "payment_pref_tag")
+    utils::commit_and_link(&payment_pref_entry, &app_hash, "payment_pref_tag","")
 }
 
 pub fn handle_get_service_log_details(app_hash:Address)-> ZomeApiResult<PaymentPref>{
-    let payment_details : Vec<utils::GetLinksLoadElement<PaymentPref>> = utils::get_links_and_load_type(&app_hash, "payment_pref_tag")?;
+    let payment_details : Vec<PaymentPref> = utils::get_links_and_load_type(&app_hash, Some("payment_pref_tag".to_string()), Some("".to_string()))?;
     // let payment_pref:PaymentPref = PaymentPref::try_from(payment_details[0].entry.to_owned());
-    Ok(payment_details[0].entry.to_owned())
+    Ok(payment_details[0].to_owned())
 }
