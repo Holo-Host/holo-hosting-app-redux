@@ -7,7 +7,7 @@ use hdk::{
     holochain_core_types::{
     	hash::HashString,
     	entry::{AppEntryValue, Entry},
-    	cas::content::{Address, AddressableContent},
+    	cas::content::AddressableContent,
     },
     error::{ZomeApiResult, ZomeApiError}
 };

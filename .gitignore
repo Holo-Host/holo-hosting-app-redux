@@ -1,5 +1,11 @@
 dist/
 node_modules/
+Cargo.lock
 target/
 
 package-lock.json
+
+.vscode
+\#*\#
+.\#*
+*~
