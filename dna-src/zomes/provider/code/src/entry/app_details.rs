@@ -52,7 +52,7 @@ pub fn definitions()-> ValidatingEntryType{
         links: [
             from!(
                 "app_config",
-                tag: "details_tag",
+                link_type: "details_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry

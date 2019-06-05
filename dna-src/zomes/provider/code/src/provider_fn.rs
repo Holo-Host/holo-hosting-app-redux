@@ -5,6 +5,7 @@ use crate::entry::domain_name::DNS;
 
 use hdk::{
     self,
+    utils,
     holochain_core_types::{
         entry::Entry,
         hash::HashString,
@@ -58,13 +59,13 @@ pub fn handle_register_app_bundle(app_bundle:AppConfig) -> ZomeApiResult<Address
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
 
-    utils::commit_and_link(&app_entry, &anchor_address, "all_apps_tag")?;
-    utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "my_registered_apps_tag")
+    utils::commit_and_link(&app_entry, &anchor_address, "all_apps_tag","")?;
+    utils::commit_and_link(&app_entry, &hdk::AGENT_ADDRESS, "my_registered_apps_tag","")
 }
 
 pub fn handle_get_my_registered_app_list() -> ZomeApiResult<GetLinksResult> {
     validate_provider()?;
-    hdk::get_links(&hdk::AGENT_ADDRESS, "my_registered_apps_tag")
+    hdk::get_links(&hdk::AGENT_ADDRESS, Some("my_registered_apps_tag".to_string()), Some("".to_string()))
 }
 //
 // // TODO Decide the actual details that are needed
@@ -88,17 +89,17 @@ pub struct PaymentPref {
 pub struct AppBundle{
     pub app_bundle:AppConfig,
     // pub app_details:Vec<utils::GetLinksLoadElement<AppDetails>>,
-    pub payment_pref:Vec<utils::GetLinksLoadElement<PaymentPref>>
+    pub payment_pref:Vec<PaymentPref>
 }
 
 pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<AppBundle> {
     Ok(AppBundle{
         // get app AppConfig
-        app_bundle:utils::get_as_type(&app_hash)?,
+        app_bundle:utils::get_as_type(app_hash.to_owned())?,
         // get app details_tag
         // app_details: utils::get_links_and_load_type(&app_hash, "details_tag")?,
         // get app servicelog details ir
-        payment_pref: utils::get_links_and_load_type(&app_hash, "payment_pref_tag")?
+        payment_pref: utils::get_links_and_load_type(&app_hash, Some("payment_pref_tag".to_string()), Some("".to_string()))?
     })
 }
 
@@ -111,15 +112,15 @@ pub fn handle_add_app_domain_name(domain_name:DNS, app_hash:&Address) -> ZomeApi
 
     let domain_address = hdk::commit_entry(&app_domain_name_entry)?;
 
-    utils::link_entries_bidir(&domain_address, app_hash,"app_hash_tag" ,"domain_name_tag")?;
-    hdk::link_entries(app_hash,&domain_address,"new_domain_name_tag")?;
+    utils::link_entries_bidir(&domain_address, app_hash,"app_hash_tag" ,"domain_name_tag","","")?;
+    hdk::link_entries(app_hash,&domain_address,"new_domain_name_tag", "")?;
     Ok(domain_address)
 }
 
 pub fn handle_get_all_apps() -> ZomeApiResult<GetLinksResult> {
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
-    hdk::get_links(&anchor_address, "all_apps_tag")
+    hdk::get_links(&anchor_address, Some("all_apps_tag".to_string()), Some("".to_string()))
 }
 
 
@@ -132,7 +133,8 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
         let mut recently_updated_dns:Vec<DnsDnaKV>=Vec::new();
         for app in all_apps.clone(){
             let app_copy = app.clone();
-            let updated_dns:Vec<utils::GetLinksLoadElement<DNS>> = utils::get_links_and_load_type(&app_copy, "new_domain_name_tag")?;
+            // let updated_dns:Vec<hc_common::GetLinksLoadElement<DNS>> = hc_common::get_links_and_load_type(&app_copy, "new_domain_name_tag".to_string())?;
+            let updated_dns:Vec<hc_common::GetLinksLoadElement<DNS>> = hc_common::get_links_and_load_type(&app_copy, Some("new_domain_name_tag".to_string()))?;
             // Data refactor
             let mut dns_list:Vec<DNSEntry>=Vec::new();
             for dns in updated_dns.clone(){
@@ -149,8 +151,8 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
 
             // Remove the new_domain_name tag and add intransition apps
             for dns in &updated_dns{
-                hdk::remove_link(&app_copy,&dns.address,"new_domain_name_tag")?;
-                hdk::link_entries(&app_copy,&dns.address ,"need_update_domain_name_tag")?;
+                hdk::remove_link(&app_copy,&dns.address,"new_domain_name_tag","")?;
+                hdk::link_entries(&app_copy,&dns.address ,"need_update_domain_name_tag", "")?;
             }
         }
         Ok(recently_updated_dns)
@@ -159,31 +161,31 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
 pub fn handle_kv_updates_domain_name_completed(kv_bundle:Vec<DnsDnaKV>)-> ZomeApiResult<()>{
     for kv in kv_bundle{
         for dns in kv.dns {
-            hdk::remove_link(&kv.dna,&dns.address.clone(),"need_update_domain_name_tag")?;
+            hdk::remove_link(&kv.dna,&dns.address.clone(),"need_update_domain_name_tag","")?;
         }
     }
     Ok(())
 }
 
-pub fn handle_get_app_domain_name(app_hash:Address) -> ZomeApiResult<Vec<utils::GetLinksLoadElement<DNS>>> {
-    utils::get_links_and_load_type(&app_hash, "domain_name_tag")
+pub fn handle_get_app_domain_name(app_hash:Address) -> ZomeApiResult<Vec<DNS>> {
+    utils::get_links_and_load_type(&app_hash, Some("domain_name_tag".to_string()), Some("".to_string()))
 }
 
 pub fn handle_register_as_provider(provider_doc:ProviderDoc) -> ZomeApiResult<Address> {
     // TODO : Validation
     let verified_entry = Entry::App("provider_doc".into(), provider_doc.into());
-    utils::commit_and_link(&verified_entry, &hdk::AGENT_ADDRESS, "verified_provider_tag")
+    utils::commit_and_link(&verified_entry, &hdk::AGENT_ADDRESS, "verified_provider_tag","")
 }
 
 pub fn handle_is_registered_as_provider() -> ZomeApiResult<GetLinksResult> {
-    hdk::get_links(&hdk::AGENT_ADDRESS, "verified_provider_tag")
+    hdk::get_links(&hdk::AGENT_ADDRESS, Some("verified_provider_tag".to_string()), Some("".to_string()))
 }
 
 pub fn handle_add_holofuel_account(holofuel_account_details:HoloFuelAc) -> ZomeApiResult<Address> {
     let ac_entry = Entry::App("holofuel_account".into(), holofuel_account_details.into());
-    utils::commit_and_link(&ac_entry, &hdk::AGENT_ADDRESS, "holofuel_account_details_tag")
+    utils::commit_and_link(&ac_entry, &hdk::AGENT_ADDRESS, "holofuel_account_details_tag", "")
 }
 
 pub fn handle_get_holofuel_account() -> ZomeApiResult<GetLinksResult> {
-    hdk::get_links(&hdk::AGENT_ADDRESS, "holofuel_account_details_tag")
+    hdk::get_links(&hdk::AGENT_ADDRESS, Some("holofuel_account_details_tag".to_string()), Some("".to_string()) )
 }

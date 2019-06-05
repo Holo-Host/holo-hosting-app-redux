@@ -101,6 +101,6 @@ scenario.runTape('Provider Tests Domain Name', async(t, {liza}) => {
 
     const app_domain_name = liza.call("provider","get_app_domain_name",{app_hash:app_address.Ok});
     console.log("Get Domain Names:: ",app_domain_name);
-    t.equal(app_domain_name.Ok[0].entry.dns_name, 'app2.holo.host')
+    t.equal(app_domain_name.Ok[0].dns_name, 'app2.holo.host')
   })
 }

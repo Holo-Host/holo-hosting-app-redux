@@ -49,7 +49,7 @@ pub fn definitions()-> ValidatingEntryType{
         links: [
             from!(
                 "app_config",
-                tag: "domain_name_tag",
+                link_type: "domain_name_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
@@ -61,7 +61,7 @@ pub fn definitions()-> ValidatingEntryType{
             ),
             from!(
                 "app_config",
-                tag: "new_domain_name_tag",
+                link_type: "new_domain_name_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
@@ -73,7 +73,7 @@ pub fn definitions()-> ValidatingEntryType{
             ),
             from!(
                 "app_config",
-                tag: "need_update_domain_name_tag",
+                link_type: "need_update_domain_name_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
@@ -85,7 +85,7 @@ pub fn definitions()-> ValidatingEntryType{
             ),
             to!(
                 "app_config",
-                tag: "app_hash_tag",
+                link_type: "app_hash_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
@@ -97,7 +97,7 @@ pub fn definitions()-> ValidatingEntryType{
             ),
             from!(
                 "anchor",
-                tag: "new_domain_name_tag",
+                link_type: "new_domain_name_tag",
 
                 validation_package: || {
                     hdk::ValidationPackageDefinition::Entry
