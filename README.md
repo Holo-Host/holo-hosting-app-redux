@@ -67,7 +67,7 @@ Network spawned with bindings:
 
 
 ## Built With
-* [Holochain-rust](https://github.com/holochain/holochain-rust)
+* [Holochain-rust v0.0.18-alpha1](https://github.com/holochain/holochain-rust)
 * [HDK](https://developer.holochain.org/api/latest/hdk/)
 
 ## Authors
