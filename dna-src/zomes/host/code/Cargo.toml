@@ -12,6 +12,7 @@ syn = "=0.15.31"
 hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.18-alpha1"}
 holochain_core_types_derive= { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.18-alpha1"}
 boolinator = "=2.4.0"
+hc_common = { path = "../../../hc_common/utils" }
 
 [lib]
 path = "src/lib.rs"

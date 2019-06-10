@@ -49,7 +49,7 @@ define_zome! {
             }
             get_enabled_app_list: {
                 inputs: | |,
-                outputs: |result: ZomeApiResult<Vec<host_fn::AppConfig>>|,
+                outputs: |result: ZomeApiResult<Vec<hc_common::GetLinksLoadElement<host_fn::AppConfig>>>|,
                 handler: host_fn::handle_get_enabled_app_list
             }
             get_host_for_app: {
