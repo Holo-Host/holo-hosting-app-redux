@@ -222,6 +222,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "hc_common"
+version = "0.1.0"
+dependencies = [
+ "hdk 0.0.17-alpha2 (git+https://github.com/holochain/holochain-rust?branch=release-0.0.17-alpha2)",
+ "holochain_core_types_derive 0.0.17-alpha2 (git+https://github.com/holochain/holochain-rust?branch=release-0.0.17-alpha2)",
+ "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_derive 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.39 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "hcid"
 version = "0.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -303,6 +314,7 @@ name = "host"
 version = "0.2.1-alpha"
 dependencies = [
  "boolinator 2.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hc_common 0.1.0",
  "hdk 0.0.17-alpha2 (git+https://github.com/holochain/holochain-rust?branch=release-0.0.17-alpha2)",
  "holochain_core_types_derive 0.0.17-alpha2 (git+https://github.com/holochain/holochain-rust?branch=release-0.0.17-alpha2)",
  "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",

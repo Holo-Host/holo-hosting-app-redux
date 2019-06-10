@@ -181,9 +181,9 @@ pub fn handle_kv_updates_host_completed(kv_bundle:Vec<App2Host>)-> ZomeApiResult
     }
     Ok(())
 }
-pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<AppConfig>>{
+pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<hc_common::GetLinksLoadElement<AppConfig>>>{
     validate_host()?;
-    utils::get_links_and_load_type(&hdk::AGENT_ADDRESS, Some("apps_enabled".to_string()), Some("".to_string()))
+    hc_common::get_links_and_load_type(&hdk::AGENT_ADDRESS, Some("apps_enabled".to_string()))
 }
 
 pub fn handle_get_host_for_app(app_hash:Address)->ZomeApiResult<Vec<ZomeApiResult<Entry>>>{
