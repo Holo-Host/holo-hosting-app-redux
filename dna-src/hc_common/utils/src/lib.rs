@@ -2,15 +2,20 @@
 #[macro_use]
 extern crate serde_derive;
 use core::convert::TryFrom;
+
 use hdk::{
     self,
-    holochain_core_types::{
-    	hash::HashString,
-    	entry::{AppEntryValue, Entry},
-    	cas::content::AddressableContent,
+    error::{ZomeApiResult, ZomeApiError},
+    holochain_persistence_api::{
+        cas::content::AddressableContent,
+        hash::HashString,
     },
-    error::{ZomeApiResult, ZomeApiError}
+    holochain_core_types::{
+        entry::{AppEntryValue, Entry},
+        link::LinkMatch,
+    }
 };
+
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GetLinksLoadElement<T> {
@@ -26,9 +31,11 @@ pub fn get_links_and_load_type<
 	R: TryFrom<AppEntryValue>
 >(
     base: &HashString,
-    tag: Option<String>
+    tag: String
 ) -> ZomeApiResult<GetLinksLoadResult<R>> {
-	let link_load_results = hdk::get_links_and_load(base, tag, Some("".to_string()))?;
+	let link_load_results = hdk::get_links_and_load(base,
+        LinkMatch::Exactly(&tag),
+        LinkMatch::Any)?;
 
 	Ok(link_load_results
 	.iter()

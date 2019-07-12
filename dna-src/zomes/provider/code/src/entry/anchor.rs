@@ -1,13 +1,15 @@
 use boolinator::Boolinator;
 
-use hdk::holochain_core_types::{
-    dna::entry_types::Sharing,
-    validation::{EntryValidationData},
-    json::RawString,
-};
 use hdk::{
     self,
     entry_definition::ValidatingEntryType,
+    holochain_json_api::{
+        json::{JsonString,RawString},
+    },
+    holochain_core_types::{
+        dna::entry_types::Sharing,
+        validation::{EntryValidationData},
+    },
 };
 
 

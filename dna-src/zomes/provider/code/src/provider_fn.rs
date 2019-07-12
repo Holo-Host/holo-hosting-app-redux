@@ -6,25 +6,31 @@ use crate::entry::domain_name::DNS;
 use hdk::{
     self,
     utils,
+    error::{ZomeApiResult, ZomeApiError},
+    holochain_persistence_api::{
+        cas::content::Address,
+        hash::HashString,
+    },
+    holochain_json_api::{
+        error::JsonError,
+        json::{JsonString,RawString},
+    },
     holochain_core_types::{
         entry::Entry,
-        hash::HashString,
-        json::JsonString,
-        json::RawString,
-        cas::content::Address,
-        error::HolochainError,
+        link::LinkMatch,
     },
-    holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
-    error::{ZomeApiResult,ZomeApiError},
+    holochain_wasm_utils::api_serialization::{
+        get_links::GetLinksResult,
+    }
 };
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson )]
 pub struct DnsDnaKV {
     dna:HashString,
     dns:Vec<DNSEntry>
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson )]
 pub struct DNSEntry {
     address:HashString,
     name:String
@@ -65,7 +71,9 @@ pub fn handle_register_app_bundle(app_bundle:AppConfig) -> ZomeApiResult<Address
 
 pub fn handle_get_my_registered_app_list() -> ZomeApiResult<GetLinksResult> {
     validate_provider()?;
-    hdk::get_links(&hdk::AGENT_ADDRESS, Some("my_registered_apps_tag".to_string()), Some("".to_string()))
+    hdk::get_links(&hdk::AGENT_ADDRESS,
+        LinkMatch::Exactly("my_registered_apps_tag"),
+        LinkMatch::Any)
 }
 //
 // // TODO Decide the actual details that are needed
@@ -76,7 +84,7 @@ pub fn handle_get_my_registered_app_list() -> ZomeApiResult<GetLinksResult> {
 // }
 
 // Copy of the PaymentPref in the host zome
-#[derive(Serialize, Deserialize, DefaultJson, Debug, Clone)]
+#[derive(Serialize, Deserialize , Debug, Clone, DefaultJson)]
 pub struct PaymentPref {
     pub provider_address: Address,
     pub dna_bundle_hash: HashString,
@@ -85,7 +93,7 @@ pub struct PaymentPref {
     pub price_per_unit: f64,
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson )]
 pub struct AppBundle{
     pub app_bundle:AppConfig,
     // pub app_details:Vec<utils::GetLinksLoadElement<AppDetails>>,
@@ -99,7 +107,9 @@ pub fn handle_get_app_details(app_hash:Address) -> ZomeApiResult<AppBundle> {
         // get app details_tag
         // app_details: utils::get_links_and_load_type(&app_hash, "details_tag")?,
         // get app servicelog details ir
-        payment_pref: utils::get_links_and_load_type(&app_hash, Some("payment_pref_tag".to_string()), Some("".to_string()))?
+        payment_pref: utils::get_links_and_load_type(&app_hash,
+            LinkMatch::Exactly("payment_pref_tag"),
+            LinkMatch::Any)?
     })
 }
 
@@ -120,7 +130,9 @@ pub fn handle_add_app_domain_name(domain_name:DNS, app_hash:&Address) -> ZomeApi
 pub fn handle_get_all_apps() -> ZomeApiResult<GetLinksResult> {
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
-    hdk::get_links(&anchor_address, Some("all_apps_tag".to_string()), Some("".to_string()))
+    hdk::get_links(&anchor_address,
+        LinkMatch::Exactly("all_apps_tag"),
+        LinkMatch::Any)
 }
 
 
@@ -134,7 +146,7 @@ pub fn handle_get_kv_updates_domain_name()-> ZomeApiResult<Vec<DnsDnaKV>> {
         for app in all_apps.clone(){
             let app_copy = app.clone();
             // let updated_dns:Vec<hc_common::GetLinksLoadElement<DNS>> = hc_common::get_links_and_load_type(&app_copy, "new_domain_name_tag".to_string())?;
-            let updated_dns:Vec<hc_common::GetLinksLoadElement<DNS>> = hc_common::get_links_and_load_type(&app_copy, Some("new_domain_name_tag".to_string()))?;
+            let updated_dns:Vec<hc_common::GetLinksLoadElement<DNS>> = hc_common::get_links_and_load_type(&app_copy, "new_domain_name_tag".to_string())?;
             // Data refactor
             let mut dns_list:Vec<DNSEntry>=Vec::new();
             for dns in updated_dns.clone(){
@@ -168,7 +180,9 @@ pub fn handle_kv_updates_domain_name_completed(kv_bundle:Vec<DnsDnaKV>)-> ZomeAp
 }
 
 pub fn handle_get_app_domain_name(app_hash:Address) -> ZomeApiResult<Vec<DNS>> {
-    utils::get_links_and_load_type(&app_hash, Some("domain_name_tag".to_string()), Some("".to_string()))
+    utils::get_links_and_load_type(&app_hash,
+        LinkMatch::Exactly("domain_name_tag"),
+        LinkMatch::Any)
 }
 
 pub fn handle_register_as_provider(provider_doc:ProviderDoc) -> ZomeApiResult<Address> {
@@ -178,7 +192,9 @@ pub fn handle_register_as_provider(provider_doc:ProviderDoc) -> ZomeApiResult<Ad
 }
 
 pub fn handle_is_registered_as_provider() -> ZomeApiResult<GetLinksResult> {
-    hdk::get_links(&hdk::AGENT_ADDRESS, Some("verified_provider_tag".to_string()), Some("".to_string()))
+    hdk::get_links(&hdk::AGENT_ADDRESS,
+        LinkMatch::Exactly("verified_provider_tag"),
+        LinkMatch::Any)
 }
 
 pub fn handle_add_holofuel_account(holofuel_account_details:HoloFuelAc) -> ZomeApiResult<Address> {
@@ -187,5 +203,7 @@ pub fn handle_add_holofuel_account(holofuel_account_details:HoloFuelAc) -> ZomeA
 }
 
 pub fn handle_get_holofuel_account() -> ZomeApiResult<GetLinksResult> {
-    hdk::get_links(&hdk::AGENT_ADDRESS, Some("holofuel_account_details_tag".to_string()), Some("".to_string()) )
+    hdk::get_links(&hdk::AGENT_ADDRESS,
+        LinkMatch::Exactly("holofuel_account_details_tag"),
+        LinkMatch::Any)
 }

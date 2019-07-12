@@ -1,6 +1,6 @@
 module.exports = (scenario) => {
-  scenario.runTape('get user address', async(t, {liza}) => {
-    const result = liza.call("whoami", "get_user", {})
+  scenario('get user address', async(s, t, {liza}) => {
+    const result = await liza.call("whoami", "get_user", {})
     console.log("->",result)
     t.equal(result.Ok.hash.length, 63) // agent addresses are 92 chars long?
   })

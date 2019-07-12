@@ -1,6 +1,18 @@
 use hdk::{
     utils,
-    error::{ZomeApiResult,ZomeApiError},
+    error::{ZomeApiResult, ZomeApiError},
+    holochain_persistence_api::{
+        cas::content::Address,
+        hash::HashString,
+    },
+    holochain_json_api::{
+        error::JsonError,
+        json::{JsonString,RawString},
+    },
+    holochain_core_types::{
+        entry::Entry,
+        link::LinkMatch,
+    },
     holochain_wasm_utils::api_serialization::{
         get_entry::{
             GetEntryOptions,
@@ -9,35 +21,28 @@ use hdk::{
         get_links::GetLinksResult,
     }
 };
-use hdk::holochain_core_types::{
-    hash::HashString,
-    json::JsonString,
-    json::RawString,
-    error::HolochainError,
-    cas::content::Address,
-    entry::Entry,
-};
+
 use crate::entry::host_doc::HostDoc;
 use crate::entry::payment_pref::PaymentPref;
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson )]
 pub struct AppConfig {
     pub happ_hash:HashString,
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson )]
 pub struct DnaToHost{
     recently_enabled_apps:Vec<App2Host>,
     recently_disabled_apps:Vec<App2Host>
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson )]
 pub struct App2Host{
     app:HashString,
     host:Vec<String>
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, DefaultJson )]
 pub struct AllApps{
     hash:HashString,
     details:String
@@ -58,7 +63,9 @@ pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
     validate_host()?;
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
-    let all_apps_commit = hdk::get_links(&anchor_address, Some("all_apps_tag".to_string()), Some("".to_string()))?;
+    let all_apps_commit = hdk::get_links(&anchor_address,
+        LinkMatch::Exactly("all_apps_tag"),
+        LinkMatch::Any)?;
     let app_address = all_apps_commit.addresses();
 
     let mut app_details_list: Vec<AllApps> =Vec::new();
@@ -103,7 +110,9 @@ fn handle_get_all_apps_addresses() -> ZomeApiResult<GetLinksResult> {
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
 
-    hdk::get_links(&anchor_address, Some("all_apps_tag".to_string()), Some("".to_string()))
+    hdk::get_links(&anchor_address,
+        LinkMatch::Exactly("all_apps_tag"),
+        LinkMatch::Any)
 }
 
 pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
@@ -114,8 +123,12 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
     let mut recently_enabled_apps:Vec<App2Host>=Vec::new();
     for app in all_apps.clone(){
         let app_copy = app.clone();
-        let mut enabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("recently_enabled_app_tag".to_string()), Some("".to_string()))?;
-        let mut enabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("need_updates_enabled_from_kv_store".to_string()), Some("".to_string()))?;
+        let mut enabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy,
+            LinkMatch::Exactly("recently_enabled_app_tag"),
+            LinkMatch::Any)?;
+        let mut enabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy,
+            LinkMatch::Exactly("need_updates_enabled_from_kv_store"),
+            LinkMatch::Any)?;
 
         enabled_agents.append(&mut enabled_agents_old);
 
@@ -143,8 +156,13 @@ pub fn handle_get_kv_updates_dna_to_host()-> ZomeApiResult<DnaToHost> {
     let mut recently_disabled_apps:Vec<App2Host>=Vec::new();
     for app in all_apps.clone(){
         let app_copy = app.clone();
-        let mut disabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("recently_disabled_app_tag".to_string()), Some("".to_string()))?;
-        let mut disabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy, Some("need_updates_disabled_from_kv_store".to_string()), Some("".to_string()))?;
+        let mut disabled_agents:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy,
+            LinkMatch::Exactly("recently_disabled_app_tag"),
+            LinkMatch::Any)?;
+
+        let mut disabled_agents_old:Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(&app_copy,
+            LinkMatch::Exactly("need_updates_disabled_from_kv_store"),
+            LinkMatch::Any)?;
 
         disabled_agents.append(&mut disabled_agents_old);
 
@@ -183,11 +201,13 @@ pub fn handle_kv_updates_host_completed(kv_bundle:Vec<App2Host>)-> ZomeApiResult
 }
 pub fn handle_get_enabled_app_list() -> ZomeApiResult<Vec<hc_common::GetLinksLoadElement<AppConfig>>>{
     validate_host()?;
-    hc_common::get_links_and_load_type(&hdk::AGENT_ADDRESS, Some("apps_enabled".to_string()))
+    hc_common::get_links_and_load_type(&hdk::AGENT_ADDRESS, "apps_enabled".to_string())
 }
 
 pub fn handle_get_host_for_app(app_hash:Address)->ZomeApiResult<Vec<ZomeApiResult<Entry>>>{
-    hdk::get_links_and_load(&app_hash, Some("host_enabled".to_string()), Some("".to_string()))
+    hdk::get_links_and_load(&app_hash,
+        LinkMatch::Exactly("host_enabled"),
+        LinkMatch::Any)
 }
 
 pub fn handle_register_as_host(host_doc:HostDoc) -> ZomeApiResult<Address> {
@@ -198,14 +218,16 @@ pub fn handle_register_as_host(host_doc:HostDoc) -> ZomeApiResult<Address> {
 }
 
 pub fn handle_is_registered_as_host() -> ZomeApiResult<GetLinksResult> {
-    hdk::get_links(&hdk::AGENT_ADDRESS, Some("verified_host_tag".to_string()), Some("".to_string()))
+    hdk::get_links(&hdk::AGENT_ADDRESS,
+        LinkMatch::Exactly("verified_host_tag"),
+        LinkMatch::Any)
 }
 
 /*************************/
 /* Service Log Functions */
 /*************************/
 
-#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson )]
 pub struct HoloFuelAc {
     pub account_number:String,
 }
@@ -221,7 +243,9 @@ pub fn handle_add_service_log_details(app_hash: Address, max_fuel_per_invoice:f6
             {
                 let provider_address = result.headers[result.headers.len()-1].provenances()[0].source();
 
-                let provider_hf: Vec<HoloFuelAc> = utils::get_links_and_load_type(&provider_address, Some("holofuel_account_details_tag".to_string()), Some("".to_string()))?;
+                let provider_hf: Vec<HoloFuelAc> = utils::get_links_and_load_type(&provider_address,
+                    LinkMatch::Exactly("holofuel_account_details_tag"),
+                    LinkMatch::Any)?;
 
                 add_service_log_details(PaymentPref{
                     provider_address: Address::from(provider_hf[0].account_number.to_owned()),
@@ -242,7 +266,9 @@ fn add_service_log_details(payment_pref:PaymentPref,app_hash:Address)-> ZomeApiR
 }
 
 pub fn handle_get_service_log_details(app_hash:Address)-> ZomeApiResult<PaymentPref>{
-    let payment_details : Vec<PaymentPref> = utils::get_links_and_load_type(&app_hash, Some("payment_pref_tag".to_string()), Some("".to_string()))?;
+    let payment_details : Vec<PaymentPref> = utils::get_links_and_load_type(&app_hash,
+        LinkMatch::Exactly("payment_pref_tag"),
+        LinkMatch::Any)?;
     // let payment_pref:PaymentPref = PaymentPref::try_from(payment_details[0].entry.to_owned());
     Ok(payment_details[0].to_owned())
 }

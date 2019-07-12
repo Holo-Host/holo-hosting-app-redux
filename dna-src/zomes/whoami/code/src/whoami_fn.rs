@@ -1,14 +1,15 @@
+
 use hdk::{
     AGENT_ADDRESS,
     AGENT_ID_STR,
     error::ZomeApiResult,
-    holochain_core_types::{
+    holochain_json_api::{
+        error::JsonError,
         json::JsonString,
-        error::HolochainError,
-    }
+    },
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson )]
 pub struct UserDetails {
     hash: String,
     name: String,

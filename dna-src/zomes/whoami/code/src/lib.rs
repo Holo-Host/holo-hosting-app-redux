@@ -6,11 +6,14 @@ extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
-extern crate holochain_core_types_derive;
+extern crate holochain_json_derive;
 
 use hdk::{
     error::ZomeApiResult,
-    holochain_core_types::{json::JsonString, error::HolochainError},
+    holochain_json_api::{
+        error::JsonError,
+        json::JsonString,
+    }
 };
 
 pub mod whoami_fn;

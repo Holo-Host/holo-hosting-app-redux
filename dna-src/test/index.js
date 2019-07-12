@@ -1,18 +1,40 @@
-// const { Config, Scenario } = require("../../../holochain-rust/nodejs_conductor")
-const { Config, Scenario } = require("@holochain/holochain-nodejs")
-Scenario.setTape(require('tape'))
-const dnaPath = "dist/dna-src.dna.json"
-const dna = Config.dna(dnaPath, 'happs')
-const agentLiza = Config.agent("liza")
-const instanceLiza = Config.instance(agentLiza, dna)
-const scenario = new Scenario([instanceLiza],{ debugLog: false })
+const path = require('path')
+const tape = require('tape')
 
-require('./unit_test/app_flow_test')(scenario);
-require('./unit_test/kv_enable_disable_test')(scenario);
-require('./unit_test/whoami_test')(scenario);
-require('./unit_test/dna_dns_test')(scenario);
-require('./unit_test/host_test')(scenario);
-require('./unit_test/provider_test')(scenario);
-require('./unit_test/payment_prefs_test')(scenario);
-require('./unit_test/retrive_all_apps')(scenario);
-require('./unit_test/register_app_test')(scenario);
+const { Diorama, tapeExecutor, backwardCompatibilityMiddleware } = require('@holochain/diorama')
+
+process.on('unhandledRejection', error => {
+  // Will print "unhandledRejection err is not defined"
+  console.error('got unhandledRejection:', error);
+});
+
+const dnaPath = path.join(__dirname, "../dist/dna-src.dna.json")
+const dna = Diorama.dna(dnaPath, 'hha')
+
+const diorama = new Diorama({
+  instances: {
+    // alice: dna,
+    // bob: dna,
+    liza: dna,
+  },
+  // bridges: [
+  //   Diorama.bridge('test-bridge', 'alice', 'bob')
+  // ],
+  debugLog: false,
+  executor: tapeExecutor(require('tape')),
+  middleware: backwardCompatibilityMiddleware,
+})
+
+require('./unit_test/whoami_test')(diorama.registerScenario);
+require('./unit_test/app_flow_test')(diorama.registerScenario);
+require('./unit_test/kv_enable_disable_test')(diorama.registerScenario);
+require('./unit_test/dna_dns_test')(diorama.registerScenario);
+require('./unit_test/host_test')(diorama.registerScenario);
+require('./unit_test/provider_test')(diorama.registerScenario);
+require('./unit_test/payment_prefs_test')(diorama.registerScenario);
+require('./unit_test/retrive_all_apps')(diorama.registerScenario);
+require('./unit_test/register_app_test')(diorama.registerScenario);
+
+diorama.run().then(()=>
+  process.exit()
+)
