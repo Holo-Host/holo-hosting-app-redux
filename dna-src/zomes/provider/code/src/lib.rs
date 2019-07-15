@@ -1,4 +1,3 @@
-#![feature(try_from)]
 extern crate boolinator;
 #[macro_use]
 extern crate hdk;
@@ -11,13 +10,8 @@ extern crate holochain_json_derive;
 
 use hdk::{
     error::ZomeApiResult,
-    holochain_persistence_api::{
-        cas::content::Address,
-    },
-    holochain_json_api::{
-        error::JsonError,
-        json::JsonString,
-    },
+    holochain_json_api::{error::JsonError, json::JsonString},
+    holochain_persistence_api::cas::content::Address,
     holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
 };
 

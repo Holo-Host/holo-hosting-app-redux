@@ -3,17 +3,11 @@ use boolinator::Boolinator;
 use hdk::{
     self,
     entry_definition::ValidatingEntryType,
-    holochain_json_api::{
-        json::{JsonString,RawString},
-    },
-    holochain_core_types::{
-        dna::entry_types::Sharing,
-        validation::{EntryValidationData},
-    },
+    holochain_core_types::{dna::entry_types::Sharing, validation::EntryValidationData},
+    holochain_json_api::json::{JsonString, RawString},
 };
 
-
-pub fn definitions()-> ValidatingEntryType{
+pub fn definitions() -> ValidatingEntryType {
     entry!(
         name: "anchor",
         description: "anchor for an app",

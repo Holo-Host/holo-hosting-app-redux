@@ -3,25 +3,18 @@ use boolinator::Boolinator;
 use hdk::{
     self,
     entry_definition::ValidatingEntryType,
-    holochain_json_api::{
-        error::JsonError,
-        json::JsonString,
-    },
-    holochain_core_types::{
-        dna::entry_types::Sharing,
-        validation::{EntryValidationData},
-    },
+    holochain_core_types::{dna::entry_types::Sharing, validation::EntryValidationData},
+    holochain_json_api::{error::JsonError, json::JsonString},
 };
 
-
-#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson )]
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
 pub struct AppDetails {
-    pub name:String,
-    pub details:String,
+    pub name: String,
+    pub details: String,
     // pub domain_name:String
 }
 
-pub fn definitions()-> ValidatingEntryType{
+pub fn definitions() -> ValidatingEntryType {
     entry!(
         name: "app_details",
         description: "Details for an app",

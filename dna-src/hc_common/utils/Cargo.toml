@@ -5,8 +5,8 @@ authors = ["Willem Olding <willem.olding@holo.host>","Zo-El <joel.ulahanna@holo.
 edition = "2018"
 
 [dependencies]
-serde = { version = "=1.0.89", features = ["rc"] }
+serde = "=1.0.89"
 serde_json = { version = "=1.0.39", features = ["preserve_order"] }
 serde_derive = "=1.0.89"
-hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.23-alpha1" }
-holochain_json_derive = "=0.0.1-alpha2"
+hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.24-alpha2" }
+holochain_json_derive = "=0.0.15"

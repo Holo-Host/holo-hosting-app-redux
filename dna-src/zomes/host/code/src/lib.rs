@@ -1,4 +1,3 @@
-#![feature(try_from)]
 #[macro_use]
 extern crate hdk;
 #[macro_use]
@@ -11,22 +10,14 @@ extern crate holochain_json_derive;
 
 use hdk::{
     error::ZomeApiResult,
-    holochain_persistence_api::{
-        cas::content::Address,
-        hash::HashString,
-    },
-    holochain_json_api::{
-        error::JsonError,
-        json::JsonString,
-    },
-    holochain_core_types::{
-        entry::Entry,
-    },
+    holochain_core_types::entry::Entry,
+    holochain_json_api::{error::JsonError, json::JsonString},
+    holochain_persistence_api::{cas::content::Address, hash::HashString},
     holochain_wasm_utils::api_serialization::get_links::GetLinksResult,
 };
 
-pub mod host_fn;
 pub mod entry;
+pub mod host_fn;
 
 define_zome! {
     entries: [

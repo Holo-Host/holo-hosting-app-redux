@@ -1,23 +1,12 @@
 use hdk::{
     self,
     entry_definition::ValidatingEntryType,
-    holochain_persistence_api::{
-        cas::content::Address,
-        hash::HashString,
-    },
-    holochain_json_api::{
-        error::JsonError,
-        json::JsonString,
-    },
-    holochain_core_types::{
-        dna::entry_types::Sharing,
-        validation::{EntryValidationData},
-    },
+    holochain_core_types::{dna::entry_types::Sharing, validation::EntryValidationData},
+    holochain_json_api::{error::JsonError, json::JsonString},
+    holochain_persistence_api::{cas::content::Address, hash::HashString},
 };
 
-
-
-#[derive(Serialize, Deserialize , Debug, Clone, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
 pub struct PaymentPref {
     pub provider_address: Address,
     pub dna_bundle_hash: HashString,
