@@ -5,5 +5,5 @@ jobs:
     docker:
     - image: holochain/holonix:latest
     steps:
-    - run: nix-shell
-    
+      - checkout
+      - run: nix-shell --run npm
