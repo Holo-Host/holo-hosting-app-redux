@@ -7,4 +7,7 @@ jobs:
     steps:
     - run:
         name: Starting test
-        command: nix-shell --run npm run ci-test
+        command: nix-shell
+    - run:
+        name: ls -la
+        command: ls -la
