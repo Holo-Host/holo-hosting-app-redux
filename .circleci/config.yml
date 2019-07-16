@@ -5,7 +5,6 @@ jobs:
     docker:
     - image: holochain/holonix:latest
     steps:
-    - checkout
     - run:
         name: Starting test
         command: cd dna-src && nix-shell --run hc-test
