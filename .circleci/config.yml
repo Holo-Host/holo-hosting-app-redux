@@ -1,8 +1,11 @@
-version: 2
+version: 2.1
 
 jobs:
   build:
     docker:
     - image: holochain/holochain-rust:circle.01.warm.nix
     steps:
-      - run: nix-shell dna-src/ --run dev-shell
+    - checkout
+    - run:
+        name: Starting test
+        command: nix-shell --run hc-test
