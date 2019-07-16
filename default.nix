@@ -24,7 +24,7 @@ with holonix.pkgs;
  dev-shell = stdenv.mkDerivation (holonix.shell // {
   name = "dev-shell";
 
-  buildInputs = [ mkdir ]
+  buildInputs = [ ]
    ++ holonix.shell.buildInputs
 
    ++ (holonix.pkgs.callPackage ./dna-src/install {

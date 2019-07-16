@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-    - image: holochain/holochain-rust:circle.01.warm.nix
+    - image: holochain/holonix:latest
     steps:
     - checkout
     - run:
