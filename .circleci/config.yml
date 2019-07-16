@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-    - image: holochain/holonix:latest
+    - image: holochain/holochain-rust:circle.01.warm.nix
     steps:
     - run:
         name: Starting test
