@@ -5,6 +5,7 @@ jobs:
     docker:
     - image: holochain/holonix:latest
     steps:
+    - checkout
     - run:
         name: Starting test
         command: nix-shell --run hc-test
