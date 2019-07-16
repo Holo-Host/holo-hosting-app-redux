@@ -4,9 +4,9 @@ let
 
   script = pkgs.writeShellScriptBin name
   ''
-  rm -f dist/DeepKey.dna.json
+  rm -f dist/dna-src.dna.json
   mkdir -p dist
-  hc package --output dist/DeepKey.dna.json --strip-meta
+  hc package --output dist/dna-src.dna.json --strip-meta
   '';
 in
 {

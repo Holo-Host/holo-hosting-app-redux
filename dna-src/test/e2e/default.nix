@@ -4,7 +4,7 @@ let
 
   script = pkgs.writeShellScriptBin name
   ''
-   # Build DeepKey, install test JS dependencies, and run Diorama tests
+   # Build HHA, install test JS dependencies, and run Diorama tests
    hf-install \
    && ( cd test && npm install ) \
    && RUST_BACKTRACE=1 hc test \
