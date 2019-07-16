@@ -20,7 +20,7 @@ test: tools
 		-A clippy::nursery -A clippy::style -A clippy::cargo \
 		-A clippy::pedantic -A clippy::restriction \
 		-D clippy::complexity -D clippy::perf -D clippy::correctness
-		hc test
+		nix-shell --run hc-test
 
 fmt: tools
 	cargo fmt

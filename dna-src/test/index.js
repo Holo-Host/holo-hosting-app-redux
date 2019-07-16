@@ -49,13 +49,14 @@ const orchestratorSimple = new Orchestrator({
 
 require('./unit_test/whoami_test')(orchestratorSimple.registerScenario);
 require('./unit_test/app_flow_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/kv_enable_disable_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/dna_dns_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/host_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/provider_test')(orchestratorSimple.registerScenario);
+require('./unit_test/kv_enable_disable_test')(orchestratorSimple.registerScenario);
+require('./unit_test/dna_dns_test')(orchestratorSimple.registerScenario);
+require('./unit_test/host_test')(orchestratorSimple.registerScenario);
+require('./unit_test/provider_test')(orchestratorSimple.registerScenario);
 // require('./unit_test/payment_prefs_test')(orchestratorSimple.registerScenario);
 // require('./unit_test/retrive_all_apps')(orchestratorSimple.registerScenario);
 // require('./unit_test/register_app_test')(orchestratorSimple.registerScenario);
+
 // require('./multi-dna')(orchestratorMultiDna.registerScenario)
 
 const run = async () => {
