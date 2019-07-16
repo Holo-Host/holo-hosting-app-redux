@@ -27,11 +27,11 @@ with holonix.pkgs;
   buildInputs = [ ]
    ++ holonix.shell.buildInputs
 
-   ++ (holonix.pkgs.callPackage ./dna-src/install {
+   ++ (holonix.pkgs.callPackage ./install {
     pkgs = holonix.pkgs;
    }).buildInputs
 
-   ++ (holonix.pkgs.callPackage ./dna-src/test {
+   ++ (holonix.pkgs.callPackage ./test {
     pkgs = holonix.pkgs;
    }).buildInputs
    ;
