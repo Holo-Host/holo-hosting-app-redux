@@ -1,7 +1,8 @@
 [workspace]
 
 members = [
-  "zomes/host/code",
-  "zomes/provider/code",
-  "zomes/whoami/code",
+  "dna-src/zomes/host/code",
+  "dna-src/zomes/host/code",
+  "dna-src/zomes/provider/code",
+  "dna-src/zomes/whoami/code",
 ]
