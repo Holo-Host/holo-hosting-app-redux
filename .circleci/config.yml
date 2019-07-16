@@ -4,8 +4,7 @@ jobs:
   build:
     docker:
     - image: holochain/holonix:latest
-    - image: circleci/node:10.15.1
     steps:
     - run:
         name: Starting test
-        command: npm run ci-test
+        command: nix-shell --run hc-test
