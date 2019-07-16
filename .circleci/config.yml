@@ -3,11 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-    - image: holochain/holochain-rust:circle.01.warm.nix
+    - image: holochain/holonix:latest
     steps:
-    - run:
-        name: Starting test
-        command: nix-shell
-    - run:
-        name: ls -la
-        command: ls -la
+    - run: nix-shell
+    
