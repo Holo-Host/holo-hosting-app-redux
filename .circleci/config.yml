@@ -5,5 +5,4 @@ jobs:
     docker:
     - image: holochain/holochain-rust:circle.01.warm.nix
     steps:
-      - checkout
-      - run: cd dna-src && nix-shell --run npm
+      - run: nix-shell dna-src/ --run dev-shell
