@@ -1,0 +1,14 @@
+{
+  "name": "Holo Hosting App",
+  "description": "A Holo app that is for holo app providers and the holo hosts",
+  "authors": [
+    {
+      "identifier": "zo-el <zo@el.org>",
+      "public_key_source": "",
+      "signature": ""
+    }
+  ],
+  "version": "0.2.4-alpha1",
+  "dht": {},
+  "properties": null
+}
