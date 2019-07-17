@@ -1,8 +1,8 @@
 # Holo Hosting App
 
-![GitHub last commit](https://img.shields.io/github/last-commit/holo-host/Holo-Hostin-App.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/holo-host/Holo-Hosting-App.svg)
 
-**Circle CI:** [![CircleCI](https://circleci.com/gh/Holo-Host/Holo-Hosting-App.svg?style=svg)](https://circleci.com/gh/holo-host/Holo-Hosting-App)
+**Circle CI:** [![CircleCI](https://circleci.com/gh/Holo-Host/Holo-Hosting-App.svg?style=svg)](https://circleci.com/gh/Holo-Host/Holo-Hosting-App)
 
 **Status:** Closed-Alpha. Early development and testing.
 
