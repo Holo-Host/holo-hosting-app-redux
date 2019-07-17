@@ -1,6 +1,6 @@
 [package]
 name = "host"
-version = "0.2.2-alpha"
+version = "0.2.4-alpha1"
 authors = ["zo-el <joelulahanna@gmail.com>"]
 edition = "2018"
 

@@ -68,7 +68,7 @@ echo "All finished!!!"
   # the previous version will be scanned/bumped by release scripts
   # the current version is what the release scripts bump *to*
   version = {
-   current = "0.2.2-alpha";
+   current = "0.2.4-alpha1";
    previous = "0.2.2-alpha";
   };
 
