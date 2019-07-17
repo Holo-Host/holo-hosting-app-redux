@@ -9,7 +9,7 @@ process.on('unhandledRejection', error => {
   console.error('got unhandledRejection:', error);
 });
 
-const dnaPath = path.join(__dirname, "../dist/dna-src.dna.json")
+const dnaPath = path.join(__dirname, "../dist/Holo-Hosting-App.dna.json")
 const dna = Orchestrator.dna(dnaPath, 'hha')
 // const dna2 = Orchestrator.dna(dnaPath, 'hha', {uuid: 'altered-dna'})
 
