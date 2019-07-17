@@ -26,7 +26,7 @@ fmt: tools
 	cargo fmt
 
 clean:
-	rm -rf dist test/node_modules test/package-lock.json
+	rm -rf dist test/node_modules test/package-lock.json target .cargo Cargo.lock
 	rm -rf zomes/host/code/Cargo.lock Cargo.lock .cargo target
 	rm -rf zomes/provider/code/Cargo.lock
 	rm -rf zomes/whoami/code/Cargo.lock

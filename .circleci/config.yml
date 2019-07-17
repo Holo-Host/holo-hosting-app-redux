@@ -1,9 +1,11 @@
-version: 2.1
+version: 2
 
 jobs:
   build:
     docker:
     - image: holochain/holonix:latest
+    environment:
+    - PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     steps:
     - checkout
     - run:

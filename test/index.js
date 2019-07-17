@@ -9,7 +9,7 @@ process.on('unhandledRejection', error => {
   console.error('got unhandledRejection:', error);
 });
 
-const dnaPath = path.join(__dirname, "../dist/dna-src.dna.json")
+const dnaPath = path.join(__dirname, "../dist/Holo-Hosting-App.dna.json")
 const dna = Orchestrator.dna(dnaPath, 'hha')
 // const dna2 = Orchestrator.dna(dnaPath, 'hha', {uuid: 'altered-dna'})
 
@@ -49,10 +49,10 @@ const orchestratorSimple = new Orchestrator({
 
 require('./unit_test/whoami_test')(orchestratorSimple.registerScenario);
 require('./unit_test/app_flow_test')(orchestratorSimple.registerScenario);
-require('./unit_test/kv_enable_disable_test')(orchestratorSimple.registerScenario);
-require('./unit_test/dna_dns_test')(orchestratorSimple.registerScenario);
-require('./unit_test/host_test')(orchestratorSimple.registerScenario);
-require('./unit_test/provider_test')(orchestratorSimple.registerScenario);
+// require('./unit_test/kv_enable_disable_test')(orchestratorSimple.registerScenario);
+// require('./unit_test/dna_dns_test')(orchestratorSimple.registerScenario);
+// require('./unit_test/host_test')(orchestratorSimple.registerScenario);
+// require('./unit_test/provider_test')(orchestratorSimple.registerScenario);
 // require('./unit_test/payment_prefs_test')(orchestratorSimple.registerScenario);
 // require('./unit_test/retrive_all_apps')(orchestratorSimple.registerScenario);
 // require('./unit_test/register_app_test')(orchestratorSimple.registerScenario);
