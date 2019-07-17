@@ -13,7 +13,7 @@ The hosting app is a space for Hosts and App Providers to interact
 
 ## How to run test?
 ```
-cd dna-src && hc test 
+cd dna-src && hc test
 ```
 > Note since this repo is in dev mode, you would have to pull the [holochain-rust](https://github.com/holochain/holochain-rust) repo in the same folder you pull this repo into. This is required to run the hc test with the latest nodejs_conductor in the holochain-rust.
 
@@ -21,7 +21,7 @@ cd dna-src && hc test
 After running the cmd bellow you will find the `.dna.json` in the `dna-src/dist` folder
 
 ```
-cd dna-src && hc package 
+cd dna-src && hc package
 ```
 # How to quickly spin up an agent
 > This could be used to test the [UI](https://github.com/Holo-Host/holo-hosting-app_GUI)
@@ -32,7 +32,7 @@ cd dna-src && hc package
       - Find the `start-dna-agent1` script inside the `package.json`
       - Update the **HC_N3H_PATH** to path of the n3h repo on your local device.(eg: HC_N3H_PATH=/home/lisa/n3h)
 
-  3. In the first terminal, run agent1's DNA 
+  3. In the first terminal, run agent1's DNA
         ```
         npm run start-dna-agent1
         ````
@@ -42,7 +42,7 @@ cd dna-src && hc package
         - Update the **HC_N3H_PATH** to path of the n3h repo on your local device.
         - Add the **HC_N3H_BOOTSTRAP_NODE** as provided in the networking details within the terminal when running agent1's DNA. (As shown on line #9 in the terminal snippet below.)
         - Add the **HC_N3H_IPC_URI** as provided in the networking details within the terminal when running agent1's DNA. (As shown on line #3 in the terminal snippet below.)
-        
+
 ```=
 (wss-connection) [i] listening at wss://127.0.0.1:41249/
 Network spawned with bindings:
@@ -67,7 +67,7 @@ Network spawned with bindings:
 
 
 ## Built With
-* [Holochain-rust](https://github.com/holochain/holochain-rust)
+* [Holochain-rust  v0.0.24-alpha2](https://github.com/holochain/holochain-rust)
 * [HDK](https://developer.holochain.org/api/latest/hdk/)
 
 ## Authors

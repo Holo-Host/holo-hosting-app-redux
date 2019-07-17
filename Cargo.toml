@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+  "zomes/host/code",
+  "zomes/provider/code",
+  "zomes/whoami/code",
+]
