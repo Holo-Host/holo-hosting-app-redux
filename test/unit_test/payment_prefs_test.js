@@ -6,7 +6,7 @@ module.exports = (scenario) => {
       provider_doc:{
       kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
     }}
-    const verified_provider = await liza.app.call("provider", "register_as_provider", Provider_Doc);
+    const verified_provider = await liza.call("provider", "register_as_provider", Provider_Doc);
     console.log("verified_provider:: ",verified_provider);
     t.equal(verified_provider.Ok.length, 46)
 
@@ -26,7 +26,7 @@ module.exports = (scenario) => {
       }
     }
 
-    const app_address = await liza.app.call("provider", "register_app", App_Config);
+    const app_address = await liza.call("provider", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 
@@ -38,7 +38,7 @@ module.exports = (scenario) => {
       }
     }
 
-    const HFC = await liza.app.call("provider", "add_holofuel_account", HoloFuelAc);
+    const HFC = await liza.call("provider", "add_holofuel_account", HoloFuelAc);
     console.log("HF COMMIT:: ",HFC);
     t.equal(HFC.Ok.length, 46)
 
@@ -51,13 +51,13 @@ module.exports = (scenario) => {
       price_per_unit: 0.5
     }
 
-    const pref_commited = await liza.app.call("host","add_service_log_details",PaymentPref);
+    const pref_commited = await liza.call("host","add_service_log_details",PaymentPref);
     console.log("pref_commited:: ",pref_commited);
     t.ok(pref_commited.Ok)
 
     
 
-    const app_bundle = await liza.app.call("provider","get_app_details",{app_hash:app_address.Ok});
+    const app_bundle = await liza.call("provider","get_app_details",{app_hash:app_address.Ok});
     // console.log("App_bundle:: ",app_bundle.Ok);
     console.log("Payment_pref:: ",app_bundle.Ok.payment_pref[0].entry);
     t.equal(app_bundle.Ok.app_bundle.happ_hash, App_Config.app_bundle.happ_hash)
@@ -65,7 +65,7 @@ module.exports = (scenario) => {
     t.equal(app_bundle.Ok.payment_pref[0].price_per_unit, PaymentPref.price_per_unit)
 
 
-    const service_log_details = await liza.app.call("host","get_service_log_details",{app_hash:app_address.Ok});
+    const service_log_details = await liza.call("host","get_service_log_details",{app_hash:app_address.Ok});
     console.log("SERVICe LOG Details: ",service_log_details);
     t.equal(service_log_details.Ok.max_unpaid_value, 10)
 
