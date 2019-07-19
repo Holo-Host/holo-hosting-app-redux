@@ -1,6 +1,6 @@
 { pkgs }:
 let
-  name = "hf-install";
+  name = "hc-install";
 
   script = pkgs.writeShellScriptBin name
   ''
