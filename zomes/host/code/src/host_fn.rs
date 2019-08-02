@@ -16,7 +16,8 @@ use hdk::{
 use crate::entry::host_doc::HostDoc;
 use crate::entry::payment_pref::PaymentPref;
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+// use std::convert::{ TryInto };
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
 pub struct AppConfig {
     pub happ_hash: HashString,
 }
@@ -33,10 +34,23 @@ pub struct App2Host {
     host: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, DefaultJson)]
+#[derive(Serialize, Deserialize, Debug,Clone, DefaultJson)]
 pub struct AllApps {
     hash: HashString,
     details: String,
+    dns_details : String,
+}
+
+
+#[derive(Serialize, Deserialize, Debug,Clone, DefaultJson)]
+pub struct AppBundle {
+    pub app_bundle: AppConfig,
+    pub payment_pref: Vec<PaymentPref>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, DefaultJson)]
+pub struct DNS {
+    pub dns_name: String,
 }
 
 pub fn validate_host() -> ZomeApiResult<bool> {
@@ -61,16 +75,34 @@ pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
 
     let mut app_details_list: Vec<AllApps> = Vec::new();
     for x in app_address {
-        let details = hdk::call(
+        let raw_details = hdk::call(
             hdk::THIS_INSTANCE,
             "provider",
             Address::from(hdk::PUBLIC_TOKEN.to_string()),
             "get_app_details",
             json!({ "app_hash": x }).into(),
         )?;
+        let raw_dns = hdk::call(
+            hdk::THIS_INSTANCE,
+            "provider",
+            Address::from(hdk::PUBLIC_TOKEN.to_string()),
+            "get_app_domain_name",
+            json!({ "app_hash": x }).into(),
+        )?;
+        hdk::debug("=================")?;
+
+        hdk::debug(raw_details.to_string().clone())?;
+        hdk::debug("=================")?;
+        // let details : AppBundle = raw_details.try_into()?;
+
+
+        // hdk::debug(details.app_bundle.happ_hash.clone())?;
+
+        // let dns_details : DNS = raw_dns.try_into()?;
         app_details_list.push(AllApps {
             hash: x.to_owned(),
-            details: String::from(details.to_owned()),
+            details: String::from(raw_details).to_owned(),
+            dns_details:String::from(raw_dns).to_owned(),
         });
     }
     Ok(app_details_list)

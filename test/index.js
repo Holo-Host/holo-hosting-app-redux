@@ -19,19 +19,19 @@ const diorama = new Diorama({
   // bridges: [
   //   Diorama.bridge('test-bridge', 'liza', 'jack')
   // ],
-  debugLog: false,
+  debugLog: true,
   executor: tapeExecutor(require('tape')),
   middleware: backwardCompatibilityMiddleware,
 })
 
-require('./unit_test/whoami_test')(diorama.registerScenario);
-require('./unit_test/app_flow_test')(diorama.registerScenario);
-require('./unit_test/kv_enable_disable_test')(diorama.registerScenario);
-require('./unit_test/dna_dns_test')(diorama.registerScenario);
-require('./unit_test/host_test')(diorama.registerScenario);
-require('./unit_test/provider_test')(diorama.registerScenario);
-require('./unit_test/payment_prefs_test')(diorama.registerScenario);
-require('./unit_test/retrive_all_apps')(diorama.registerScenario);
+// require('./unit_test/whoami_test')(diorama.registerScenario);
+// require('./unit_test/app_flow_test')(diorama.registerScenario);
+// require('./unit_test/kv_enable_disable_test')(diorama.registerScenario);
+// require('./unit_test/dna_dns_test')(diorama.registerScenario);
+// require('./unit_test/host_test')(diorama.registerScenario);
+// require('./unit_test/provider_test')(diorama.registerScenario);
+// require('./unit_test/payment_prefs_test')(diorama.registerScenario);
+// require('./unit_test/retrive_all_apps')(diorama.registerScenario);
 require('./unit_test/register_app_test')(diorama.registerScenario);
 
 diorama.run()
