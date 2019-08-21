@@ -9,8 +9,8 @@ serde = "=1.0.89"
 serde_json = { version = "=1.0.39", features = ["preserve_order"] }
 serde_derive = "=1.0.89"
 syn = "=0.15.31"
-hdk = { git = "https://github.com/holochain/holochain-rust" , branch = "release-0.0.24-alpha2"}
-holochain_json_derive = "=0.0.15"
+hdk = { path = "../../../holochain-rust/hdk-rust" }
+holochain_json_derive = "=0.0.17"
 boolinator = "=2.4.0"
 hc_common = { path = "../../../hc_common/utils" }
 

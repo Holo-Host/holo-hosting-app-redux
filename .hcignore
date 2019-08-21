@@ -13,3 +13,5 @@ install/
 dist/
 .cargo/
 .circleci/
+holochain-rust
+*.nix
