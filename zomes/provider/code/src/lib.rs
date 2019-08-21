@@ -28,7 +28,11 @@ define_zome! {
         entry::anchor::definitions()
     ]
 
-    genesis: || {
+    init: || {
+        Ok(())
+    }
+
+    validate_agent: |validation_data : EntryValidationData::<AgentId>| {
         Ok(())
     }
 

@@ -5,38 +5,9 @@
       "arguments": [
         "build",
         "--release",
-        "--target=wasm32-unknown-unknown",
-        "--target-dir=/tmp/holochain/target"
-      ]
-    },
-    {
-      "command": "wasm-gc",
-      "arguments": ["/tmp/holochain/target/wasm32-unknown-unknown/release/provider.wasm"]
-    },
-    {
-      "command": "wasm-opt",
-      "arguments": [
-        "-Oz",
-        "--vacuum",
-        "/tmp/holochain/target/wasm32-unknown-unknown/release/provider.wasm"
-      ]
-    },
-    {
-      "command": "wasm2wat",
-      "arguments": [
-        "/tmp/holochain/target/wasm32-unknown-unknown/release/provider.wasm",
-        "-o",
-        "/tmp/holochain/target/wasm32-unknown-unknown/release/provider.wat"
-      ]
-    },
-    {
-      "command": "wat2wasm",
-      "arguments": [
-        "/tmp/holochain/target/wasm32-unknown-unknown/release/provider.wat",
-        "-o",
-        "/tmp/holochain/target/wasm32-unknown-unknown/release/provider.wasm"
+        "--target=wasm32-unknown-unknown"
       ]
     }
   ],
-  "artifact": "/tmp/holochain/target/wasm32-unknown-unknown/release/provider.wasm"
+  "artifact": "target/wasm32-unknown-unknown/release/provider.wasm"
 }

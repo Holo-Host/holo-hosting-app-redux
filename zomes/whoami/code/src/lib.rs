@@ -16,7 +16,11 @@ pub mod whoami_fn;
 define_zome! {
     entries: [ ]
 
-    genesis: || { Ok(()) }
+    init: || { Ok(()) }
+
+    validate_agent: |validation_data : EntryValidationData::<AgentId>| {
+        Ok(())
+    }
 
     functions: [
         get_user: {

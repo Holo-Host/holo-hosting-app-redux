@@ -25,7 +25,11 @@ define_zome! {
     entry::payment_pref::definitions()
     ]
 
-    genesis: || { Ok(()) }
+    init: || { Ok(()) }
+
+    validate_agent: |validation_data : EntryValidationData::<AgentId>| {
+        Ok(())
+    }
 
     functions: [
             get_all_apps: {
