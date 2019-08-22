@@ -24,6 +24,9 @@ install:	build
 build:		$(DNA)
 
 # Build the DNA; Specifying a custom --output requires the path to exist
+# However, if the name of the directory within which `hc` is run matches the
+# DNA's name, then this name is used by default, and the output directory is
+# created automatically.
 $(DNA):
 	hc package --strip-meta
 
@@ -35,7 +38,7 @@ test-unit:
 	    --manifest-path zomes/host/code/Cargo.toml \
 	    -- --nocapture
 
-# test-e2e -- Uses dist/$(DNAMAME).dna.json; install test JS dependencies, and run end-to-end tests
+# test-e2e -- Uses dist/$(DNANAME).dna.json; install test JS dependencies, and run end-to-end tests
 test-e2e:	$(DNA)
 	( cd test && npm install ) \
 	  && RUST_BACKTRACE=1 hc test \
