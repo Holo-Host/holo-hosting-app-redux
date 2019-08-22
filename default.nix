@@ -1,8 +1,8 @@
 { pkgs ? import ./pkgs.nix {} }: with pkgs;
 
 {
-  example = buildZome {
-    name = "example";
+  Holo-Hosting-App = buildDNA {
+    name = "Holo-Hosting-App";
     src = gitignoreSource ./.;
   };
 }
