@@ -25,9 +25,7 @@ build:		$(DNA)
 
 # Build the DNA; Specifying a custom --output requires the path to exist
 $(DNA):
-	mkdir -p $(dir $(@))
-	hc package --output $@ --strip-meta
-	ln $(DNA) dist/$$( hc hash | sed -ne 's/DNA Hash: \(.*\)/\1/p' ).$(DNANAME).dna.json
+	hc package --strip-meta
 
 test:		test-unit test-e2e
 
@@ -37,19 +35,11 @@ test-unit:
 	    --manifest-path zomes/host/code/Cargo.toml \
 	    -- --nocapture
 
-# test-e2e -- Uses dist/holofuel.dna.json; install test JS dependencies, and run end-to-end Diorama tests
+# test-e2e -- Uses dist/$(DNAMAME).dna.json; install test JS dependencies, and run end-to-end tests
 test-e2e:	$(DNA)
 	( cd test && npm install ) \
-	&& RUST_BACKTRACE=1 hc test \
-
-#	    | test/node_modules/faucet/bin/cmd.js
-
-
-.PHONY: doc-all
-doc-all: $(addsuffix .html, $(basename $(wildcard doc/*.org)))
-
-doc/%.html: doc/%.org
-	emacs $< --batch -f org-html-export-to-html --kill
+	  && RUST_BACKTRACE=1 hc test \
+	    | test/node_modules/faucet/bin/cmd.js
 
 # Generic targets; does not require a Nix environment
 .PHONY: clean
