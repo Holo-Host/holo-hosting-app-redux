@@ -2,10 +2,13 @@ version: 2
 
 jobs:
   build:
+    branches:
+      ignore:
+        - gh-pages
     docker:
       - image: nixos/nix
     # Required because hc package default DNA name is working directory name
-    working_directory: ~/holofuel
+    working_directory: ~/Holo-Hosting-App
     steps:
       - checkout
       - run: |
