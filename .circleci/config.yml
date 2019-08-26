@@ -3,11 +3,17 @@ version: 2
 jobs:
   build:
     docker:
-    - image: holochain/holonix:latest
-    environment:
-    - PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - image: nixos/nix
+    # Required because hc package default DNA name is working directory name
+    working_directory: ~/holofuel
     steps:
-    - checkout
-    - run:
-        name: Starting test
-        command: nix-shell --run 'make test'
+      - checkout
+      - run: |
+          nix-env -f pkgs.nix -iA git
+      - run: |
+          nix-shell \
+            --option substituters 'https://cache.holo.host https://cache.nixos.org' \
+            --option trusted-public-keys \
+              'cache.holo.host-1:lNXIXtJgS9Iuw4Cu6X0HINLu9sTfcjEntnrgwMQIMcE=
+               cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' \
+            --run 'make test'
