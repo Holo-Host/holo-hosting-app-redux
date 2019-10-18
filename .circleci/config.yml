@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: nixos/nix
     # Required because hc package default DNA name is working directory name
-    working_directory: ~/Holo-Hosting-App
+    working_directory: ~/holo-hosting-app
     steps:
       - checkout
       - run: |
