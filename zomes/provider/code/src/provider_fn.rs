@@ -49,18 +49,12 @@ pub fn handle_register_app_bundle(app_bundle: AppConfig) -> ZomeApiResult<Addres
     // Validation before commiting to the DHT
     // Check if user is verified
     // Check if all the hashes exist in the HCHC
-    hdk::debug("---------------------------".to_string())?;
     validate_provider()?;
-    hdk::debug("---------------------------".to_string())?;
     let app_entry = Entry::App("app_config".into(), app_bundle.into());
-hdk::debug("---------------------------".to_string())?;
     // CREATING AN ANCHOR
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
-    hdk::debug("---------------------------".to_string())?;
     let anchor_address = hdk::commit_entry(&all_apps)?;
-hdk::debug("---------------------------".to_string())?;
     utils::commit_and_link(&app_entry, &anchor_address, "all_apps_tag", "")?;
-    hdk::debug("---------------------------".to_string())?;
     utils::commit_and_link(
         &app_entry,
         &hdk::AGENT_ADDRESS,

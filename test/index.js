@@ -137,15 +137,15 @@ const orchestrator = new Orchestrator({
     }
 })
 
-// require('./unit_test/whoami_test')(orchestrator.registerScenario);
-// require('./unit_test/app_flow_test')(orchestrator.registerScenario);
-// require('./unit_test/kv_enable_disable_test')(orchestrator.registerScenario);
-// require('./unit_test/dna_dns_test')(orchestrator.registerScenario);
-// require('./unit_test/host_test')(orchestrator.registerScenario);
+require('./unit_test/whoami_test')(orchestrator.registerScenario);
+require('./unit_test/app_flow_test')(orchestrator.registerScenario);
+require('./unit_test/kv_enable_disable_test')(orchestrator.registerScenario);
+require('./unit_test/dna_dns_test')(orchestrator.registerScenario);
+require('./unit_test/host_test')(orchestrator.registerScenario);
 require('./unit_test/provider_test')(orchestrator.registerScenario);
-// require('./unit_test/payment_prefs_test')(orchestrator.registerScenario);
-// require('./unit_test/retrive_all_apps')(orchestrator.registerScenario);
-// require('./unit_test/register_app_test')(orchestrator.registerScenario);
+require('./unit_test/payment_prefs_test')(orchestrator.registerScenario);
+require('./unit_test/retrive_all_apps')(orchestrator.registerScenario);
+require('./unit_test/register_app_test')(orchestrator.registerScenario);
 
 
 // Check to see that we haven't accidentally disabled a bunch of scenarios

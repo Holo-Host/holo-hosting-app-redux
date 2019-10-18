@@ -35,9 +35,7 @@ test:		test-unit test-e2e
 # test-unit -- Run Rust unit tests via Cargo
 test-unit:
 	RUST_BACKTRACE=1 cargo test \
-	  	--manifest-path zomes/provider/code/Cargo.toml \
-	    --manifest-path zomes/host/code/Cargo.toml \
-	    --manifest-path zomes/whoami/code/Cargo.toml \
+	  	--manifest-path zomes/host/code/Cargo.toml \
 	    -- --nocapture
 
 # test-e2e -- Uses dist/holo-hosting-app.dna.json; install test JS dependencies, and run end-to-end tests
