@@ -13,15 +13,15 @@ The hosting app is a space for Hosts and App Providers to interact
 
 ## How to run test?
 ```
-cd dna-src && hc test
+nix-test
 ```
 > Note since this repo is in dev mode, you would have to pull the [holochain-rust](https://github.com/holochain/holochain-rust) repo in the same folder you pull this repo into. This is required to run the hc test with the latest nodejs_conductor in the holochain-rust.
 
 ## How to build DNA?
-After running the cmd bellow you will find the `.dna.json` in the `dna-src/dist` folder
+After running the cmd bellow you will find the `.dna.json` in the `dist/` folder
 
 ```
-cd dna-src && hc package
+nix-build
 ```
 # How to quickly spin up an agent
 > This could be used to test the [UI](https://github.com/Holo-Host/holo-hosting-app_GUI)
@@ -67,7 +67,7 @@ Network spawned with bindings:
 
 
 ## Built With
-* [Holochain-rust  v0.0.24-alpha2](https://github.com/holochain/holochain-rust)
+* [Holochain-rust  v0.0.32-alpha2](https://github.com/holochain/holochain-rust)
 * [HDK](https://developer.holochain.org/api/latest/hdk/)
 
 ## Authors

@@ -1,8 +1,8 @@
-# 
-# Test and build Holo-Hosting-App Project
-# 
+#
+# Test and build HoloFuel Project
+#
 SHELL		= bash
-DNANAME		= Holo-Hosting-App
+DNANAME		= holo-hosting-app
 DNA		= dist/$(DNANAME).dna.json
 
 # External targets; Uses a nix-shell environment to obtain Holochain runtimes, run tests, etc.
@@ -15,7 +15,7 @@ nix-%:
 
 # Internal targets; require a Nix environment in order to be deterministic.
 # - Uses the version of `hc`, `holochain` on the system PATH.
-# - Normally called from within a Nix environment, eg. run `nix-shell` from within holofuel
+# - Normally called from within a Nix environment, eg. run `nix-shell` from within holo-hosting-app
 .PHONY:		rebuild install build test test-unit test-e2e
 rebuild:	clean build
 
@@ -35,14 +35,31 @@ test:		test-unit test-e2e
 # test-unit -- Run Rust unit tests via Cargo
 test-unit:
 	RUST_BACKTRACE=1 cargo test \
-	    --manifest-path zomes/host/code/Cargo.toml \
+	    --manifest-path zomes/transactions/code/Cargo.toml \
 	    -- --nocapture
 
-# test-e2e -- Uses dist/$(DNANAME).dna.json; install test JS dependencies, and run end-to-end tests
+# test-e2e -- Uses dist/holo-hosting-app.dna.json; install test JS dependencies, and run end-to-end tests
+#
+# Depends on dynamodb, if using sim1h DHT.
+test-e2e: export AWS_ACCESS_KEY_ID     ?= HoloCentral
+test-e2e: export AWS_SECRET_ACCESS_KEY ?= ...
 test-e2e:	$(DNA)
-	( cd test && npm install ) \
-	  && RUST_BACKTRACE=1 hc test \
-	    | test/node_modules/faucet/bin/cmd.js
+	export |grep AWS
+	@echo "Setting up Scenario test Javascript..."; \
+	    ( cd test && npm install );
+	@echo "Starting dynamodb-memory..."; \
+	    dynamodb-memory &
+	@echo "Starting HoloFuel Scenario tests..."; \
+	    RUST_BACKTRACE=1 hc test \
+
+#	    | test/node_modules/faucet/bin/cmd.js
+
+
+.PHONY: doc-all
+doc-all: $(addsuffix .html, $(basename $(wildcard doc/*.org)))
+
+doc/%.html: doc/%.org
+	emacs $< --batch -f org-html-export-to-html --kill
 
 # Generic targets; does not require a Nix environment
 .PHONY: clean

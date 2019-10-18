@@ -1,1 +1,1 @@
-(import ./. {}).Holo-Hosting-App.override { shell = true; }
+(import ./. {}).holo-hosting-app.override { shell = true; }
