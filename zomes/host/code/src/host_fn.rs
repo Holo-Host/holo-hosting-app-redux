@@ -81,61 +81,98 @@ pub fn handle_get_all_apps() -> ZomeApiResult<Vec<AllApps>> {
     Ok(app_details_list)
 }
 
-pub fn handle_enable_app(app_hash: HashString) -> ZomeApiResult<()> {
+pub fn is_enabled(app_hash: &HashString) -> ZomeApiResult<bool>
+{
     validate_host()?;
-    utils::link_entries_bidir(
-        &app_hash,
-        &hdk::AGENT_ADDRESS,
-        "host_enabled",
-        "apps_enabled",
-        "",
-        "",
-    )?;
+    let links = hdk::get_links(&hdk::AGENT_ADDRESS,
+        LinkMatch::Exactly("apps_enabled"),
+        LinkMatch::Any)?;
 
-    // check if its a recently_disabled_app_tag
-    hdk::remove_link(
-        &app_hash,
-        &hdk::AGENT_ADDRESS,
-        "recently_disabled_app_tag",
-        "",
-    )?;
+    let result = links.addresses().into_iter().find(|x| x == app_hash);
+    match result {
+        Some(_) => Ok(true),
+        None => Ok(false)
+    }
+}
 
-    hdk::link_entries(
-        &app_hash,
-        &hdk::AGENT_ADDRESS,
-        "recently_enabled_app_tag",
-        "",
-    )?;
+pub fn handle_enable_app(app_hash: HashString) -> ZomeApiResult<()> {
 
+    if is_enabled(&app_hash)? == false {
+
+        utils::link_entries_bidir(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "host_enabled",
+            "apps_enabled",
+            "",
+            "",
+        )?;
+
+        // check if its a recently_disabled_app_tag
+        hdk::remove_link(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "recently_disabled_app_tag",
+            "",
+        )?;
+
+        // check if its a recently_disabled_app_tag
+        hdk::remove_link(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "need_updates_disabled_from_kv_store",
+            "",
+        )?;
+        // The sleep is because we need to wait for remove to propogate
+        hdk::sleep(Duration::from_millis(100))?;
+
+        hdk::link_entries(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "recently_enabled_app_tag",
+            "",
+        )?;
+
+    }
     Ok(())
 }
 
 pub fn handle_disable_app(app_hash: HashString) -> ZomeApiResult<()> {
-    validate_host()?;
 
-    hdk::remove_link(
-        &app_hash,
-        &hdk::AGENT_ADDRESS,
-        "host_enabled",
-        &"".to_owned(),
-    )?;
-    hdk::remove_link(&hdk::AGENT_ADDRESS, &app_hash, "apps_enabled", "")?;
+    if is_enabled(&app_hash)? == true {
+        hdk::remove_link(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "host_enabled",
+            &"".to_owned(),
+        )?;
+        hdk::remove_link(&hdk::AGENT_ADDRESS, &app_hash, "apps_enabled", "")?;
 
-    // check if its a recently_disabled_app_tag
-    hdk::remove_link(
-        &app_hash,
-        &hdk::AGENT_ADDRESS,
-        "recently_enabled_app_tag",
-        "",
-    )?;
+        // check if its a recently_disabled_app_tag
+        hdk::remove_link(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "recently_enabled_app_tag",
+            "",
+        )?;
+        // check if its a recently_disabled_app_tag
+        hdk::remove_link(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "need_updates_enabled_from_kv_store",
+            "",
+        )?;
 
-    hdk::link_entries(
-        &app_hash,
-        &hdk::AGENT_ADDRESS,
-        "recently_disabled_app_tag",
-        "",
-    )?;
+        // The sleep is because we need to wait for remove to propogate
+        hdk::sleep(Duration::from_millis(100))?;
 
+        hdk::link_entries(
+            &app_hash,
+            &hdk::AGENT_ADDRESS,
+            "recently_disabled_app_tag",
+            "",
+        )?;
+    }
     Ok(())
 }
 
@@ -295,6 +332,8 @@ pub fn handle_kv_updates_host_completed(kv_bundle: Vec<App2Host>) -> ZomeApiResu
                 "need_updates_disabled_from_kv_store",
                 "",
             )?;
+            // The sleep is because we need to wait for remove to propogate
+            hdk::sleep(Duration::from_millis(100))?;
         }
     }
     Ok(())
