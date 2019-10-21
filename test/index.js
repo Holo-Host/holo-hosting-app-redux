@@ -1,89 +1,163 @@
-const path = require('path')
-const tape = require('tape')
+//"use strict"; // locks up tests for some reason
+// This test file uses the tape testing framework.
+// To learn more, go here: https://github.com/substack/tape
 
-const { Orchestrator, tapeExecutor, backwardCompatibilityMiddleware } = require('@holochain/try-o-rama')
-const spawnConductor = require('./spawn_conductors')
+/*
+ * Try-o-rama
+ */
+const { Orchestrator, tapeExecutor, singleConductor, combine, callSync } = require('@holochain/try-o-rama')
+
+const { callSyncMiddleware } = require('./config')
+
+const MIN_EXPECTED_SCENARIOS = 1
 
 process.on('unhandledRejection', error => {
   // Will print "unhandledRejection err is not defined"
   console.error('got unhandledRejection:', error);
 });
 
-const dnaPath = path.join(__dirname, "../dist/Holo-Hosting-App.dna.json")
-const dna = Orchestrator.dna(dnaPath, 'hha')
-// const dna2 = Orchestrator.dna(dnaPath, 'hha', {uuid: 'altered-dna'})
+const dumbWaiter = interval => (run, f) => run(s =>
+  f(Object.assign({}, s, {
+    consistency: () => new Promise(resolve => {
+      console.log(`dumbWaiter is waiting ${interval}ms...`)
+      setTimeout(resolve, interval)
+    })
+  }))
+)
 
-const commonConductorConfig = {
-  instances: {
-    app: dna,
-  },
+
+let transport_config = 'memory';
+let middleware = combine(
+  // by default, combine conductors into a single conductor for in-memory networking
+  // NB: this middleware makes a really huge difference! and it's not very well tested,
+  // as of Oct 1 2019. So, keep an eye out.
+  singleConductor,
+  callSyncMiddleware,
+  tapeExecutor(require('tape')),
+);
+
+const APP_SPEC_NETWORK_TYPE = process.env.APP_SPEC_NETWORK_TYPE || "sim1h"
+
+if (APP_SPEC_NETWORK_TYPE === "websocket")
+{
+  transport_config = "websocket"
+
+  // omit singleConductor
+  middleware = combine(
+    callSync,
+    tapeExecutor(require('tape')),
+  );
+}
+else if (APP_SPEC_NETWORK_TYPE === "sim1h") // default
+{
+    transport_config = {
+	type: 'sim1h',
+	dynamo_url: "http://localhost:8000",
+    }
+
+    // omit singleConductor
+    middleware = combine(
+	// dumbWaiter(1000),
+	callSync,
+	tapeExecutor(require('tape')),
+    );
+}
+else if (APP_SPEC_NETWORK_TYPE === "sim2h")
+{
+    transport_config = {
+        type: 'sim2h',
+        sim2h_url: "wss://localhost:9000",
+    }
+
+    // omit singleConductor
+    middleware = combine(
+        // dumbWaiter(1000),
+        callSyncMiddleware,
+        tapeExecutor(require('tape')),
+    );
 }
 
-const orchestratorSimple = new Orchestrator({
-  conductors: {
-    liza: commonConductorConfig,
-    // jack: commonConductorConfig,
-  },
-  debugLog: false,
-  executor: tapeExecutor(require('tape')),
-  middleware: backwardCompatibilityMiddleware,
+if (process.env.HC_TRANSPORT_CONFIG) {
+    transport_config=require(process.env.HC_TRANSPORT_CONFIG)
+}
+
+
+const orchestrator = new Orchestrator({
+    middleware,
+    waiter: {
+	softTimeout: 5000,
+	hardTimeout: 10000,
+    },
+    globalConfig: {
+    	logger: {
+        type: "debug",
+        rules: {
+      		rules: [
+            {
+              exclude: true,
+      			  pattern: ".*parity.*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*mio.*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*tokio*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*hyper.*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*rusoto_core.*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*want.*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*holochain_core_types*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*holochain_net*"
+            },
+            {
+        			exclude: true,
+        			pattern: ".*rpc.*"
+            }
+      		]
+        },
+        state_dump: false,
+    	},
+	     network: transport_config
+    }
 })
 
-// const orchestratorMultiDna = new Orchestrator({
-//   conductors: {
-//     conductor: {
-//       instances: {
-//         app1: dna,
-//         // app2: dna2,
-//       },
-//       bridges: [
-//         Orchestrator.bridge('test-bridge', 'app1', 'app2')
-//       ],
-//     }
-//   },
-//   debugLog: false,
-//   executor: tapeExecutor(require('tape')),
-//   middleware: backwardCompatibilityMiddleware,
-//   callbacksPort: 8888,
-// })
+require('./unit_test/whoami_test')(orchestrator.registerScenario);
+require('./unit_test/app_flow_test')(orchestrator.registerScenario);
+require('./unit_test/kv_enable_disable_test')(orchestrator.registerScenario);
+require('./unit_test/dna_dns_test')(orchestrator.registerScenario);
+require('./unit_test/host_test')(orchestrator.registerScenario);
+require('./unit_test/provider_test')(orchestrator.registerScenario);
+require('./unit_test/payment_prefs_test')(orchestrator.registerScenario);
+require('./unit_test/retrive_all_apps')(orchestrator.registerScenario);
+require('./unit_test/register_app_test')(orchestrator.registerScenario);
 
-require('./unit_test/whoami_test')(orchestratorSimple.registerScenario);
-require('./unit_test/app_flow_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/kv_enable_disable_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/dna_dns_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/host_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/provider_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/payment_prefs_test')(orchestratorSimple.registerScenario);
-// require('./unit_test/retrive_all_apps')(orchestratorSimple.registerScenario);
-// require('./unit_test/register_app_test')(orchestratorSimple.registerScenario);
 
-// require('./multi-dna')(orchestratorMultiDna.registerScenario)
-
-const run = async () => {
-  const liza = await spawnConductor('liza', 3000)
-  await orchestratorSimple.registerConductor({name: 'liza', url: 'http://0.0.0.0:3000'})
-  // const jack = await spawnConductor('jack', 4000)
-  // await orchestratorSimple.registerConductor({name: 'jack', url: 'http://0.0.0.0:4000'})
-
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-  console.log("Waiting for conductors to settle...")
-  await delay(5000)
-  console.log("Ok, starting tests!")
-
-  await orchestratorSimple.run()
-  liza.kill()
-  // jack.kill()
-
-  // Multi instance tests where n3h is the network connecting them currently fails with the 2nd instance
-  // waiting for and not receiving the agent entry of the first one.
-  // I believe this is due to n3h not sending a peer connected message for a local instance
-  // and core has not implented the authoring list yet...
-  //const conductor = await spawnConductor('conductor', 6000)
-  //await orchestratorMultiDna.registerConductor({name: 'conductor', url: 'http://0.0.0.0:6000'})
-  //await orchestratorMultiDna.run()
-  //conductor.kill()
-
-  process.exit()
+// Check to see that we haven't accidentally disabled a bunch of scenarios
+const num = orchestrator.numRegistered()
+if (num < MIN_EXPECTED_SCENARIOS) {
+  console.error(`Expected at least ${MIN_EXPECTED_SCENARIOS} scenarios, but only ${num} were registered!`)
+  process.exit(1)
+}
+else {
+  console.log(`Registered ${num} scenarios (at least ${MIN_EXPECTED_SCENARIOS} were expected)`)
 }
 
-run()
+orchestrator.run().then(stats => {
+  console.log("All done.")
+})

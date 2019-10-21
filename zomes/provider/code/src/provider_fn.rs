@@ -51,11 +51,9 @@ pub fn handle_register_app_bundle(app_bundle: AppConfig) -> ZomeApiResult<Addres
     // Check if all the hashes exist in the HCHC
     validate_provider()?;
     let app_entry = Entry::App("app_config".into(), app_bundle.into());
-
     // CREATING AN ANCHOR
     let all_apps = Entry::App("anchor".into(), RawString::from("ALL_APPS").into());
     let anchor_address = hdk::commit_entry(&all_apps)?;
-
     utils::commit_and_link(&app_entry, &anchor_address, "all_apps_tag", "")?;
     utils::commit_and_link(
         &app_entry,
