@@ -1,6 +1,11 @@
+use std::time::Duration;
 use hdk::{
     error::{ZomeApiError, ZomeApiResult},
-    holochain_core_types::{entry::Entry, link::LinkMatch},
+    holochain_core_types::{
+        entry::Entry,
+        error::HolochainError,
+        link::LinkMatch
+    },
     holochain_json_api::{
         error::JsonError,
         json::{JsonString, RawString},
@@ -159,13 +164,13 @@ pub fn handle_get_kv_updates_dna_to_host() -> ZomeApiResult<DnaToHost> {
             LinkMatch::Exactly("recently_enabled_app_tag"),
             LinkMatch::Any,
         )?;
-        let mut enabled_agents_old: Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(
+        let enabled_agents_old: Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(
             &app_copy,
             LinkMatch::Exactly("need_updates_enabled_from_kv_store"),
             LinkMatch::Any,
         )?;
 
-        enabled_agents.append(&mut enabled_agents_old);
+        enabled_agents.append(&mut enabled_agents_old.to_owned());
 
         let mut agent_address_list: Vec<String> = Vec::new();
         for a in enabled_agents {
@@ -187,12 +192,17 @@ pub fn handle_get_kv_updates_dna_to_host() -> ZomeApiResult<DnaToHost> {
                 "recently_enabled_app_tag",
                 "",
             )?;
-            hdk::link_entries(
-                &app_copy,
-                &HashString::from(agent.clone()),
-                "need_updates_enabled_from_kv_store",
-                "",
-            )?;
+            // The sleep is because we need to wait for remove to propogate
+            hdk::sleep(Duration::from_millis(100))?;
+            // This check because as of hc v0.0.32-lapha2 hdk::link_entries adds a new link even if a link exists between two entire
+            if check_agent_exist(enabled_agents_old.to_owned(), agent.to_owned().to_string())? == false {
+                hdk::link_entries(
+                    &app_copy,
+                    &HashString::from(agent.clone()),
+                    "need_updates_enabled_from_kv_store",
+                    "",
+                )?;
+            }
         }
     }
 
@@ -206,13 +216,13 @@ pub fn handle_get_kv_updates_dna_to_host() -> ZomeApiResult<DnaToHost> {
             LinkMatch::Any,
         )?;
 
-        let mut disabled_agents_old: Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(
+        let disabled_agents_old: Vec<ZomeApiResult<Entry>> = hdk::get_links_and_load(
             &app_copy,
             LinkMatch::Exactly("need_updates_disabled_from_kv_store"),
             LinkMatch::Any,
         )?;
 
-        disabled_agents.append(&mut disabled_agents_old);
+        disabled_agents.append(&mut disabled_agents_old.to_owned());
 
         // Data Refactored
         let mut agent_address_list: Vec<String> = Vec::new();
@@ -234,18 +244,40 @@ pub fn handle_get_kv_updates_dna_to_host() -> ZomeApiResult<DnaToHost> {
                 "recently_disabled_app_tag",
                 "",
             )?;
-            hdk::link_entries(
-                &app_copy,
-                &HashString::from(agent.clone()),
-                "need_updates_disabled_from_kv_store",
-                "",
-            )?;
+            // The sleep is because we need to wait for remove to propogate
+            hdk::sleep(Duration::from_millis(100))?;
+            // This check because as of hc v0.0.32-lapha2 hdk::link_entries adds a new link even if a link exists between two entire
+            if check_agent_exist(disabled_agents_old.to_owned(), agent.to_owned().to_string())? == false {
+                hdk::link_entries(
+                    &app_copy,
+                    &HashString::from(agent.clone()),
+                    "need_updates_disabled_from_kv_store",
+                    "",
+                )?;
+            }
+
         }
     }
     Ok(DnaToHost {
         recently_enabled_apps,
         recently_disabled_apps,
     })
+}
+
+fn check_agent_exist(agent_list: Vec<ZomeApiResult<Entry>>, agent:String) -> Result<bool, HolochainError> {
+    let mut flag :bool = false;
+    for a in agent_list {
+        match a? {
+            Entry::AgentId(a) => {
+                if a.pub_sign_key == agent.to_owned() {
+                    flag = true;
+                    break;
+                }
+            },
+            _ => {}
+        }
+    }
+    return Ok(flag)
 }
 
 pub fn handle_kv_updates_host_completed(kv_bundle: Vec<App2Host>) -> ZomeApiResult<()> {
