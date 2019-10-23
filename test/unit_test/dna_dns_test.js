@@ -8,7 +8,7 @@ scenario('DNS TO DNA Tests', async(s, t) => {
       provider_doc:{
       kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
     }}
-    const verified_provider = await liza.callSync("app","provider", "register_as_provider", Provider_Doc);
+    const verified_provider = await liza.call("app","provider", "register_as_provider", Provider_Doc);
     console.log("verified_provider:: ",verified_provider);
     t.equal(verified_provider.Ok.length, 46)
 
@@ -21,7 +21,7 @@ scenario('DNS TO DNA Tests', async(s, t) => {
         dns_name: "appDNS1.holo.host"
       }
     }
-    const app_address = await liza.callSync("app","provider", "register_app", App_Config);
+    const app_address = await liza.call("app","provider", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 
@@ -51,7 +51,7 @@ scenario('DNS TO DNA Tests', async(s, t) => {
 
     // delete the updated DNS details are recieved
     console.log("SENDING... :",new_domain_name.Ok);
-    const updated = await liza.callSync("app","provider","kv_updates_domain_name_completed",{kv_bundle:new_domain_name.Ok});
+    const updated = await liza.call("app","provider","kv_updates_domain_name_completed",{kv_bundle:new_domain_name.Ok});
     console.log("Is Updated?:: ",updated);
     t.equal(updated.Ok, null)
 

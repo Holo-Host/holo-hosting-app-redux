@@ -9,7 +9,7 @@ module.exports = (scenario) => {
       kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
     }}
     t.plan(2)
-    const verified = await liza.callSync("app","host", "register_as_host", Host_Doc);
+    const verified = await liza.call("app","host", "register_as_host", Host_Doc);
     console.log("verified:: ",verified);
     t.equal(verified.Ok.length, 46)
 

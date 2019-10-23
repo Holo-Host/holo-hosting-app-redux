@@ -20,17 +20,17 @@ module.exports = (scenario) => {
   scenario('register app', async(s, t) => {
     const { liza } = await s.players({liza: one('liza')}, true)
 
-    let register_app_result = await liza.callSync("app","provider", "register_app", App_Config);
+    let register_app_result = await liza.call("app","provider", "register_app", App_Config);
     console.log("register_app_result", register_app_result);
     t.equal(register_app_result.Err.Internal, 'Agent Not a Provider');
 
-    const register_provider_result = await liza.callSync("app","provider", "register_as_provider", Provider_Config );
+    const register_provider_result = await liza.call("app","provider", "register_as_provider", Provider_Config );
     console.log("App Address Hash: ", register_provider_result);
     t.equal(register_provider_result.Ok.length, 46);
 
 
 
-    register_app_result = await liza.callSync("app","provider", "register_app", App_Config);
+    register_app_result = await liza.call("app","provider", "register_app", App_Config);
     console.log("App Address Hash: ", register_app_result);
     t.equal(register_app_result.Ok.length, 46);
 
@@ -40,7 +40,7 @@ module.exports = (scenario) => {
       }
     }
 
-    const verified = await liza.callSync("app","host", "register_as_host", Host_Doc);
+    const verified = await liza.call("app","host", "register_as_host", Host_Doc);
     console.log("verified:: ",verified);
     t.equal(verified.Ok.length, 46)
 

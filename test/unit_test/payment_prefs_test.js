@@ -8,7 +8,7 @@ module.exports = (scenario) => {
       provider_doc:{
       kyc_proof: "DOC # QuarnnnnvltuenblergjasnvAfs"
     }}
-    const verified_provider = await liza.callSync("app","provider", "register_as_provider", Provider_Doc);
+    const verified_provider = await liza.call("app","provider", "register_as_provider", Provider_Doc);
     console.log("verified_provider:: ",verified_provider);
     t.equal(verified_provider.Ok.length, 46)
 
@@ -28,7 +28,7 @@ module.exports = (scenario) => {
       }
     }
 
-    const app_address = await liza.callSync("app","provider", "register_app", App_Config);
+    const app_address = await liza.call("app","provider", "register_app", App_Config);
     console.log("APP ADDRESS:: ",app_address);
     t.equal(app_address.Ok.length, 46)
 
@@ -40,7 +40,7 @@ module.exports = (scenario) => {
       }
     }
 
-    const HFC = await liza.callSync("app","provider", "add_holofuel_account", HoloFuelAc);
+    const HFC = await liza.call("app","provider", "add_holofuel_account", HoloFuelAc);
     console.log("HF COMMIT:: ",HFC);
     t.equal(HFC.Ok.length, 46)
 
@@ -53,7 +53,7 @@ module.exports = (scenario) => {
       price_per_unit: 0.5
     }
 
-    const pref_commited = await liza.callSync("app","host","add_service_log_details",PaymentPref);
+    const pref_commited = await liza.call("app","host","add_service_log_details",PaymentPref);
     console.log("pref_commited:: ",pref_commited);
     t.ok(pref_commited.Ok)
 
