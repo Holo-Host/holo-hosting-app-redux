@@ -132,6 +132,30 @@ module.exports = (scenario) => {
     // console.log("KV Updates Disabled App2:: ",kv_updates_4.Ok.recently_disabled_apps[1].host);
     t.equal(kv_updates_4.Ok.recently_disabled_apps[0].host.length, 0)
     t.equal(kv_updates_4.Ok.recently_disabled_apps.length, 2)
+
+    // These following tests are to stress test the system
+    // It will make the same calls to test consistency
+    let stress_result = await liza.call("app","host","get_kv_updates_dna_to_host",{});
+    t.equal(stress_result.Ok.recently_disabled_apps[0].host.length, 0)
+    t.equal(stress_result.Ok.recently_disabled_apps.length, 2)
+
+    stress_result = await liza.call("app","host","get_kv_updates_dna_to_host",{});
+    t.equal(stress_result.Ok.recently_disabled_apps[0].host.length, 0)
+    t.equal(stress_result.Ok.recently_disabled_apps.length, 2)
+
+    stress_result = await liza.call("app","host","get_kv_updates_dna_to_host",{});
+    t.equal(stress_result.Ok.recently_disabled_apps[0].host.length, 0)
+    t.equal(stress_result.Ok.recently_disabled_apps.length, 2)
+
+    stress_result = await liza.call("app","host","get_kv_updates_dna_to_host",{});
+    t.equal(stress_result.Ok.recently_disabled_apps[0].host.length, 0)
+    t.equal(stress_result.Ok.recently_disabled_apps.length, 2)
+
+    stress_result = await liza.call("app","host","get_kv_updates_dna_to_host",{});
+    t.equal(stress_result.Ok.recently_disabled_apps[0].host.length, 0)
+    t.equal(stress_result.Ok.recently_disabled_apps.length, 2)
+
+
     await liza.kill()
 
   })
