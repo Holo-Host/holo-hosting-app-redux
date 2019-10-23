@@ -64,7 +64,7 @@ else if (APP_SPEC_NETWORK_TYPE === "sim2h")
 {
     transport_config = {
         type: 'sim2h',
-        sim2h_url: "wss://localhost:9000",
+        sim2h_url: "wss://localhost:9002",
     }
 
     // omit singleConductor
