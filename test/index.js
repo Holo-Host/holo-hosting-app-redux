@@ -7,8 +7,6 @@
  */
 const { Orchestrator, tapeExecutor, singleConductor, combine, callSync } = require('@holochain/try-o-rama')
 
-const { callSyncMiddleware } = require('./config')
-
 const MIN_EXPECTED_SCENARIOS = 1
 
 process.on('unhandledRejection', error => {
@@ -32,7 +30,7 @@ let middleware = combine(
   // NB: this middleware makes a really huge difference! and it's not very well tested,
   // as of Oct 1 2019. So, keep an eye out.
   singleConductor,
-  callSyncMiddleware,
+  callSync,
   tapeExecutor(require('tape')),
 );
 
@@ -72,11 +70,12 @@ else if (APP_SPEC_NETWORK_TYPE === "sim2h")
     // omit singleConductor
     middleware = combine(
         // dumbWaiter(1000),
-        callSyncMiddleware,
+        callSync,
         tapeExecutor(require('tape')),
     );
 }
 
+// override the transport_config if we are in the Final Exam context!
 if (process.env.HC_TRANSPORT_CONFIG) {
     transport_config=require(process.env.HC_TRANSPORT_CONFIG)
 }
