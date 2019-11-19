@@ -15,7 +15,6 @@ const Provider_Config = {
   }
 }
 
-const sleep=require('sleep')
 module.exports = (scenario) => {
   scenario('register app', async(s, t) => {
     const { liza } = await s.players({liza: one('liza')}, true)

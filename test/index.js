@@ -5,9 +5,7 @@
 /*
  * Try-o-rama
  */
-const { Orchestrator, tapeExecutor, singleConductor, combine, callSync } = require('@holochain/try-o-rama')
-
-const { callSyncMiddleware } = require('./config')
+const { Orchestrator, tapeExecutor, Config, singleConductor, combine, callSync, localOnly } = require('@holochain/tryorama')
 
 const MIN_EXPECTED_SCENARIOS = 1
 
@@ -31,55 +29,10 @@ let middleware = combine(
   // by default, combine conductors into a single conductor for in-memory networking
   // NB: this middleware makes a really huge difference! and it's not very well tested,
   // as of Oct 1 2019. So, keep an eye out.
-  singleConductor,
-  callSyncMiddleware,
   tapeExecutor(require('tape')),
+  localOnly,
+  callSync
 );
-
-const APP_SPEC_NETWORK_TYPE = process.env.APP_SPEC_NETWORK_TYPE || "sim1h"
-
-if (APP_SPEC_NETWORK_TYPE === "websocket")
-{
-  transport_config = "websocket"
-
-  // omit singleConductor
-  middleware = combine(
-    callSync,
-    tapeExecutor(require('tape')),
-  );
-}
-else if (APP_SPEC_NETWORK_TYPE === "sim1h") // default
-{
-    transport_config = {
-	type: 'sim1h',
-	dynamo_url: "http://localhost:8000",
-    }
-
-    // omit singleConductor
-    middleware = combine(
-	// dumbWaiter(1000),
-	callSync,
-	tapeExecutor(require('tape')),
-    );
-}
-else if (APP_SPEC_NETWORK_TYPE === "sim2h")
-{
-    transport_config = {
-        type: 'sim2h',
-        sim2h_url: "wss://localhost:9000",
-    }
-
-    // omit singleConductor
-    middleware = combine(
-        // dumbWaiter(1000),
-        callSyncMiddleware,
-        tapeExecutor(require('tape')),
-    );
-}
-
-if (process.env.HC_TRANSPORT_CONFIG) {
-    transport_config=require(process.env.HC_TRANSPORT_CONFIG)
-}
 
 
 const orchestrator = new Orchestrator({
@@ -87,53 +40,6 @@ const orchestrator = new Orchestrator({
     waiter: {
 	softTimeout: 5000,
 	hardTimeout: 10000,
-    },
-    globalConfig: {
-    	logger: {
-        type: "debug",
-        rules: {
-      		rules: [
-            {
-              exclude: true,
-      			  pattern: ".*parity.*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*mio.*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*tokio*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*hyper.*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*rusoto_core.*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*want.*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*holochain_core_types*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*holochain_net*"
-            },
-            {
-        			exclude: true,
-        			pattern: ".*rpc.*"
-            }
-      		]
-        },
-        state_dump: false,
-    	},
-	     network: transport_config
     }
 })
 

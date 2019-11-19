@@ -1,6 +1,11 @@
 #
-# Test and build HoloFuel Project
+# Test and build holo-hosting-app Project
 #
+# This Makefile is primarily instructional; you can simply enter the Nix environment for
+# holochain-rust development (supplied by holo=nixpkgs; see pkgs.nix) via `nix-shell` and run `hc
+# test` directly, or build a target directly (see default.nix), eg. `nix-build -A holo-hosting-app`
+# TODO: ensure buildDNA works for multi-zome DNAs
+# 
 SHELL		= bash
 DNANAME		= holo-hosting-app
 DNA		= dist/$(DNANAME).dna.json
@@ -28,7 +33,7 @@ build:		$(DNA)
 # DNA's name, then this name is used by default, and the output directory is
 # created automatically.
 $(DNA):
-	hc package --strip-meta
+	hc package
 
 test:		test-unit test-e2e
 
@@ -37,29 +42,23 @@ test-unit:
 	RUST_BACKTRACE=1 cargo test \
 	  	--manifest-path zomes/host/code/Cargo.toml \
 	    -- --nocapture
+	RUST_BACKTRACE=1 cargo test \
+	  	--manifest-path zomes/whoami/code/Cargo.toml \
+	    -- --nocapture
+	RUST_BACKTRACE=1 cargo test \
+	  	--manifest-path zomes/provider/code/Cargo.toml \
+	    -- --nocapture
 
-# test-e2e -- Uses dist/holo-hosting-app.dna.json; install test JS dependencies, and run end-to-end tests
-#
-# Depends on dynamodb, if using sim1h DHT.
-test-e2e: export AWS_ACCESS_KEY_ID     ?= HoloCentral
-test-e2e: export AWS_SECRET_ACCESS_KEY ?= ...
+# End-to-end test of DNA.  Runs a sim2h_server on localhost:9000; the default expected by `hc test`
 test-e2e:	$(DNA)
-	export |grep AWS
 	@echo "Setting up Scenario test Javascript..."; \
 	    ( cd test && npm install );
-	@echo "Starting dynamodb-memory..."; \
-	    dynamodb-memory &
-	@echo "Starting HoloFuel Scenario tests..."; \
+	@echo "Starting sim2h_server on localhost:9000 (may already be running)..."; \
+	    sim2h_server -p 9000 &
+	@echo "Starting Scenario tests..."; \
 	    RUST_BACKTRACE=1 hc test \
 
-#	    | test/node_modules/faucet/bin/cmd.js
-
-
-.PHONY: doc-all
-doc-all: $(addsuffix .html, $(basename $(wildcard doc/*.org)))
-
-doc/%.html: doc/%.org
-	emacs $< --batch -f org-html-export-to-html --kill
+#	        | test/node_modules/faucet/bin/cmd.js
 
 # Generic targets; does not require a Nix environment
 .PHONY: clean
@@ -69,6 +68,5 @@ clean:
 	    test/node_modules \
 	    .cargo \
 	    target \
-	    zomes/provider/code/target \
-	    zomes/host/code/target \
-	    zomes/whoami/code/target
+	    zomes/*/code/target
+

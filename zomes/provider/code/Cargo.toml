@@ -1,6 +1,6 @@
 [package]
 name = "provider"
-version = "0.3.0-alpha1"
+version = "0.4.0"
 authors = ["zo-el <zo@el.org>"]
 edition = "2018"
 
@@ -9,7 +9,7 @@ serde = "=1.0.89"
 serde_json = { version = "=1.0.39", features = ["preserve_order"] }
 serde_derive = "=1.0.89"
 syn = "=0.15.31"
-hdk = { path = "../../../holochain-rust/hdk-rust" }
+hdk = { path = "../../../holochain-rust/crates/hdk" }
 holochain_json_derive = "=0.0.17"
 boolinator = "=2.4.0"
 hc_common = { path = "../../../hc_common/utils" }

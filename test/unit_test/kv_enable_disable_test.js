@@ -32,9 +32,11 @@ module.exports = (scenario) => {
     }
 
     const app_address_1 = await liza.callSync("app","provider",  "register_app", App_Config_1);
-    const app_address_2 = await liza.callSync("app","provider",  "register_app", App_Config_2);
-    console.log("APP ADDRESS:: ",app_address_1);
+    console.log("APP ADDRESS:: 1",app_address_1);
     t.equal(app_address_1.Ok.length, 46)
+    const app_address_2 = await liza.callSync("app","provider",  "register_app", App_Config_2);
+    console.log("APP ADDRESS:: 2",app_address_2);
+    t.equal(app_address_2.Ok.length, 46)
 
     const Host_Doc = {
       host_doc:{
@@ -47,10 +49,12 @@ module.exports = (scenario) => {
 
 
 
-    const app_enable = await liza.callSync("app","host","enable_app",{app_hash:app_address_1.Ok});
-    await liza.call("app","host","enable_app",{app_hash:app_address_2.Ok});
-    console.log("App_enbled: ", app_enable);
-    t.equal(app_enable.Ok, null)
+    const app_enable_1 = await liza.callSync("app","host","enable_app",{app_hash:app_address_1.Ok});
+    console.log("App_enbled: 1 ", app_enable_1);
+    t.equal(app_enable_1.Ok, null)
+    const app_enable_2 = await liza.callSync("app","host","enable_app",{app_hash:app_address_2.Ok});
+    console.log("App_enbled: 2 ", app_enable_2);
+    t.equal(app_enable_2.Ok, null)
 
 
 
