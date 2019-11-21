@@ -67,7 +67,7 @@ module.exports = (scenario) => {
     t.equal(agent_list.Ok.length, 1)
 
     const disable_app_hash = await liza.callSync("app","host","disable_app",{app_hash:app_address_2.Ok});
-    console.log("App_Disabled: ", app_enable);
+    console.log("App_Disabled: ", disable_app_hash);
     t.equal(disable_app_hash.Ok, null)
 
 
