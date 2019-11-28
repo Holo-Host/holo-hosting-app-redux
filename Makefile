@@ -21,7 +21,7 @@ nix-%:
 # Internal targets; require a Nix environment in order to be deterministic.
 # - Uses the version of `hc`, `holochain` on the system PATH.
 # - Normally called from within a Nix environment, eg. run `nix-shell` from within holo-hosting-app
-.PHONY:		rebuild install build test test-unit test-e2e
+.PHONY:		rebuild install build
 rebuild:	clean build
 
 install:	build
@@ -35,6 +35,7 @@ build:		$(DNA)
 $(DNA):
 	hc package
 
+.PHONY: test test-unit test-e2e test-stress test-sim2h test-node
 test:		test-unit test-e2e
 
 # test-unit -- Run Rust unit tests via Cargo
@@ -50,14 +51,18 @@ test-unit:
 	    -- --nocapture
 
 # End-to-end test of DNA.  Runs a sim2h_server on localhost:9000; the default expected by `hc test`
-test-e2e:	$(DNA)
-	@echo "Setting up Scenario test Javascript..."; \
-	    ( cd test && npm install );
-	@echo "Starting sim2h_server on localhost:9000 (may already be running)..."; \
-	    sim2h_server -p 9000 &
+test-e2e:	$(DNA) test-sim2h test-node
 	@echo "Starting Scenario tests..."; \
 	    RUST_BACKTRACE=1 hc test \
 	        | test/node_modules/faucet/bin/cmd.js
+
+test-node:
+	@echo "Setting up Scenario/Stress test Javascript..."; \
+	    cd test && npm install
+
+test-sim2h:
+	@echo "Starting sim2h_server on localhost:9000 (may already be running)..."; \
+	    sim2h_server -p 9000 &
 
 # Generic targets; does not require a Nix environment
 .PHONY: clean
