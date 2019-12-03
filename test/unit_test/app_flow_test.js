@@ -38,13 +38,16 @@ module.exports = (scenario) => {
     t.ok(verified_provider.Ok)
 
     const app_address_1 = await liza.callSync("app", "provider", "register_app", App_Config_1);
-    const app_address_2 = await liza.callSync("app","provider",  "register_app", App_Config_2);
     console.log("APP ADDRESS 1:: ",app_address_1);
     t.ok(app_address_1.Ok);
+    const app_address_2 = await liza.callSync("app", "provider", "register_app", App_Config_2);
+    console.log("APP ADDRESS 2:: ",app_address_2);
+    t.ok(app_address_2.Ok);
 
-    const app_enable = await liza.callSync("app","host","enable_app",{app_hash:app_address_1.Ok});
-    await liza.call("app","host","enable_app",{app_hash:app_address_2.Ok});
-    t.equal(app_enable.Ok, null)
+    const app_enable_1 = await liza.callSync("app","host","enable_app",{app_hash:app_address_1.Ok});
+    t.equal(app_enable_1.Ok, null)
+    const app_enable_2 = await liza.callSync("app","host","enable_app",{app_hash:app_address_2.Ok});
+    t.equal(app_enable_2.Ok, null)
 
     const app_list = await liza.call("app","host","get_enabled_app_list",{});
     console.log("APP List:: ",app_list);
