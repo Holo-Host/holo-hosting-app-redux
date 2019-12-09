@@ -9,5 +9,5 @@
       ]
     }
   ],
-  "artifact": "target/wasm32-unknown-unknown/release/host.wasm"
+  "artifact": "../../../target/wasm32-unknown-unknown/release/host.wasm"
 }
