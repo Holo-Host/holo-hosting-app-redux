@@ -1,7 +1,6 @@
 /dist
 /holochain-rust
 node_modules/
-/target/**/
+/target
 
 .vscode
-.cargo
