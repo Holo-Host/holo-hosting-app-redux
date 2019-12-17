@@ -41,13 +41,6 @@ test:		test-unit test-e2e
 # test-unit -- Run Rust unit tests via Cargo
 test-unit:
 	RUST_BACKTRACE=1 cargo test \
-	  	--manifest-path zomes/host/code/Cargo.toml \
-	    -- --nocapture
-	RUST_BACKTRACE=1 cargo test \
-	  	--manifest-path zomes/whoami/code/Cargo.toml \
-	    -- --nocapture
-	RUST_BACKTRACE=1 cargo test \
-	  	--manifest-path zomes/provider/code/Cargo.toml \
 	    -- --nocapture
 
 # End-to-end test of DNA.  Runs a sim2h_server on localhost:9000; the default expected by `hc test`
@@ -71,6 +64,6 @@ clean:
 	    dist \
 	    test/node_modules \
 	    .cargo \
-	    target \
-	    zomes/*/code/target
+	    target
+
 
