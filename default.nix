@@ -1,4 +1,4 @@
-{ pkgs ? import ./pkgs.nix {} }:
+{ pkgs ? import ./pkgs.nix, shell ? false }:
 
 with pkgs;
 
@@ -8,6 +8,8 @@ in
 
 {
   holo-hosting-app = buildDNA {
+    inherit shell;
+
     name = "holo-hosting-app";
     src = gitignoreSource ./.;
 
