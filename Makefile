@@ -55,7 +55,7 @@ test-node:
 
 test-sim2h:
 	@echo "Starting sim2h_server on localhost:9000 (may already be running)..."; \
-	    sim2h_server -p 9000 &
+	    sim2h_server -p 9000 >sim2h_server.log 2>&1 &
 
 # Generic targets; does not require a Nix environment
 .PHONY: clean
