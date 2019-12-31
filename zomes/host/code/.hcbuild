@@ -7,6 +7,34 @@
         "--release",
         "--target=wasm32-unknown-unknown"
       ]
+    },
+    {
+      "command": "wasm-gc",
+      "arguments": ["../../../target/wasm32-unknown-unknown/release/host.wasm"]
+    },
+    {
+      "command": "wasm-opt",
+      "arguments": [
+        "-Oz",
+        "--vacuum",
+        "../../../target/wasm32-unknown-unknown/release/host.wasm"
+      ]
+    },
+    {
+      "command": "wasm2wat",
+      "arguments": [
+        "../../../target/wasm32-unknown-unknown/release/host.wasm",
+        "-o",
+        "../../../target/wasm32-unknown-unknown/release/host.wat"
+      ]
+    },
+    {
+      "command": "wat2wasm",
+      "arguments": [
+        "../../../target/wasm32-unknown-unknown/release/host.wat",
+        "-o",
+        "../../../target/wasm32-unknown-unknown/release/host.wasm"
+      ]
     }
   ],
   "artifact": "../../../target/wasm32-unknown-unknown/release/host.wasm"
