@@ -47,11 +47,11 @@ test-unit:
 test-e2e:	$(DNA) test-sim2h test-node
 	@echo "Starting Scenario tests..."; \
 	    RUST_BACKTRACE=1 hc test \
-	        | test/node_modules/faucet/bin/cmd.js
+	        | node test/node_modules/faucet/bin/cmd.js
 
 test-node:
 	@echo "Setting up Scenario/Stress test Javascript..."; \
-	    cd test && npm install
+	    cd test && [ -d test/node_modules ] || npm install
 
 test-sim2h:
 	@echo "Starting sim2h_server on localhost:9000 (may already be running)..."; \
