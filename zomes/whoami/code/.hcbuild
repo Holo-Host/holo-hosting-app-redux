@@ -17,13 +17,15 @@
       "arguments": [
         "-Oz",
         "--vacuum",
-        "../../../target/wasm32-unknown-unknown/release/whoami.wasm"
+        "../../../target/wasm32-unknown-unknown/release/whoami.wasm",
+        "-o",
+        "../../../target/wasm32-unknown-unknown/release/whoami.wasm.opt"
       ]
     },
     {
       "command": "wasm2wat",
       "arguments": [
-        "../../../target/wasm32-unknown-unknown/release/whoami.wasm",
+        "../../../target/wasm32-unknown-unknown/release/whoami.wasm.opt",
         "-o",
         "../../../target/wasm32-unknown-unknown/release/whoami.wat"
       ]
