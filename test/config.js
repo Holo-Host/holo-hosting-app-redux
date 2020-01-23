@@ -30,7 +30,7 @@ if (process.env.HC_TRANSPORT_CONFIG) {
           : networkType === 'sim2h'
           ? {
               type: 'sim2h',
-              sim2h_url: 'wss://localhost:9000'
+              sim2h_url: 'ws://localhost:9000'
           }
 
           : (() => {throw new Error(`Unsupported network type: ${networkType}`)})()
