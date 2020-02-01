@@ -3,12 +3,15 @@
   "description": "A Holo app that is for holo app providers and the holo hosts",
   "authors": [
     {
-      "identifier": "zo-el <zo@el.org>",
+      "identifier": "zo-el <joel.ulahanna@holo.host>",
       "public_key_source": "",
       "signature": ""
     }
   ],
-  "version": "0.5.0",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "version": "0.6.0",
   "dht": {},
-  "properties": null
+  "properties": {
+      "sim2h_url": "ws://hosting.sim2h.net:9000"
+  }
 }
