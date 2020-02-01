@@ -565,7 +565,7 @@ dependencies = [
 
 [[package]]
 name = "host"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "boolinator 2.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hc_common 0.1.1",
@@ -905,7 +905,7 @@ dependencies = [
 
 [[package]]
 name = "provider"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "boolinator 2.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hc_common 0.1.1",
@@ -1308,7 +1308,7 @@ dependencies = [
 
 [[package]]
 name = "whoami"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "hdk 0.0.42-alpha5",
  "holochain_json_derive 0.0.17 (registry+https://github.com/rust-lang/crates.io-index)",
