@@ -11,7 +11,5 @@
   "uuid": "00000000-0000-0000-0000-000000000000",
   "version": "0.6.0",
   "dht": {},
-  "properties": {
-      "sim2h_url": "ws://hosting.sim2h.net:9000"
-  }
+  "properties": null
 }
